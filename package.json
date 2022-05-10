@@ -1,0 +1,28 @@
+{
+  "name": "authoring-tool",
+  "version": "1.0.0",
+  "description": "TEAMING.AI Authoring Tool",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IlPalazz/authoring-tool.git"
+  },
+  "keywords": [
+    "TEAMING.AI",
+    "Authoring Tool",
+    "BPMN 2.0",
+    "BPMN Editor"
+  ],
+  "author": "Federico Palazzi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IlPalazz/authoring-tool/issues"
+  },
+  "homepage": "https://github.com/IlPalazz/authoring-tool#readme",
+  "dependencies": {
+    "bpmn-js": "^9.0.3"
+  }
+}
