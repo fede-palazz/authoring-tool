@@ -1,14 +1,14 @@
-//import Modeler from "bpmn-js/lib/Modeler";
+import Modeler from "bpmn-js/lib/Modeler";
 import BpmnViewer from "bpmn-js/lib/Viewer";
 import "bpmn-js/dist/assets/diagram-js.css";
 import "bpmn-js/dist/assets/bpmn-font/css/bpmn.css";
 import "./style.css";
 import diagram from "./assets/pizza-diagram.bpmn";
 
-var viewer = new BpmnViewer({ container: "#canvas" });
+// var viewer = new BpmnViewer({ container: "#canvas" });
 
 // create a modeler
-//const modeler = new Modeler({ container: "#canvas" });
+const viewer = new Modeler({ container: "#canvas" });
 
 function fetchDiagram(url) {
   return fetch(url).then((response) => response.text());
