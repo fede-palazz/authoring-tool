@@ -16,13 +16,14 @@
       </section>
     </div>
     <div class="toolbar">
-      <div class="entry">
-        <a id="downloadDiag" href="#" download="diagram.bpmn">Download</a>
-      </div>
+      <button class="icon-btn">
+        <a id="downloadDiag" download="diagram.bpmn">Download</a>
+      </button>
 
-      <div class="entry">
-        <input id="loadDiag" type="file" value="open" accept=".bpmn" />
-      </div>
+      <button class="icon-btn" onclick="loadDiag.click()">
+        Upload
+        <input id="loadDiag" type="file" accept=".bpmn" hidden />
+      </button>
     </div>
   </body>
 </html>
