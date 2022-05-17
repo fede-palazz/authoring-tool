@@ -2,27 +2,27 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title><%= htmlWebpackPlugin.options.title %></title>
+    <title>BPMN Editor</title>
   </head>
 
   <body>
     <div id="wrapper">
       <header class="header">
-        <h1>BPMN Viewer</h1>
+        <h1>BPMN Editor</h1>
       </header>
 
       <section id="canvas-container">
         <div id="canvas"></div>
       </section>
     </div>
-    <!-- <div class="toolbar">
+    <div class="toolbar">
       <div class="entry">
-        <a href data-download download="pizza-annotated.bpmn">Download</a>
+        <a id="downloadDiag" href="#" download="diagram.bpmn">Download</a>
       </div>
 
       <div class="entry">
-        <input type="file" data-open-file value="open" />
+        <input id="loadDiag" type="file" value="open" accept=".bpmn" />
       </div>
-    </div> -->
+    </div>
   </body>
 </html>

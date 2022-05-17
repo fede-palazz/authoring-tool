@@ -3,27 +3,72 @@ import BpmnViewer from "bpmn-js/lib/Viewer";
 import "bpmn-js/dist/assets/diagram-js.css";
 import "bpmn-js/dist/assets/bpmn-font/css/bpmn.css";
 import "./style.css";
-import diagram from "./assets/pizza-diagram.bpmn";
 
 // var viewer = new BpmnViewer({ container: "#canvas" });
 
 // create a modeler
 const viewer = new Modeler({ container: "#canvas" });
 
-function fetchDiagram(url) {
-  return fetch(url).then((response) => response.text());
+// ********************
+// ** DIAGRAM UPLOAD **
+// ********************
+
+/**
+ * File upload event listener
+ */
+loadDiag.addEventListener("change", () => {
+  // Get the file input element
+  const uploadField = document.querySelector("#loadDiag");
+
+  // Null check for selected diagram
+  if (!uploadField.files) return;
+
+  // File extension check
+  const fileName = uploadField.value;
+  if (fileName.split(".").pop() !== "bpmn") {
+    alert("Only .bpmn files can be submitted!");
+    // Reset the file choice
+    uploadField.value = "";
+    return;
+  }
+  // Read the selected local diagram and display it
+  fetchAndDisplay(uploadField.files[0]);
+});
+
+/**
+ * Fetch a local diagram and display it to the canvas
+ * @param {File} file
+ */
+function fetchAndDisplay(file) {
+  if (!file) throw new Error("Error: received file is null!");
+
+  let fr = new FileReader();
+
+  // Load event: reading finished, no errors
+  fr.onload = () => {
+    // Display the diagram
+    displayDiagram(fr.result);
+  };
+
+  // Error occured during file reading
+  fr.onerror = (err) => {
+    throw new Error("An error occured during file reading: " + err);
+  };
+
+  // Read the .bpmn file as plain text
+  fr.readAsText(file);
 }
 
-async function loadDiagram() {
-  //const diagram = await fetchDiagram("./pizza-diagram.bpmn");
-
+/**
+ * Display a bpmn diagram passed as XML text
+ * @param {String} diagram
+ */
+async function displayDiagram(diagram) {
+  if (!diagram) return;
   try {
     await viewer.importXML(diagram);
     viewer.get("canvas").zoom("fit-viewport");
   } catch (err) {
-    console.log("Error", err);
+    console.log(err);
   }
 }
-
-loadDiagram();
-console.log("Funzia");
