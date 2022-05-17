@@ -6,8 +6,10 @@ import "./style.css";
 
 // var viewer = new BpmnViewer({ container: "#canvas" });
 
-// create a modeler
+// Create a Modeler instance
 const viewer = new Modeler({ container: "#canvas" });
+const uploadField = document.querySelector("#uploadDiag");
+const downloadBtn = document.querySelector("#downloadDiag");
 
 // ********************
 // ** DIAGRAM UPLOAD **
@@ -16,10 +18,7 @@ const viewer = new Modeler({ container: "#canvas" });
 /**
  * File upload event listener
  */
-loadDiag.addEventListener("change", () => {
-  // Get the file input element
-  const uploadField = document.querySelector("#loadDiag");
-
+uploadField.addEventListener("change", () => {
   // Null check for selected diagram
   if (!uploadField.files) return;
 

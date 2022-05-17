@@ -38,8 +38,7 @@ body {
 }
 
 .header h1 {
-  margin: 10px;
-  padding: 0;
+  margin: 5px;
 }
 
 .toolbar {
@@ -49,12 +48,17 @@ body {
 }
 
 .toolbar .icon-btn {
-  background: #eee;
+  background-color: #eee;
   border: solid 1px #999;
   border-radius: 5px;
   padding: 5px;
   margin-right: 10px;
   display: inline-block;
+}
+
+.toolbar .icon-btn:hover {
+  cursor: pointer;
+  background-color: darkgrey;
 }
 
 a {
