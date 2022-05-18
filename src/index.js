@@ -8,6 +8,8 @@ import "./style.css";
 
 // Create a Modeler instance
 const viewer = new Modeler({ container: "#canvas" });
+
+// Get UI components
 const importDiagBtn = document.querySelector("#importDiag");
 const exportDiagBtn = document.querySelector("#exportDiag");
 
@@ -77,21 +79,9 @@ async function serializeDiagram() {
   } catch (err) {
     console.log("Failed to serialize BPMN 2.0 xml", err);
   }
-  // Get the diagram xml
-  // const xmlDiag = serializeDiagram();
 }
 
 exportDiagBtn.addEventListener("click", serializeDiagram);
-// () => {
-// Get the diagram xml
-//   const xmlDiag = serializeDiagram();
-
-//   // Make the href attribute point to the diagram xlm
-//   exportDiagBtn.setAttribute(
-//     "href",
-//     "data:application/bpmn20-xml;charset=UTF-8," + xmlDiag
-//   );
-// });
 
 /**
  * Display a bpmn diagram passed as XML text
