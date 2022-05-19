@@ -7,8 +7,10 @@
 
   <body>
     <div id="wrapper">
-      <header class="header">
-        <h1>BPMN Editor</h1>
+      <header class="top-bar">
+        <div class="title">
+          <h1>BPMN Editor</h1>
+        </div>
       </header>
 
       <section id="canvas-container">
@@ -16,9 +18,9 @@
       </section>
     </div>
     <div class="toolbar">
-      <a id="exportDiag" download="diagram.bpmn">
-        <button class="icon-btn">Download</button>
-      </a>
+      <button class="icon-btn">
+        <a id="exportDiag" download="diagram.bpmn"> Download </a>
+      </button>
 
       <button class="icon-btn" onclick="importDiag.click()">
         Upload

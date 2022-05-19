@@ -1,24 +1,18 @@
-import Modeler from "bpmn-js/lib/Modeler";
-import BpmnViewer from "bpmn-js/lib/Viewer";
-import "bpmn-js/dist/assets/diagram-js.css";
-import "bpmn-js/dist/assets/bpmn-font/css/bpmn.css";
+import * as diagHandler from "./diagramHandler";
 import "./style.css";
 
-// var viewer = new BpmnViewer({ container: "#canvas" });
-
-// Create a Modeler instance
-const viewer = new Modeler({ container: "#canvas" });
+// Canvas id
+const CANVAS = "canvas";
 
 // Get UI components
 const importDiagBtn = document.querySelector("#importDiag");
 const exportDiagBtn = document.querySelector("#exportDiag");
 
-// ********************
-// ** DIAGRAM UPLOAD **
-// ********************
+// Instantiate the editor
+diagHandler.createEditor("m", CANVAS);
 
 /**
- * File upload event listener
+ * Diagram import event listener
  */
 importDiagBtn.addEventListener("change", () => {
   // Null check for selected diagram
@@ -33,66 +27,30 @@ importDiagBtn.addEventListener("change", () => {
     return;
   }
   // Read the selected local diagram and display it
-  fetchAndDisplay(importDiagBtn.files[0]);
+  diagHandler.fetchAndDisplay(importDiagBtn.files[0]);
 });
 
 /**
- * Fetch a local diagram and display it to the canvas
- * @param {File} file
+ * Export diagram event listener
  */
-function fetchAndDisplay(file) {
-  if (!file) throw new Error("Error: received file is null!");
-
-  let fr = new FileReader();
-
-  // Load event: reading finished, no errors
-  fr.onload = () => {
-    // Display the diagram
-    displayDiagram(fr.result);
-  };
-
-  // Error occured during file reading
-  fr.onerror = (err) => {
-    throw new Error("An error occured during file reading: " + err);
-  };
-
-  // Read the .bpmn file as plain text
-  fr.readAsText(file);
-}
-
-// **********************
-// ** DOWNLOAD DIAGRAM **
-// **********************
-
-/**
- * Save the diagram to a local .bpmn file
- */
-async function serializeDiagram() {
-  try {
-    const { xml } = await viewer.saveXML();
-    const xmlDiag = encodeURIComponent(xml);
-    // Make the href attribute point to the diagram xlm
-    exportDiagBtn.setAttribute(
-      "href",
-      "data:application/bpmn20-xml;charset=UTF-8," + xmlDiag
-    );
-  } catch (err) {
-    console.log("Failed to serialize BPMN 2.0 xml", err);
-  }
-}
-
-exportDiagBtn.addEventListener("click", serializeDiagram);
-
-/**
- * Display a bpmn diagram passed as XML text
- * @param {String} diagram
- */
-async function displayDiagram(diagram) {
-  if (!diagram) return;
-  try {
-    await viewer.importXML(diagram);
-    viewer.get("canvas").zoom("fit-viewport");
-  } catch (err) {
-    console.log(err);
-  }
-}
+exportDiagBtn.addEventListener("click", () => {
+  diagHandler
+    .exportDiagram()
+    .then((xmlDiag) => {
+      // Make the href attribute point to the diagram xml
+      exportDiagBtn.setAttribute(
+        "href",
+        "data:application/bpmn20-xml;charset=UTF-8," + xmlDiag
+      );
+    })
+    .then(() => {
+      // Wait 10ms
+      return new Promise((resolve) => {
+        setTimeout(() => resolve(), 10);
+      });
+    })
+    .then(() => {
+      // Reset the href attribute of the anchor element
+      exportDiagBtn.setAttribute("href", "");
+    });
+});
