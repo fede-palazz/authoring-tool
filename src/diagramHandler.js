@@ -38,13 +38,13 @@ function createEditor(editorMode, canvas) {
 }
 
 /**
- * Save the diagram to a local .bpmn file
+ * Export the current diagram into its xml representation
+ * @returns {String} XML Encoded BPMN diagram
  */
 async function exportDiagram() {
   try {
     const { xml } = await editor.saveXML();
-    const xmlDiag = encodeURIComponent(xml);
-    return xmlDiag;
+    return encodeURIComponent(xml);
   } catch (err) {
     console.log("Failed to serialize BPMN 2.0 xml", err);
   }
