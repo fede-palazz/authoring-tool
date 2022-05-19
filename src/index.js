@@ -1,29 +1,66 @@
-//import Modeler from "bpmn-js/lib/Modeler";
-import BpmnViewer from "bpmn-js/lib/Viewer";
-import "bpmn-js/dist/assets/diagram-js.css";
-import "bpmn-js/dist/assets/bpmn-font/css/bpmn.css";
-import "./style.css";
-import diagram from "./assets/pizza-diagram.bpmn";
+import * as diagHandler from './diagramHandler';
+import './style.css';
 
-var viewer = new BpmnViewer({ container: "#canvas" });
+// Canvas id
+const CANVAS = 'canvas';
+const DEFAULT_MODE = 'm';
 
-// create a modeler
-//const modeler = new Modeler({ container: "#canvas" });
+// Get UI components
+const importDiagBtn = document.querySelector('#importDiag');
+const exportDiagBtn = document.querySelector('#exportDiag');
 
-function fetchDiagram(url) {
-  return fetch(url).then((response) => response.text());
+/**
+ * Inizialitazion function: creates a new Editor based on the DEFAULT_MODE constant and displays a blank diagram
+ */
+function initializeCanvas() {
+  // Instantiate the editor
+  diagHandler.createEditor(DEFAULT_MODE, CANVAS);
+  // Load the blank diagram template
+  diagHandler.displayBlankDiagram();
 }
 
-async function loadDiagram() {
-  //const diagram = await fetchDiagram("./pizza-diagram.bpmn");
+/**
+ * Diagram import event listener
+ */
+importDiagBtn.addEventListener('change', () => {
+  // Null check for selected diagram
+  if (!importDiagBtn.files) return;
 
-  try {
-    await viewer.importXML(diagram);
-    viewer.get("canvas").zoom("fit-viewport");
-  } catch (err) {
-    console.log("Error", err);
+  // File extension check
+  const fileName = importDiagBtn.value;
+  if (fileName.split('.').pop() !== 'bpmn') {
+    alert('Only .bpmn files can be submitted!');
+    // Reset the file choice
+    importDiagBtn.value = '';
+    return;
   }
-}
+  // Read the selected local diagram and display it
+  diagHandler.fetchAndDisplay(importDiagBtn.files[0]);
+});
 
-loadDiagram();
-console.log("Funzia");
+/**
+ * Export diagram event listener
+ */
+exportDiagBtn.addEventListener('click', () => {
+  diagHandler
+    .exportDiagram()
+    .then((xmlDiag) => {
+      // Make the href attribute point to the diagram xml
+      exportDiagBtn.setAttribute(
+        'href',
+        'data:application/bpmn20-xml;charset=UTF-8,' + xmlDiag
+      );
+    })
+    .then(() => {
+      // Wait 10ms
+      return new Promise((resolve) => {
+        setTimeout(() => resolve(), 10);
+      });
+    })
+    .then(() => {
+      // Reset the href attribute of the anchor element
+      exportDiagBtn.setAttribute('href', '');
+    });
+});
+
+initializeCanvas();

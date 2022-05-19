@@ -21,6 +21,7 @@ module.exports = {
     hot: true,
     port: 9000,
   },
+  // Only for multiple entry points
   //   optimization: {
   //     runtimeChunk: "single",
   //   },
@@ -45,7 +46,6 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: "BPMN Viewer",
       filename: "index.html",
       template: "./src/index.html",
     }),
