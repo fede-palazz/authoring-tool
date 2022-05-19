@@ -1,29 +1,37 @@
-import * as diagHandler from "./diagramHandler";
-import "./style.css";
+import * as diagHandler from './diagramHandler';
+import './style.css';
 
 // Canvas id
-const CANVAS = "canvas";
+const CANVAS = 'canvas';
+const DEFAULT_MODE = 'm';
 
 // Get UI components
-const importDiagBtn = document.querySelector("#importDiag");
-const exportDiagBtn = document.querySelector("#exportDiag");
+const importDiagBtn = document.querySelector('#importDiag');
+const exportDiagBtn = document.querySelector('#exportDiag');
 
-// Instantiate the editor
-diagHandler.createEditor("m", CANVAS);
+/**
+ * Inizialitazion function: creates a new Editor based on the DEFAULT_MODE constant and displays a blank diagram
+ */
+function initializeCanvas() {
+  // Instantiate the editor
+  diagHandler.createEditor(DEFAULT_MODE, CANVAS);
+  // Load the blank diagram template
+  diagHandler.displayBlankDiagram();
+}
 
 /**
  * Diagram import event listener
  */
-importDiagBtn.addEventListener("change", () => {
+importDiagBtn.addEventListener('change', () => {
   // Null check for selected diagram
   if (!importDiagBtn.files) return;
 
   // File extension check
   const fileName = importDiagBtn.value;
-  if (fileName.split(".").pop() !== "bpmn") {
-    alert("Only .bpmn files can be submitted!");
+  if (fileName.split('.').pop() !== 'bpmn') {
+    alert('Only .bpmn files can be submitted!');
     // Reset the file choice
-    importDiagBtn.value = "";
+    importDiagBtn.value = '';
     return;
   }
   // Read the selected local diagram and display it
@@ -33,14 +41,14 @@ importDiagBtn.addEventListener("change", () => {
 /**
  * Export diagram event listener
  */
-exportDiagBtn.addEventListener("click", () => {
+exportDiagBtn.addEventListener('click', () => {
   diagHandler
     .exportDiagram()
     .then((xmlDiag) => {
       // Make the href attribute point to the diagram xml
       exportDiagBtn.setAttribute(
-        "href",
-        "data:application/bpmn20-xml;charset=UTF-8," + xmlDiag
+        'href',
+        'data:application/bpmn20-xml;charset=UTF-8,' + xmlDiag
       );
     })
     .then(() => {
@@ -51,6 +59,8 @@ exportDiagBtn.addEventListener("click", () => {
     })
     .then(() => {
       // Reset the href attribute of the anchor element
-      exportDiagBtn.setAttribute("href", "");
+      exportDiagBtn.setAttribute('href', '');
     });
 });
+
+initializeCanvas();

@@ -1,8 +1,9 @@
-import Modeler from "bpmn-js/lib/Modeler";
-import Viewer from "bpmn-js/lib/Viewer";
-import NavigatedViewer from "bpmn-js/lib/NavigatedViewer";
-import "bpmn-js/dist/assets/diagram-js.css";
-import "bpmn-js/dist/assets/bpmn-font/css/bpmn.css";
+import Modeler from 'bpmn-js/lib/Modeler';
+import Viewer from 'bpmn-js/lib/Viewer';
+import NavigatedViewer from 'bpmn-js/lib/NavigatedViewer';
+import BLANK_DIAGRAM from './assets/diagrams/new-diagram.bpmn';
+import 'bpmn-js/dist/assets/diagram-js.css';
+import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
 
 // Editor type
 let editor;
@@ -19,17 +20,17 @@ let diagramFile = null;
 function createEditor(editorMode, canvas) {
   if (editor !== undefined) return;
   switch (editorMode) {
-    case "m": // Modeler
+    case 'm': // Modeler
       editor = new Modeler({
         container: `#${canvas}`,
       });
       break;
-    case "v": // Viewer
+    case 'v': // Viewer
       editor = new Viewer({
         container: `#${canvas}`,
       });
       break;
-    case "n": // NavigatedViewer
+    case 'n': // NavigatedViewer
       editor = new NavigatedViewer({
         container: `#${canvas}`,
       });
@@ -46,7 +47,7 @@ async function exportDiagram() {
     const { xml } = await editor.saveXML();
     return encodeURIComponent(xml);
   } catch (err) {
-    console.log("Failed to serialize BPMN 2.0 xml", err);
+    console.log('Failed to serialize BPMN 2.0 xml', err);
   }
 }
 
@@ -55,7 +56,7 @@ async function exportDiagram() {
  * @param {File} file
  */
 function fetchAndDisplay(file) {
-  if (!file) throw new Error("Error: received file is null!");
+  if (!file) throw new Error('Error: received file is null!');
 
   // Save current diagram file
   // Maybe it's better to save only the fileName (input value)
@@ -71,11 +72,16 @@ function fetchAndDisplay(file) {
 
   // Error occured during file reading
   fr.onerror = (err) => {
-    throw new Error("An error occured during file reading: " + err);
+    throw new Error('An error occured during file reading: ' + err);
   };
 
   // Read the .bpmn file as plain text
   fr.readAsText(file);
+}
+
+function displayBlankDiagram() {
+  if (editor) displayDiagram(BLANK_DIAGRAM);
+  else throw new Error('Editor is not defined!');
 }
 
 /**
@@ -86,10 +92,10 @@ async function displayDiagram(diagram) {
   if (!diagram) return;
   try {
     await editor.importXML(diagram);
-    editor.get("canvas").zoom("fit-viewport");
+    editor.get('canvas').zoom('fit-viewport');
   } catch (err) {
     console.log(err);
   }
 }
 
-export { createEditor, exportDiagram, fetchAndDisplay };
+export { createEditor, exportDiagram, fetchAndDisplay, displayBlankDiagram };
