@@ -7,6 +7,8 @@ import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
 
 // Editor type
 let editor;
+// Command stack
+let commandStack;
 // Current diagram file
 let diagramFile = null;
 // Current diagram mode
@@ -23,19 +25,30 @@ function createEditor(editorMode, canvas) {
     case 'm': // Modeler
       editor = new Modeler({
         container: `#${canvas}`,
+        keyboard: {
+          bindTo: document,
+        },
       });
       break;
     case 'v': // Viewer
       editor = new Viewer({
         container: `#${canvas}`,
+        keyboard: {
+          bindTo: document,
+        },
       });
       break;
     case 'n': // NavigatedViewer
       editor = new NavigatedViewer({
         container: `#${canvas}`,
+        keyboard: {
+          bindTo: document,
+        },
       });
       break;
   }
+  // Initialize commandStack
+  commandStack = editor.get('commandStack');
 }
 
 /**
@@ -98,4 +111,19 @@ async function displayDiagram(diagram) {
   }
 }
 
-export { createEditor, exportDiagram, fetchAndDisplay, displayBlankDiagram };
+function undoAction() {
+  commandStack.undo();
+}
+
+function redoAction() {
+  commandStack.redo();
+}
+
+export {
+  createEditor,
+  exportDiagram,
+  fetchAndDisplay,
+  displayBlankDiagram,
+  undoAction,
+  redoAction,
+};
