@@ -87,6 +87,13 @@ exportDiagSvgBtn.addEventListener('click', () => {
       // Reset the href attribute of the anchor element
       exportDiagSvgBtn.setAttribute('href', '');
     });
+
+/**
+ * Undo / Redo action event listener
+ */
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.key === 'z') diagHandler.undoAction();
+  else if (e.ctrlKey && e.key === 'y') diagHandler.redoAction();
 });
 
 initializeCanvas();
