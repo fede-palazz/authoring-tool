@@ -8,6 +8,7 @@ const DEFAULT_MODE = 'm';
 // Get UI components
 const importDiagBtn = document.querySelector('#importDiag');
 const exportDiagBtn = document.querySelector('#exportDiag');
+const exportDiagSvgBtn = document.querySelector('#exportDiagSvg');
 
 /**
  * Inizialitazion function: creates a new Editor based on the DEFAULT_MODE constant and displays a blank diagram
@@ -23,13 +24,13 @@ function initializeCanvas() {
  * Diagram import event listener
  */
 importDiagBtn.addEventListener('change', () => {
-  // Null check for selected diagram
+  // Null check for the selected file diagram
   if (!importDiagBtn.files) return;
 
   // File extension check
   const fileName = importDiagBtn.value;
   if (fileName.split('.').pop() !== 'bpmn') {
-    alert('Only .bpmn files can be submitted!');
+    alert('Only files with .bpmn extension can be submitted!');
     // Reset the file choice
     importDiagBtn.value = '';
     return;
@@ -39,7 +40,7 @@ importDiagBtn.addEventListener('change', () => {
 });
 
 /**
- * Export diagram event listener
+ * Export BPMN diagram event listener
  */
 exportDiagBtn.addEventListener('click', () => {
   diagHandler
@@ -60,6 +61,31 @@ exportDiagBtn.addEventListener('click', () => {
     .then(() => {
       // Reset the href attribute of the anchor element
       exportDiagBtn.setAttribute('href', '');
+    });
+});
+
+/**
+ * Export SVG diagram event listener
+ */
+exportDiagSvgBtn.addEventListener('click', () => {
+  diagHandler
+    .exportDiagramSVG()
+    .then((svgDiag) => {
+      // Make the href attribute point to the diagram xml
+      exportDiagSvgBtn.setAttribute(
+        'href',
+        'data:application/bpmn20-xml;charset=UTF-8,' + svgDiag
+      );
+    })
+    .then(() => {
+      // Wait 10ms
+      return new Promise((resolve) => {
+        setTimeout(() => resolve(), 10);
+      });
+    })
+    .then(() => {
+      // Reset the href attribute of the anchor element
+      exportDiagSvgBtn.setAttribute('href', '');
     });
 });
 
