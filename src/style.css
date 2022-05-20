@@ -52,16 +52,20 @@ body {
   bottom: 10px;
 }
 
-.toolbar .icon-btn {
-  background-color: #eee;
+.icon-btn {
   border: solid 1px #999;
-  border-radius: 5px;
+  border-radius: 8px;
   padding: 5px;
+  padding-right: 8px;
+  padding-left: 8px;
+}
+
+.toolbar .icon-btn {
   margin-right: 10px;
   display: inline-block;
 }
 
-.toolbar .icon-btn:hover {
+.icon-btn:hover {
   cursor: pointer;
   background-color: darkgrey;
 }
@@ -69,4 +73,17 @@ body {
 .icon-btn a {
   text-decoration: none;
   color: #000;
+}
+
+.zoom-bar {
+  position: fixed;
+  right: 20px;
+  bottom: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.zoom-bar .icon-btn {
+  margin-top: 10px;
 }
