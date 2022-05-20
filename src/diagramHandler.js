@@ -5,10 +5,9 @@ import BLANK_DIAGRAM from './assets/diagrams/new-diagram.bpmn';
 import 'bpmn-js/dist/assets/diagram-js.css';
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
 
-// Editor type
 let editor;
-// Command stack
 let commandStack;
+let zoomScroll;
 // Current diagram file
 let diagramFile = null;
 // Current diagram mode
@@ -47,8 +46,9 @@ function createEditor(editorMode, canvas) {
       });
       break;
   }
-  // Initialize commandStack
+  // Initialize control variables
   commandStack = editor.get('commandStack');
+  zoomScroll = editor.get('zoomScroll');
 }
 
 /**
@@ -132,6 +132,18 @@ function redoAction() {
   commandStack.redo();
 }
 
+function zoomIn() {
+  zoomScroll.stepZoom(1);
+}
+
+function zoomOut() {
+  zoomScroll.stepZoom(-1);
+}
+
+function resetZoom() {
+  zoomScroll.reset();
+}
+
 export {
   createEditor,
   exportDiagram,
@@ -140,4 +152,7 @@ export {
   displayBlankDiagram,
   undoAction,
   redoAction,
+  zoomIn,
+  zoomOut,
+  resetZoom,
 };

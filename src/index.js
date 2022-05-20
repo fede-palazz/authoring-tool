@@ -9,9 +9,14 @@ const DEFAULT_MODE = 'm';
 const importDiagBtn = document.querySelector('#importDiag');
 const exportDiagBtn = document.querySelector('#exportDiag');
 const exportDiagSvgBtn = document.querySelector('#exportDiagSvg');
+const zoomBar = document.querySelector('.zoom-bar');
+
+// ***************
+// ** FUNCTIONS **
+// ***************
 
 /**
- * Inizialitazion function: creates a new Editor based on the DEFAULT_MODE constant and displays a blank diagram
+ * Initialize a blank canvas
  */
 function initializeCanvas() {
   // Instantiate the editor
@@ -20,8 +25,12 @@ function initializeCanvas() {
   diagHandler.displayBlankDiagram();
 }
 
+// *********************
+// ** EVENT LISTENERS **
+// *********************
+
 /**
- * Diagram import event listener
+ * Import diagram button event listener
  */
 importDiagBtn.addEventListener('change', () => {
   // Null check for the selected file diagram
@@ -40,7 +49,7 @@ importDiagBtn.addEventListener('change', () => {
 });
 
 /**
- * Export BPMN diagram event listener
+ * Export BPMN button event listener
  */
 exportDiagBtn.addEventListener('click', () => {
   diagHandler
@@ -65,7 +74,7 @@ exportDiagBtn.addEventListener('click', () => {
 });
 
 /**
- * Export SVG diagram event listener
+ * Export SVG button event listener
  */
 exportDiagSvgBtn.addEventListener('click', () => {
   diagHandler
@@ -87,6 +96,7 @@ exportDiagSvgBtn.addEventListener('click', () => {
       // Reset the href attribute of the anchor element
       exportDiagSvgBtn.setAttribute('href', '');
     });
+});
 
 /**
  * Undo / Redo action event listener
@@ -94,6 +104,23 @@ exportDiagSvgBtn.addEventListener('click', () => {
 document.addEventListener('keydown', (e) => {
   if (e.ctrlKey && e.key === 'z') diagHandler.undoAction();
   else if (e.ctrlKey && e.key === 'y') diagHandler.redoAction();
+});
+
+/**
+ * Change diagram zoom event listener
+ */
+zoomBar.addEventListener('click', (e) => {
+  switch (e.target.name) {
+    case 'resetZoomBtn':
+      diagHandler.resetZoom();
+      break;
+    case 'zoomInBtn':
+      diagHandler.zoomIn();
+      break;
+    case 'zoomOutBtn':
+      diagHandler.zoomOut();
+      break;
+  }
 });
 
 initializeCanvas();
