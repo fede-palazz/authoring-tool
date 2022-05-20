@@ -1,5 +1,12 @@
 import * as diagHandler from './diagramHandler';
 import './style.css';
+import './assets/icons/zoom-in.svg';
+import './assets/icons/zoom-out.svg';
+import './assets/icons/reset-zoom.svg';
+import './assets/icons/export-diag.svg';
+import './assets/icons/export-svg.svg';
+import './assets/icons/import-diag.svg';
+import './assets/icons/new-diag.svg';
 
 // Canvas id
 const CANVAS = 'canvas';

@@ -63,6 +63,11 @@ body {
   padding-left: 8px;
 }
 
+.icon-btn img {
+  width: 20px;
+  height: 20px;
+}
+
 .toolbar .icon-btn {
   margin-right: 10px;
   display: inline-block;
@@ -89,4 +94,8 @@ body {
 
 .zoom-bar .icon-btn {
   margin-top: 10px;
+}
+
+svg {
+  font-size: x-large;
 }
