@@ -53,7 +53,7 @@ function createEditor(editorMode, canvas) {
 
 /**
  * Export the current diagram into its xml representation
- * @returns {String} XML Encoded BPMN diagram
+ * @returns {String} XML encoded BPMN diagram
  */
 async function exportDiagram() {
   try {
@@ -61,6 +61,19 @@ async function exportDiagram() {
     return encodeURIComponent(xml);
   } catch (err) {
     console.log('Failed to serialize BPMN 2.0 xml', err);
+  }
+}
+
+/**
+ * Export the current diagram as svg xml representation
+ * @returns {String} XML encoded SVG diagram
+ */
+async function exportDiagramSVG() {
+  try {
+    const { svg } = await editor.saveSVG();
+    return encodeURIComponent(svg);
+  } catch (err) {
+    console.log('Failed to serialize SVG xml', err);
   }
 }
 
@@ -122,6 +135,7 @@ function redoAction() {
 export {
   createEditor,
   exportDiagram,
+  exportDiagramSVG,
   fetchAndDisplay,
   displayBlankDiagram,
   undoAction,
