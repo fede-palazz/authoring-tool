@@ -46,22 +46,33 @@ body {
 }
 
 .title h1 {
-  margin: 5px;
+  margin: 8px;
 }
 
 .toolbar {
+  display: flex;
+  flex-direction: row;
+
   position: fixed;
   left: 10px;
   bottom: 10px;
 }
 
+.sub-toolbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-right: 15px;
+}
+
 .icon-btn {
-  border: solid 1px #999;
-  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 5px;
-  /* padding-top: 8px;s */
-  padding-right: 8px;
-  padding-left: 8px;
+  border-radius: 20px;
+  background-color: inherit;
+  border: none;
 }
 
 .icon-btn img {
@@ -70,13 +81,7 @@ body {
 }
 
 .toolbar .icon-btn {
-  margin-right: 10px;
-  display: inline-block;
-}
-
-.icon-btn:hover {
-  cursor: pointer;
-  background-color: darkgrey;
+  margin: 2px 5px;
 }
 
 .icon-btn a {
@@ -91,12 +96,22 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
 }
 
 .zoom-bar .icon-btn {
   margin-top: 10px;
+  margin: 5px 3px;
 }
 
-svg {
-  font-size: x-large;
+.zoom-bar,
+.sub-toolbar {
+  background-color: #eee;
+  border-radius: 10px;
+  border: 1px solid #999;
+}
+
+.icon-btn:hover {
+  cursor: pointer;
+  background-color: darkgrey;
 }

@@ -28,6 +28,8 @@ function createEditor(editorMode, canvas) {
           bindTo: document,
         },
       });
+      // Initialize control variables
+      commandStack = editor.get('commandStack');
       break;
     case 'v': // Viewer
       editor = new Viewer({
@@ -46,8 +48,7 @@ function createEditor(editorMode, canvas) {
       });
       break;
   }
-  // Initialize control variables
-  commandStack = editor.get('commandStack');
+
   zoomScroll = editor.get('zoomScroll');
 }
 
