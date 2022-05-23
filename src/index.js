@@ -32,6 +32,24 @@ function initializeCanvas() {
   diagHandler.displayBlankDiagram();
 }
 
+/**
+ * Handle the different types of zoom events
+ * @param {HTMLElement} element HTML zoom button
+ */
+function handleZoom(element) {
+  switch (element.name) {
+    case 'resetZoomBtn':
+      diagHandler.resetZoom();
+      break;
+    case 'zoomInBtn':
+      diagHandler.zoomIn();
+      break;
+    case 'zoomOutBtn':
+      diagHandler.zoomOut();
+      break;
+  }
+}
+
 // *********************
 // ** EVENT LISTENERS **
 // *********************
@@ -116,18 +134,10 @@ document.addEventListener('keydown', (e) => {
 /**
  * Change diagram zoom event listener
  */
-zoomBar.addEventListener('click', (e) => {
-  switch (e.target.name) {
-    case 'resetZoomBtn':
-      diagHandler.resetZoom();
-      break;
-    case 'zoomInBtn':
-      diagHandler.zoomIn();
-      break;
-    case 'zoomOutBtn':
-      diagHandler.zoomOut();
-      break;
-  }
+document.querySelectorAll('div.zoom-bar > button').forEach((elem) => {
+  elem.addEventListener('click', () => {
+    handleZoom(elem);
+  });
 });
 
 initializeCanvas();
