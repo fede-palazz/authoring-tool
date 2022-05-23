@@ -1,15 +1,23 @@
 import * as diagHandler from './diagramHandler';
 import './style.css';
+import './assets/icons/zoom-in.svg';
+import './assets/icons/zoom-out.svg';
+import './assets/icons/reset-zoom.svg';
+import './assets/icons/export-diag.svg';
+import './assets/icons/export-svg.svg';
+import './assets/icons/import-diag.svg';
+import './assets/icons/new-diag.svg';
 
 // Canvas id
 const CANVAS = 'canvas';
-const DEFAULT_MODE = 'm';
+// Editor default mode
+const EDITOR_MODE = 'n';
 
 // Get UI components
+const newDiagBtn = document.querySelector('#newDiag');
 const importDiagBtn = document.querySelector('#importDiag');
 const exportDiagBtn = document.querySelector('#exportDiag');
 const exportDiagSvgBtn = document.querySelector('#exportDiagSvg');
-const zoomBar = document.querySelector('.zoom-bar');
 
 // ***************
 // ** FUNCTIONS **
@@ -20,14 +28,41 @@ const zoomBar = document.querySelector('.zoom-bar');
  */
 function initializeCanvas() {
   // Instantiate the editor
-  diagHandler.createEditor(DEFAULT_MODE, CANVAS);
+  diagHandler.createEditor(EDITOR_MODE, CANVAS);
   // Load the blank diagram template
   diagHandler.displayBlankDiagram();
+}
+
+/**
+ * Handle the different types of zoom events
+ * @param {HTMLElement} element HTML zoom button
+ */
+function handleZoom(element) {
+  switch (element.name) {
+    case 'resetZoomBtn':
+      diagHandler.resetZoom();
+      break;
+    case 'zoomInBtn':
+      diagHandler.zoomIn();
+      break;
+    case 'zoomOutBtn':
+      diagHandler.zoomOut();
+      break;
+  }
+}
+
+function loadBlankCanvas() {
+  // TODO: To implement
 }
 
 // *********************
 // ** EVENT LISTENERS **
 // *********************
+
+/**
+ * New diagram button event listener
+ */
+newDiagBtn.addEventListener('click', loadBlankCanvas);
 
 /**
  * Import diagram button event listener
@@ -109,18 +144,15 @@ document.addEventListener('keydown', (e) => {
 /**
  * Change diagram zoom event listener
  */
-zoomBar.addEventListener('click', (e) => {
-  switch (e.target.name) {
-    case 'resetZoomBtn':
-      diagHandler.resetZoom();
-      break;
-    case 'zoomInBtn':
-      diagHandler.zoomIn();
-      break;
-    case 'zoomOutBtn':
-      diagHandler.zoomOut();
-      break;
-  }
+document.querySelectorAll('div.zoom-bar > button').forEach((elem) => {
+  elem.addEventListener('click', () => {
+    handleZoom(elem);
+  });
 });
 
+window.addEventListener('beforeunload', (event) => {
+  event.preventDefault();
+  event.returnValue = '';
+  // TODO: save/discard changes to the diagram
+});
 initializeCanvas();

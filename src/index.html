@@ -13,28 +13,85 @@
         </div>
       </header>
 
-      <section id="canvas-container">
+      <div id="canvas-container">
         <div id="canvas"></div>
-      </section>
-    </div>
-    <div class="toolbar">
-      <a id="exportDiag" download="diagram.bpmn"
-        ><button class="icon-btn">Export</button></a
-      >
 
-      <button class="icon-btn" onclick="importDiag.click()">
-        Import
-        <input id="importDiag" type="file" accept=".bpmn" hidden />
-      </button>
+        <!-- Bottom toolbar -->
+        <div class="toolbar">
+          <div class="sub-toolbar">
+            <!-- Create blank diagram button -->
+            <button id="newDiag" class="icon-btn">
+              <img
+                src="new-diag.svg"
+                alt="New diagram"
+                title="Create blank diagram"
+                class="icon"
+              />
+            </button>
 
-      <a id="exportDiagSvg" download="diagram.svg"
-        ><button class="icon-btn">Export SVG</button></a
-      >
-    </div>
-    <div class="zoom-bar">
-      <button class="icon-btn" name="resetZoomBtn">R</button>
-      <button class="icon-btn" name="zoomInBtn">+</button>
-      <button class="icon-btn" name="zoomOutBtn">-</button>
+            <!-- Import local diagram button -->
+            <button class="icon-btn" onclick="importDiag.click()">
+              <img
+                src="import-diag.svg"
+                alt="Import diagram"
+                title="Import local diagram"
+                class="icon"
+              />
+              <input id="importDiag" type="file" accept=".bpmn" hidden />
+            </button>
+          </div>
+          <div class="sub-toolbar">
+            <!-- Export diagram (BPMN) button -->
+            <a id="exportDiag" download="diagram.bpmn"
+              ><button class="icon-btn">
+                <img
+                  src="export-diag.svg"
+                  alt="Export diagram as BPMN"
+                  title="Export diagram (BPMN)"
+                  class="icon"
+                /></button
+            ></a>
+
+            <!-- Export diagram (SVG) button -->
+            <a id="exportDiagSvg" download="diagram.svg"
+              ><button class="icon-btn">
+                <img
+                  src="export-svg.svg"
+                  alt="Export diagram as SVG"
+                  title="Export diagram (SVG)"
+                  class="icon"
+                /></button
+            ></a>
+          </div>
+        </div>
+        <!-- Lateral zoom bar -->
+        <div class="zoom-bar">
+          <!-- Reset zoom button -->
+          <button class="icon-btn" name="resetZoomBtn">
+            <img
+              src="reset-zoom.svg"
+              alt="Reset Zoom"
+              title="Reset zoom"
+              class="icon"
+            />
+          </button>
+
+          <!-- Zoom in button -->
+          <button class="icon-btn" name="zoomInBtn">
+            <img src="zoom-in.svg" alt="Zoom In" title="Zoom in" class="icon" />
+          </button>
+
+          <!-- Zoom out button -->
+          <button class="icon-btn" name="zoomOutBtn">
+            <img
+              src="zoom-out.svg"
+              alt="Zoom Out"
+              title="Zoom out"
+              class="icon"
+            />
+          </button>
+        </div>
+      </div>
     </div>
   </body>
 </html>

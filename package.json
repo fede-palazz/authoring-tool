@@ -2,7 +2,7 @@
   "name": "authoring-tool",
   "version": "1.0.0",
   "description": "TEAMING.AI Authoring Tool",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "build": "webpack --config webpack.dev.js",
     "watch": "webpack --watch --config webpack.dev.js",
