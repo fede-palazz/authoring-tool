@@ -53,7 +53,8 @@ function handleZoom(element) {
 }
 
 function loadBlankCanvas() {
-  // TODO: To implement
+  // TODO: Check whether the current diagram has pending changes
+  diagHandler.displayBlankDiagram();
 }
 
 // *********************
@@ -165,10 +166,11 @@ document.querySelectorAll('div.zoom-bar > button').forEach((elem) => {
   });
 });
 
+// TODO: ask to save/discard pending changes to the diagram
 // window.addEventListener('beforeunload', (event) => {
 //   event.preventDefault();
 //   event.returnValue = '';
-//   // TODO: save/discard changes to the diagram
+//
 // });
 
 initializeCanvas();

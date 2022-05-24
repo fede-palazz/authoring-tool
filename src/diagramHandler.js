@@ -106,6 +106,9 @@ function fetchAndDisplay(file) {
   fr.readAsText(file);
 }
 
+/**
+ * Override the current diagram with a blank canvas
+ */
 function displayBlankDiagram() {
   if (editor) displayDiagram(BLANK_DIAGRAM);
   else throw new Error('Editor is not defined!');
