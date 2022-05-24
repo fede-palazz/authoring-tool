@@ -11,11 +11,12 @@ import './assets/icons/new-diag.svg';
 // Canvas id
 const CANVAS = 'canvas';
 // Editor default mode
-const EDITOR_MODE = 'n';
+const EDITOR_MODE = 'm';
 
 // Get UI components
 const newDiagBtn = document.querySelector('#newDiag');
 const importDiagBtn = document.querySelector('#importDiag');
+const importDiagBtnHidden = document.querySelector('#importDiagHidden');
 const exportDiagBtn = document.querySelector('#exportDiag');
 const exportDiagSvgBtn = document.querySelector('#exportDiagSvg');
 
@@ -67,20 +68,34 @@ newDiagBtn.addEventListener('click', loadBlankCanvas);
 /**
  * Import diagram button event listener
  */
-importDiagBtn.addEventListener('change', () => {
+importDiagBtn.addEventListener('click', (event) => {
+  importDiagBtnHidden.click();
+});
+
+/**
+ * Hidden file upload field event listener
+ */
+importDiagBtnHidden.addEventListener('click', (event) => {
+  event.stopPropagation();
+});
+
+/**
+ * Hidden file upload field on file change event listener
+ */
+importDiagBtnHidden.addEventListener('change', () => {
   // Null check for the selected file diagram
-  if (!importDiagBtn.files) return;
+  if (!importDiagBtnHidden.files) return;
 
   // File extension check
-  const fileName = importDiagBtn.value;
+  const fileName = importDiagBtnHidden.value;
   if (fileName.split('.').pop() !== 'bpmn') {
     alert('Only files with .bpmn extension can be submitted!');
     // Reset the file choice
-    importDiagBtn.value = '';
+    importDiagBtnHidden.value = '';
     return;
   }
   // Read the selected local diagram and display it
-  diagHandler.fetchAndDisplay(importDiagBtn.files[0]);
+  diagHandler.fetchAndDisplay(importDiagBtnHidden.files[0]);
 });
 
 /**
@@ -150,9 +165,10 @@ document.querySelectorAll('div.zoom-bar > button').forEach((elem) => {
   });
 });
 
-window.addEventListener('beforeunload', (event) => {
-  event.preventDefault();
-  event.returnValue = '';
-  // TODO: save/discard changes to the diagram
-});
+// window.addEventListener('beforeunload', (event) => {
+//   event.preventDefault();
+//   event.returnValue = '';
+//   // TODO: save/discard changes to the diagram
+// });
+
 initializeCanvas();
