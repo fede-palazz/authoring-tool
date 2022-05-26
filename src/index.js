@@ -11,7 +11,7 @@ import './assets/icons/new-diag.svg';
 // Canvas id
 const CANVAS = 'canvas';
 // Editor default mode
-const EDITOR_MODE = 'm';
+const EDITOR_MODE = 'v';
 
 // Get UI components
 const newDiagBtn = document.querySelector('#newDiag');

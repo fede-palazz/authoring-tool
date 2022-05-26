@@ -1,6 +1,7 @@
 import Modeler from 'bpmn-js/lib/Modeler';
 import Viewer from 'bpmn-js/lib/Viewer';
 import NavigatedViewer from 'bpmn-js/lib/NavigatedViewer';
+import TokenSimulationModule from 'bpmn-js-token-simulation';
 import BLANK_DIAGRAM from './assets/diagrams/new-diagram.bpmn';
 import 'bpmn-js/dist/assets/diagram-js.css';
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
@@ -27,6 +28,7 @@ function createEditor(editorMode, canvas) {
         keyboard: {
           bindTo: document,
         },
+        additionalModules: [TokenSimulationModule],
       });
       // Initialize control variables
       commandStack = editor.get('commandStack');

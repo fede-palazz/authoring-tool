@@ -25,7 +25,8 @@
   },
   "homepage": "https://github.com/IlPalazz/authoring-tool#readme",
   "dependencies": {
-    "bpmn-js": "^9.0.3"
+    "bpmn-js": "^9.0.3",
+    "bpmn-js-token-simulation": "^0.27.0"
   },
   "devDependencies": {
     "css-loader": "^6.7.1",
