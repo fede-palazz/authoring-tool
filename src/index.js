@@ -1,17 +1,11 @@
 import * as diagHandler from './diagramHandler';
 import './style.css';
-import './assets/icons/zoom-in.svg';
-import './assets/icons/zoom-out.svg';
-import './assets/icons/reset-zoom.svg';
-import './assets/icons/export-diag.svg';
-import './assets/icons/export-svg.svg';
-import './assets/icons/import-diag.svg';
-import './assets/icons/new-diag.svg';
+import * as Icons from './assets/icons';
 
 // Canvas id
 const CANVAS = 'canvas';
 // Editor default mode
-const EDITOR_MODE = 'm';
+const EDITOR_MODE = 'n';
 
 // Get UI components
 const newDiagBtn = document.querySelector('#newDiag');
@@ -19,6 +13,33 @@ const importDiagBtn = document.querySelector('#importDiag');
 const importDiagBtnHidden = document.querySelector('#importDiagHidden');
 const exportDiagBtn = document.querySelector('#exportDiag');
 const exportDiagSvgBtn = document.querySelector('#exportDiagSvg');
+
+/**
+ * Append buttons' icons
+ */
+newDiagBtn.appendChild(
+  Icons.NewDiagIcon('', 'Create blank diagram', 'Create blank diagram')
+);
+importDiagBtn.appendChild(
+  Icons.ImportDiagIcon('', 'Import diagram', 'Import local diagram')
+);
+exportDiagBtn.firstChild.appendChild(
+  Icons.ExportDiagIcon('', 'Export diagram as BPMN', 'Export diagram (BPMN)')
+);
+exportDiagSvgBtn.firstChild.appendChild(
+  Icons.ExportDiagSvgIcon('', 'Export diagram as SVG', 'Export diagram (SVG)')
+);
+document
+  .querySelector('#resetZoomBtn')
+  .appendChild(Icons.ResetZoomIcon('', 'Reset zoom', 'Reset zoom'));
+document
+  .querySelector('#zoomInBtn')
+  .appendChild(Icons.ZoomInIcon('', 'Zoom in', 'Zoom in'));
+document
+  .querySelector('#zoomOutBtn')
+  .appendChild(Icons.ZoomOutIcon('', 'Zoom out', 'Zoom out'));
+
+/*********************************************/
 
 // ***************
 // ** FUNCTIONS **
@@ -39,7 +60,7 @@ function initializeCanvas() {
  * @param {HTMLElement} element HTML zoom button
  */
 function handleZoom(element) {
-  switch (element.name) {
+  switch (element.id) {
     case 'resetZoomBtn':
       diagHandler.resetZoom();
       break;
