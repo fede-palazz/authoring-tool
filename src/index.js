@@ -7,11 +7,12 @@ import './assets/icons/export-diag.svg';
 import './assets/icons/export-svg.svg';
 import './assets/icons/import-diag.svg';
 import './assets/icons/new-diag.svg';
+// TODO: Import icons with a separate js file
 
 // Canvas id
 const CANVAS = 'canvas';
 // Editor default mode
-const EDITOR_MODE = 'v';
+const EDITOR_MODE = 'n';
 
 // Get UI components
 const newDiagBtn = document.querySelector('#newDiag');

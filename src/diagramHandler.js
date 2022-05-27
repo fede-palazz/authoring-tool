@@ -39,6 +39,7 @@ function createEditor(editorMode, canvas) {
         keyboard: {
           bindTo: document,
         },
+        additionalModules: [TokenSimulationModule],
       });
       break;
     case 'n': // NavigatedViewer
@@ -47,10 +48,10 @@ function createEditor(editorMode, canvas) {
         keyboard: {
           bindTo: document,
         },
+        additionalModules: [TokenSimulationModule],
       });
       break;
   }
-
   zoomScroll = editor.get('zoomScroll');
 }
 
