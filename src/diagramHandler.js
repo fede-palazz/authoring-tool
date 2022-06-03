@@ -6,19 +6,17 @@ import TokenSimulationModeler from 'bpmn-js-token-simulation/lib/modeler';
 import BLANK_DIAGRAM from './assets/diagrams/new-diagram.bpmn';
 import 'bpmn-js/dist/assets/diagram-js.css';
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
+import 'bpmn-js-token-simulation/assets/css/bpmn-js-token-simulation.css';
 
 let editor;
 let commandStack;
 let zoomScroll;
-let eventCallback;
-// Current diagram file
-let diagramFile = null;
 // Current diagram mode
 //let mode = ""; TODO: Work on diagram toggle mode
 
 /**
  * Instantiate a new BPMN Editor
- * @param {String} editorMode Editor typology: "v: Viewer, "n": NavigatedViewer, "m": Modeler
+ * @param {String} editorMode Editor typology {"v": Viewer, "n": NavigatedViewer, "m": Modeler}
  * @param {String} canvas Canvas container id
  */
 function createEditor(editorMode, canvas, callback) {
@@ -93,10 +91,6 @@ async function exportDiagramSVG() {
 function fetchAndDisplay(file) {
   if (!file) throw new Error('Error: received file is null!');
 
-  // Save current diagram file
-  // Maybe it's better to save only the fileName (input value)
-  diagramFile = file; // TODO: Am I going to use this?
-
   let fr = new FileReader();
 
   // Load event: reading finished, no errors
@@ -104,12 +98,10 @@ function fetchAndDisplay(file) {
     // Display the diagram
     displayDiagram(fr.result);
   };
-
   // Error occured during file reading
   fr.onerror = (err) => {
     throw new Error('An error occured during file reading: ' + err);
   };
-
   // Read the .bpmn file as plain text
   fr.readAsText(file);
 }

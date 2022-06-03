@@ -1,5 +1,4 @@
 import * as diagHandler from './diagramHandler';
-import 'bpmn-js-token-simulation/assets/css/bpmn-js-token-simulation.css';
 import './style.css';
 import './assets/icons/zoom-in.svg';
 import './assets/icons/zoom-out.svg';
@@ -59,7 +58,7 @@ function loadBlankCanvas() {
 }
 
 /**
- * Handle diagram specific events
+ * Callback function used to handle diagram events
  * @param {String} eventName
  * @param {Event} event
  */
@@ -73,6 +72,7 @@ function handleEvents(eventName, event) {
 
 /**
  * Toggle bottom toolbar visibility
+ * @param {Boolean} hide If true, hide the bottom toolbar, otherwise display it
  */
 function toggleToolbar(hide) {
   const toolbar = document.querySelector('#toolbar');
