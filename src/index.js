@@ -29,7 +29,7 @@ const exportDiagSvgBtn = document.querySelector('#exportDiagSvg');
  */
 function initializeCanvas() {
   // Instantiate the editor
-  diagHandler.createEditor(EDITOR_MODE, CANVAS);
+  diagHandler.createEditor(EDITOR_MODE, CANVAS, handleEvents);
   // Load the blank diagram template
   diagHandler.displayBlankDiagram();
 }
@@ -57,6 +57,28 @@ function loadBlankCanvas() {
   diagHandler.displayBlankDiagram();
 }
 
+/**
+ * Callback function used to handle diagram events
+ * @param {String} eventName
+ * @param {Event} event
+ */
+function handleEvents(eventName, event) {
+  switch (eventName) {
+    case 'toggleSimulation':
+      event.active ? toggleToolbar(true) : toggleToolbar(false);
+      break;
+  }
+}
+
+/**
+ * Toggle bottom toolbar visibility
+ * @param {Boolean} hide If true, hide the bottom toolbar, otherwise display it
+ */
+function toggleToolbar(hide) {
+  const toolbar = document.querySelector('#toolbar');
+  hide ? toolbar.classList.add('hide') : toolbar.classList.remove('hide');
+}
+
 // *********************
 // ** EVENT LISTENERS **
 // *********************
@@ -69,7 +91,7 @@ newDiagBtn.addEventListener('click', loadBlankCanvas);
 /**
  * Import diagram button event listener
  */
-importDiagBtn.addEventListener('click', (event) => {
+importDiagBtn.addEventListener('click', () => {
   importDiagBtnHidden.click();
 });
 
