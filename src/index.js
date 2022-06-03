@@ -1,4 +1,5 @@
 import * as diagHandler from './diagramHandler';
+import 'bpmn-js-token-simulation/assets/css/bpmn-js-token-simulation.css';
 import './style.css';
 import './assets/icons/zoom-in.svg';
 import './assets/icons/zoom-out.svg';
@@ -7,12 +8,11 @@ import './assets/icons/export-diag.svg';
 import './assets/icons/export-svg.svg';
 import './assets/icons/import-diag.svg';
 import './assets/icons/new-diag.svg';
-// TODO: Import icons with a separate js file
 
 // Canvas id
 const CANVAS = 'canvas';
 // Editor default mode
-const EDITOR_MODE = 'n';
+const EDITOR_MODE = 'm';
 
 // Get UI components
 const newDiagBtn = document.querySelector('#newDiag');
@@ -30,7 +30,7 @@ const exportDiagSvgBtn = document.querySelector('#exportDiagSvg');
  */
 function initializeCanvas() {
   // Instantiate the editor
-  diagHandler.createEditor(EDITOR_MODE, CANVAS);
+  diagHandler.createEditor(EDITOR_MODE, CANVAS, handleEvents);
   // Load the blank diagram template
   diagHandler.displayBlankDiagram();
 }
@@ -58,6 +58,27 @@ function loadBlankCanvas() {
   diagHandler.displayBlankDiagram();
 }
 
+/**
+ * Handle diagram specific events
+ * @param {String} eventName
+ * @param {Event} event
+ */
+function handleEvents(eventName, event) {
+  switch (eventName) {
+    case 'toggleSimulation':
+      event.active ? toggleToolbar(true) : toggleToolbar(false);
+      break;
+  }
+}
+
+/**
+ * Toggle bottom toolbar visibility
+ */
+function toggleToolbar(hide) {
+  const toolbar = document.querySelector('#toolbar');
+  hide ? toolbar.classList.add('hide') : toolbar.classList.remove('hide');
+}
+
 // *********************
 // ** EVENT LISTENERS **
 // *********************
@@ -70,7 +91,7 @@ newDiagBtn.addEventListener('click', loadBlankCanvas);
 /**
  * Import diagram button event listener
  */
-importDiagBtn.addEventListener('click', (event) => {
+importDiagBtn.addEventListener('click', () => {
   importDiagBtnHidden.click();
 });
 

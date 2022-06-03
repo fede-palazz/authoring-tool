@@ -1,7 +1,8 @@
 import Modeler from 'bpmn-js/lib/Modeler';
 import Viewer from 'bpmn-js/lib/Viewer';
 import NavigatedViewer from 'bpmn-js/lib/NavigatedViewer';
-import TokenSimulationModule from 'bpmn-js-token-simulation';
+import TokenSimulationViewer from 'bpmn-js-token-simulation/lib/viewer';
+import TokenSimulationModeler from 'bpmn-js-token-simulation/lib/modeler';
 import BLANK_DIAGRAM from './assets/diagrams/new-diagram.bpmn';
 import 'bpmn-js/dist/assets/diagram-js.css';
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
@@ -9,6 +10,7 @@ import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
 let editor;
 let commandStack;
 let zoomScroll;
+let eventCallback;
 // Current diagram file
 let diagramFile = null;
 // Current diagram mode
@@ -19,7 +21,7 @@ let diagramFile = null;
  * @param {String} editorMode Editor typology: "v: Viewer, "n": NavigatedViewer, "m": Modeler
  * @param {String} canvas Canvas container id
  */
-function createEditor(editorMode, canvas) {
+function createEditor(editorMode, canvas, callback) {
   if (editor !== undefined) return;
   switch (editorMode) {
     case 'm': // Modeler
@@ -28,7 +30,7 @@ function createEditor(editorMode, canvas) {
         keyboard: {
           bindTo: document,
         },
-        additionalModules: [TokenSimulationModule],
+        additionalModules: [TokenSimulationModeler],
       });
       // Initialize control variables
       commandStack = editor.get('commandStack');
@@ -39,7 +41,7 @@ function createEditor(editorMode, canvas) {
         keyboard: {
           bindTo: document,
         },
-        additionalModules: [TokenSimulationModule],
+        additionalModules: [TokenSimulationViewer],
       });
       break;
     case 'n': // NavigatedViewer
@@ -48,11 +50,14 @@ function createEditor(editorMode, canvas) {
         keyboard: {
           bindTo: document,
         },
-        additionalModules: [TokenSimulationModule],
+        additionalModules: [TokenSimulationViewer],
       });
       break;
   }
   zoomScroll = editor.get('zoomScroll');
+
+  // Set diagram events callback
+  eventsListener(callback);
 }
 
 /**
@@ -149,6 +154,12 @@ function zoomOut() {
 
 function resetZoom() {
   zoomScroll.reset();
+}
+
+function eventsListener(callback) {
+  editor.on('tokenSimulation.toggleMode', (event) => {
+    callback('toggleSimulation', event);
+  });
 }
 
 export {
