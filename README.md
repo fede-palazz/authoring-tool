@@ -21,6 +21,9 @@ $ npm install
 $ npm start
 ```
 
+### Examples
+You can find some diagrams examples under the `src/assets/diagrams` directory and import them into the editor.
+
 ## Features
 
 - possibility to create and modify BPMN diagrams
