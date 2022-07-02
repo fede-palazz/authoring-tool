@@ -188,11 +188,12 @@ document.querySelectorAll('div.zoom-bar > button').forEach((elem) => {
   });
 });
 
-// TODO: ask to save/discard pending changes to the diagram
-// window.addEventListener('beforeunload', (event) => {
-//   event.preventDefault();
-//   event.returnValue = '';
-//
-// });
+/**
+ * Ask to save/discard pending changes to the diagram
+ */
+window.addEventListener('beforeunload', (event) => {
+  event.preventDefault();
+  event.returnValue = '';
+});
 
 initializeCanvas();
