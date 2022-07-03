@@ -1,5 +1,6 @@
 import * as diagHandler from './diagramHandler';
 import './style.css';
+import './assets/idea-logo-small.png';
 
 // Canvas id
 const CANVAS = 'canvas';
