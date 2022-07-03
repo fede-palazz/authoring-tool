@@ -1,5 +1,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 
+:root {
+  --dark-primary-color: #388e3c;
+  --primary-color: #10d170;
+  --light-primary-color: #c8e6c9;
+  --secondary-color: #7a9286;
+  --secondary-text: #757575;
+  --accent-color: #607d8b;
+  --icons-color: #ffffff;
+  --divider-color: #bdbdbd;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -12,19 +23,67 @@ body {
   font-family: "Roboto", sans-serif;
 }
 
+/* MATERIAL ICONS STYLING */
+
+/* Rules for sizing the icon. */
+.material-icons.md-18 {
+  font-size: 18px;
+}
+.material-icons.md-24 {
+  font-size: 24px;
+}
+.material-icons.md-36 {
+  font-size: 36px;
+}
+.material-icons.md-48 {
+  font-size: 48px;
+}
+
+/* Rules for using icons as black on a light background. */
+.material-icons.md-dark {
+  color: rgba(0, 0, 0, 0.54);
+}
+.material-icons.md-dark.md-inactive {
+  color: rgba(0, 0, 0, 0.26);
+}
+
+/* Rules for using icons as white on a dark background. */
+.material-icons.md-light {
+  color: rgba(255, 255, 255, 1);
+}
+.material-icons.md-light:hover {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.material-icons.md-light.md-inactive {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/*************************+*/
+
 #wrapper {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-#wrapper > * {
-  padding: 5px;
-}
-
 .top-bar {
   display: flex;
   flex-grow: 0;
+  justify-items: flex-end;
+  background-color: var(--primary-color);
+  padding-left: 15px;
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  height: 70px;
+}
+
+.title {
+  text-shadow: 2px 2px 4px #000000;
 }
 
 #canvas-container {
@@ -38,21 +97,9 @@ body {
   flex-grow: 1;
 }
 
-.title {
-  margin: 10px auto;
-  border: solid 1px #999;
-  background: #eee;
-  border-radius: 5px;
-}
-
-.title h1 {
-  margin: 8px;
-}
-
 .toolbar {
   display: flex;
   flex-direction: row;
-
   position: fixed;
   left: 10px;
   bottom: 10px;
@@ -63,21 +110,17 @@ body {
   flex-direction: row;
   justify-content: space-between;
   margin-right: 15px;
+  padding: 2px;
 }
 
 .icon-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 5px;
-  border-radius: 20px;
+  padding: 4px;
+  border-radius: 12px;
   background-color: inherit;
   border: none;
-}
-
-.icon-btn img {
-  width: 20px;
-  height: 20px;
 }
 
 .toolbar .icon-btn {
@@ -97,6 +140,7 @@ body {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  padding: 2px;
 }
 
 .zoom-bar .icon-btn {
@@ -106,14 +150,18 @@ body {
 
 .zoom-bar,
 .sub-toolbar {
-  background-color: #eee;
+  background-color: var(--primary-color);
   border-radius: 10px;
-  border: 1px solid #999;
+  /* border: 1px solid #999; */
 }
 
 .icon-btn:hover {
   cursor: pointer;
-  background-color: darkgrey;
+  background-color: var(--light-primary-color);
+}
+
+.icon-btn:hover > .material-icons {
+  color: rgba(0, 0, 0, 0.54);
 }
 
 .hide {
