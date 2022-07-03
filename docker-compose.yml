@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  app:
+    container_name: auth-tool
+    image: auth-tool-img
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - '9000:80'
