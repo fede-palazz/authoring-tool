@@ -6,7 +6,7 @@ This repository contains source code and files used during the development of th
 
 ### Prerequisites
 
-- Node.js v.16 (tested with `v.16.15.0`)
+- Node.js v16 (tested with `v16.15`)
 
 ### Installation
 
@@ -22,6 +22,7 @@ $ npm start
 ```
 
 ### Examples
+
 You can find some diagrams examples under the `src/assets/diagrams` directory and import them into the editor.
 
 ## Features
