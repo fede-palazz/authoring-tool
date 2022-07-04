@@ -41,7 +41,6 @@ $ docker-compose down
 ```
 
 ## Examples
-
 You can find some diagrams examples under the `src/assets/diagrams` directory and import them into the editor.
 
 ## Features

@@ -2,16 +2,21 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
     <title>BPMN Editor</title>
   </head>
 
   <body>
     <div id="wrapper">
-      <header class="top-bar">
-        <div class="title">
-          <h1>BPMN Editor</h1>
+      <div class="top-bar">
+        <div class="title-container">
+          <h1 class="title">BPMN Editor</h1>
         </div>
-      </header>
+        <img class="logo" src="idea-logo-small.png" alt="IDEA logo" />
+      </div>
 
       <div id="canvas-container">
         <div id="canvas"></div>
@@ -21,22 +26,24 @@
           <div class="sub-toolbar">
             <!-- Create blank diagram button -->
             <button id="newDiag" class="icon-btn">
-              <img
-                src="new-diag.svg"
+              <span
+                class="material-icons md-light"
                 alt="New diagram"
                 title="Create blank diagram"
-                class="icon"
-              />
+              >
+                add_circle
+              </span>
             </button>
 
             <!-- Import local diagram button -->
             <button id="importDiag" class="icon-btn">
-              <img
-                src="import-diag.svg"
+              <span
+                class="material-icons md-light"
                 alt="Import diagram"
                 title="Import local diagram"
-                class="icon"
-              />
+              >
+                file_upload
+              </span>
               <input id="importDiagHidden" type="file" accept=".bpmn" hidden />
             </button>
           </div>
@@ -44,51 +51,57 @@
             <!-- Export diagram (BPMN) button -->
             <a id="exportDiag" download="diagram.bpmn"
               ><button class="icon-btn">
-                <img
-                  src="export-diag.svg"
+                <span
+                  class="material-icons md-light"
                   alt="Export diagram as BPMN"
                   title="Export diagram (BPMN)"
-                  class="icon"
-                /></button
-            ></a>
+                >
+                  file_download
+                </span>
+              </button></a
+            >
 
             <!-- Export diagram (SVG) button -->
             <a id="exportDiagSvg" download="diagram.svg"
               ><button class="icon-btn">
-                <img
-                  src="export-svg.svg"
+                <span
+                  class="material-icons md-light"
                   alt="Export diagram as SVG"
                   title="Export diagram (SVG)"
-                  class="icon"
-                /></button
-            ></a>
+                >
+                  image
+                </span>
+              </button></a
+            >
           </div>
         </div>
         <!-- Lateral zoom bar -->
         <div class="zoom-bar">
           <!-- Reset zoom button -->
           <button class="icon-btn" name="resetZoomBtn">
-            <img
-              src="reset-zoom.svg"
+            <span
+              class="material-icons md-light"
               alt="Reset Zoom"
               title="Reset zoom"
-              class="icon"
-            />
+              >center_focus_weak</span
+            >
           </button>
 
           <!-- Zoom in button -->
           <button class="icon-btn" name="zoomInBtn">
-            <img src="zoom-in.svg" alt="Zoom In" title="Zoom in" class="icon" />
+            <span class="material-icons md-light" alt="Zoom In" title="Zoom in"
+              >zoom_in</span
+            >
           </button>
 
           <!-- Zoom out button -->
           <button class="icon-btn" name="zoomOutBtn">
-            <img
-              src="zoom-out.svg"
+            <span
+              class="material-icons md-light"
               alt="Zoom Out"
               title="Zoom out"
-              class="icon"
-            />
+              >zoom_out</span
+            >
           </button>
         </div>
       </div>
