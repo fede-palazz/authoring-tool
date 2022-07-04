@@ -6,7 +6,9 @@ This repository contains source code and files used during the development of th
 
 ### Prerequisites
 
-- Node.js v16 (tested with `v16.15`)
+- [Node.js](https://nodejs.org/en/download/) (tested with `v16.15`)
+- [Docker](https://docs.docker.com/engine/install/)
+- [Docker compose](https://docs.docker.com/compose/install/compose-plugin/#installing-compose-on-linux-systems)
 
 ### Installation
 
@@ -14,15 +16,31 @@ This repository contains source code and files used during the development of th
 # Clone this repository
 $ git clone https://github.com/IlPalazz/authoring-tool.git
 
-# Install the dependencies
+# Install dependencies
 $ npm install
 
-# Launch the authoring tool
+# Launch the Authoring tool
 $ npm start
 ```
 
-### Examples
+### Docker
 
+```bash
+# Generate static assets inside the dist folder
+$ npm run build
+
+# Docker will copy them inside the container and
+# they will be served by NGINX
+
+# Build the image and start the container
+# (use --build flag to update image with local changes)
+$ docker-compose up -d --build
+
+# Stop running container
+$ docker-compose down
+```
+
+## Examples
 You can find some diagrams examples under the `src/assets/diagrams` directory and import them into the editor.
 
 ## Features
