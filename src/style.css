@@ -92,15 +92,21 @@ body {
   max-width: 90px;
 }
 
-#canvas-container {
+#app {
   display: flex;
   flex-grow: 1;
   justify-content: stretch;
   padding: 0;
 }
 
+#canvas-viewer,
+#canvas-modeler,
 #canvas {
   flex-grow: 1;
+}
+
+a {
+  text-decoration: none;
 }
 
 .toolbar {
