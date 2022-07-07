@@ -1,5 +1,7 @@
+import * as diagHandler from '../helpers/diagramHandler';
+
 const ViewerComponent = {
-  render: () => {
+  render() {
     return `   
       <div id="canvas"></div>
   
@@ -89,10 +91,10 @@ const ViewerComponent = {
     
           `;
   },
-  init: () => {
+  init() {
     document.addEventListener('click', hello);
   },
-  destroy: () => {
+  destroy() {
     document.removeEventListener('click', hello);
   },
 };

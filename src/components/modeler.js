@@ -1,5 +1,7 @@
+import * as diagHandler from '../helpers/diagramHandler';
+
 const ModelerComponent = {
-  render: () => {
+  render() {
     return `
                
       <div id="canvas"></div>

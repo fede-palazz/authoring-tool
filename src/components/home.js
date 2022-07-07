@@ -7,7 +7,7 @@ const HomeComponent = {
       </section>
       `;
   },
-  init: () => {
+  init() {
     document.querySelector('p').addEventListener('click', () => {
       console.log('Homepage event listener');
     });
@@ -16,7 +16,7 @@ const HomeComponent = {
      */
     document.addEventListener('keydown', undo);
   },
-  destroy: () => {
+  destroy() {
     document.removeEventListener('keydown', undo);
   },
 };

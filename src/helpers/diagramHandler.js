@@ -3,7 +3,7 @@ import Viewer from 'bpmn-js/lib/Viewer';
 import NavigatedViewer from 'bpmn-js/lib/NavigatedViewer';
 import TokenSimulationViewer from 'bpmn-js-token-simulation/lib/viewer';
 import TokenSimulationModeler from 'bpmn-js-token-simulation/lib/modeler';
-import BLANK_DIAGRAM from './assets/diagrams/new-diagram.bpmn';
+import BLANK_DIAGRAM from '../assets/diagrams/new-diagram.bpmn';
 import 'bpmn-js/dist/assets/diagram-js.css';
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
 import 'bpmn-js-token-simulation/assets/css/bpmn-js-token-simulation.css';

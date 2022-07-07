@@ -1,7 +1,6 @@
-import { HomeComponent } from './components/home';
-import { ViewerComponent } from './components/viewer';
-import { ModelerComponent } from './components/modeler';
-
+import { HomeComponent } from '../components/home';
+import { ViewerComponent } from '../components/viewer';
+import { ModelerComponent } from '../components/modeler';
 // Define router routes
 const routes = [
   { path: '/', component: HomeComponent },
