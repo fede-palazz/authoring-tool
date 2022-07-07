@@ -1,0 +1,117 @@
+/* MATERIAL ICONS STYLING */
+
+/* Rules for sizing the icon. */
+.material-icons.md-18 {
+  font-size: 18px;
+}
+.material-icons.md-24 {
+  font-size: 24px;
+}
+.material-icons.md-36 {
+  font-size: 36px;
+}
+.material-icons.md-48 {
+  font-size: 48px;
+}
+
+/* Rules for using icons as black on a light background. */
+.material-icons.md-dark {
+  color: rgba(0, 0, 0, 0.54);
+}
+.material-icons.md-dark.md-inactive {
+  color: rgba(0, 0, 0, 0.26);
+}
+
+/* Rules for using icons as white on a dark background. */
+.material-icons.md-light {
+  color: rgba(255, 255, 255, 1);
+}
+.material-icons.md-light:hover {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.material-icons.md-light.md-inactive {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/*************************+*/
+
+#canvas-viewer,
+#canvas-modeler,
+#canvas {
+  flex-grow: 1;
+}
+
+a {
+  text-decoration: none;
+}
+
+.toolbar {
+  display: flex;
+  flex-direction: row;
+  position: fixed;
+  left: 10px;
+  bottom: 10px;
+}
+
+.sub-toolbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-right: 15px;
+  padding: 2px;
+}
+
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 10px;
+  background-color: inherit;
+  border: none;
+}
+
+.toolbar .icon-btn {
+  margin: 2px 5px;
+}
+
+.icon-btn a {
+  text-decoration: none;
+  color: #000;
+}
+
+.zoom-bar {
+  position: fixed;
+  right: 15px;
+  bottom: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px;
+}
+
+.zoom-bar .icon-btn {
+  margin-top: 10px;
+  margin: 5px 3px;
+}
+
+.zoom-bar,
+.sub-toolbar {
+  background-color: var(--primary-color);
+  border-radius: 10px;
+}
+
+.icon-btn:hover {
+  cursor: pointer;
+  background-color: var(--light-primary-color);
+}
+
+.icon-btn:hover > .material-icons {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.hide {
+  display: none;
+}

@@ -1,10 +1,4 @@
-import * as diagHandler from './diagramHandler';
-import { HomeComponent } from './components';
-import { CanvasViewerComponent } from './components';
-import { CanvasModelerComponent } from './components';
-// import routes from './routes';
-// import './style.css';
-// import './assets/idea-logo-small.png';
+import * as diagHandler from './helpers/diagramHandler';
 
 // Canvas id
 const CANVAS = 'canvas';

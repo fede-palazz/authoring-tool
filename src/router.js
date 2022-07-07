@@ -1,6 +1,6 @@
-import { HomeComponent } from './components/Home';
-import { ViewerComponent } from './components/Viewer';
-import { ModelerComponent } from './components/Modeler';
+import { HomeComponent } from './components/home';
+import { ViewerComponent } from './components/viewer';
+import { ModelerComponent } from './components/modeler';
 
 // Define router routes
 const routes = [
@@ -20,7 +20,6 @@ export default function () {
   currentComponent.destroy();
   currentComponent =
     findComponentByPath(path, routes).component || HomeComponent;
-  console.log(currentComponent);
 
   const app = document.getElementById('app');
   while (app.hasChildNodes()) {
