@@ -1,25 +1,26 @@
 import { HomeComponent } from '../components/home';
 import { ViewerComponent } from '../components/viewer';
 import { ModelerComponent } from '../components/modeler';
+
 // Define router routes
 const routes = [
   { path: '/', component: HomeComponent },
   { path: '/v', component: ViewerComponent },
   { path: '/m', component: ModelerComponent },
 ];
-let currentComponent = HomeComponent;
+// Component currently displayed
+let currentComponent;
 
 export default function () {
-  // Find the component based on the current path
-  const path = parseLocation();
-
-  // If there's no matching route, get the "Error" component
-  //   const { component = HomeComponent } = findComponentByPath(path, routes) || {};
   // Remove global event listeners
-  currentComponent.destroy();
-  currentComponent =
-    findComponentByPath(path, routes).component || HomeComponent;
+  if (currentComponent) currentComponent.destroy();
 
+  // Current path
+  const path = parseLocation();
+  // Find the component based on the current path
+  currentComponent = findComponentByPath(path, routes);
+
+  // App's root element
   const app = document.getElementById('app');
   while (app.hasChildNodes()) {
     app.removeChild(app.firstChild);
@@ -28,6 +29,7 @@ export default function () {
   // Render the component in the "app" placeholder
   app.innerHTML = currentComponent.render();
 
+  // Inizialize the component
   currentComponent.init();
 }
 
@@ -40,8 +42,8 @@ function parseLocation() {
 }
 
 function findComponentByPath(path, routes) {
-  return (
+  const route =
     routes.find((r) => r.path.match(new RegExp(`^\\${path}$`, 'gm'))) ||
-    undefined
-  );
+    undefined;
+  return route ? route.component : HomeComponent;
 }

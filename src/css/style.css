@@ -29,9 +29,39 @@ body {
   min-height: 100vh;
 }
 
+.top-bar {
+  display: flex;
+  flex-grow: 0;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--primary-color);
+  padding: 0 20px;
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  height: 75px;
+}
+
+.title {
+  text-shadow: 2px 2px 4px #000000;
+}
+
+.logo {
+  display: block;
+  max-width: 90px;
+}
+
 #app {
   display: flex;
   flex-grow: 1;
   justify-content: stretch;
   padding: 0;
+}
+
+.hidden-link {
+  text-decoration: none;
+  color: inherit;
 }

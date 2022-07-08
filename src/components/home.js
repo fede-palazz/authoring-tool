@@ -1,10 +1,12 @@
 const HomeComponent = {
   render: () => {
     return `
-        <section>
+        <div id="home-container">
         <h1>Home</h1>
         <p>Laboris ex do id duis amet exercitation veniam ut deserunt in fugiat. Nisi mollit cillum sit ut tempor duis laboris ullamco adipisicing. Minim sint dolore aute deserunt laborum veniam cillum. Aliquip occaecat duis sunt in adipisicing voluptate ad dolor dolore dolore consectetur.</p>
-      </section>
+        <button id="push-state" type="button">Open Viewer</button>
+      </div>
+      
       `;
   },
   init() {

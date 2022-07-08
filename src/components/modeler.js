@@ -34,7 +34,7 @@ const ModelerComponent = {
         </div>
         <div class="sub-toolbar">
           <!-- Export diagram (BPMN) button -->
-          <a id="exportDiag" download="diagram.bpmn"
+          <a class="hidden-link" id="exportDiag" download="diagram.bpmn"
             ><button class="icon-btn">
               <span
                 class="material-icons md-light"
@@ -47,7 +47,7 @@ const ModelerComponent = {
           >
   
           <!-- Export diagram (SVG) button -->
-          <a id="exportDiagSvg" download="diagram.svg"
+          <a class="hidden-link" id="exportDiagSvg" download="diagram.svg"
             ><button class="icon-btn">
               <span
                 class="material-icons md-light"
