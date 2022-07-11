@@ -93,6 +93,8 @@ const ModelerComponent = {
           
             `;
   },
+  init(diagName = '') {},
+  destroy() {},
 };
 
 export { ModelerComponent };

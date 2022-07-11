@@ -84,6 +84,10 @@ body {
   height: 75px;
 }
 
+.title-container a {
+  cursor: pointer;
+}
+
 .title {
   text-shadow: 2px 2px 4px #000000;
   margin: 0;

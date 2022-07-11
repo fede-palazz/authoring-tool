@@ -5,7 +5,7 @@ const HomeComponent = {
           <div id="recent-files-container">
             <h2 class="subtitle">Recently opened</h2>
             <hr>
-              <ul id="recent-files">
+              <ul id="recent-files-list">
                 <li class="recent-files-item">Ciaooo</li>
                 <li class="recent-files-item">Ciaooo</li>
                 <li class="recent-files-item">Ciaooo</li>
@@ -13,7 +13,7 @@ const HomeComponent = {
           </div>
           <div class="home-toolbar">
             <!-- Create blank diagram button -->
-            <button id="newDiag" class="home-icon-btn">
+            <button id="new-diag-btn" class="home-icon-btn">
               <span
                 class="material-icons md-light md-36"
                 alt="New diagram"
@@ -43,22 +43,19 @@ const HomeComponent = {
       `;
   },
   init() {
-    document.querySelector('p').addEventListener('click', () => {
-      console.log('Homepage event listener');
-    });
-    /**
-     * Undo / Redo action event listener
+    /*
+     * EVENT LISTENERS
      */
-    document.addEventListener('keydown', undo);
+    document
+      .querySelector('#new-diag-btn')
+      .addEventListener('click', newDiagram);
   },
-  destroy() {
-    document.removeEventListener('keydown', undo);
-  },
+  destroy() {},
 };
 
-function undo(e) {
-  if (e.ctrlKey && e.key === 'z') console.log('Undo');
-  else if (e.ctrlKey && e.key === 'y') console.log('redo');
+function newDiagram() {
+  history.replaceState(null, null, '#/v');
+  window.dispatchEvent(new HashChangeEvent('hashchange'));
 }
 
 export { HomeComponent };

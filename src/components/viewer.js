@@ -91,7 +91,7 @@ const ViewerComponent = {
     
           `;
   },
-  init() {
+  init(diagName = '') {
     document.addEventListener('click', hello);
   },
   destroy() {
