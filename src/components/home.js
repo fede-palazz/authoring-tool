@@ -1,3 +1,5 @@
+import * as router from '../helpers/router';
+
 const HomeComponent = {
   render: () => {
     return `
@@ -53,9 +55,13 @@ const HomeComponent = {
   destroy() {},
 };
 
-function newDiagram() {
-  history.replaceState(null, null, '#/v');
-  window.dispatchEvent(new HashChangeEvent('hashchange'));
+function newDiagram(e) {
+  e.stopPropagation();
+  router.navigate('/v');
+}
+
+function importDiagram(e) {
+  e.stopPropagation();
 }
 
 export { HomeComponent };

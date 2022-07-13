@@ -6,32 +6,8 @@ const ViewerComponent = {
       <div id="canvas"></div>
   
       <!-- Bottom toolbar -->
-      <div class="toolbar" id="toolbar">
-        <div class="sub-toolbar">
-          <!-- Create blank diagram button -->
-          <button id="newDiag" class="icon-btn">
-            <span
-              class="material-icons md-light"
-              alt="New diagram"
-              title="Create blank diagram"
-            >
-              add_circle
-            </span>
-          </button>
-  
-          <!-- Import local diagram button -->
-          <button id="importDiag" class="icon-btn">
-            <span
-              class="material-icons md-light"
-              alt="Import diagram"
-              title="Import local diagram"
-            >
-              file_upload
-            </span>
-            <input id="importDiagHidden" type="file" accept=".bpmn" hidden />
-          </button>
-        </div>
-        <div class="sub-toolbar">
+        <div class="toolbar sub-toolbar">
+        
           <!-- Export diagram (BPMN) button -->
           <a class="hidden-link" id="exportDiag" download="diagram.bpmn"
             ><button class="icon-btn">
@@ -58,7 +34,7 @@ const ViewerComponent = {
             </button></a
           >
         </div>
-      </div>
+
       <!-- Lateral zoom bar -->
       <div class="zoom-bar">
         <!-- Reset zoom button -->

@@ -11,22 +11,22 @@ const routes = [
 // Component currently displayed
 let currentComponent;
 
-function navigate(hashUrl) {
+/**
+ * Navigate to the specified hash URL and display the corresponding component
+ * @param {String} hashUrl Hash portion of the URL
+ */
+function navigate(hashUrl = '') {
+  // Get path and diagName from the hash URL
+  const [path, diagName] = parseUrl(hashUrl);
+
   // Remove global event listeners
   if (currentComponent) currentComponent.destroy();
-
-  // Parse the url
-  const [path, diagName] = parseUrl(hashUrl);
-  console.log(`${path}, ${diagName}`);
-
   // Find the component based on the current path
-  currentComponent = findComponentByPath(path, routes);
+  currentComponent = findComponentByPath(path);
 
   // Remove currently displayed component
   const app = document.getElementById('app');
-  while (app.hasChildNodes()) {
-    app.removeChild(app.firstChild);
-  }
+  while (app.hasChildNodes()) app.removeChild(app.firstChild);
 
   // Render the new component in the "app" placeholder
   app.innerHTML = currentComponent.render();
@@ -41,37 +41,65 @@ function navigate(hashUrl) {
   }
 }
 
+/**
+ * Parse the submitted hash URL and split it into path and diagram name parts. Use the current one if a blank URL is provided.
+ * @param {String} hashUrl Hash portion of the URL
+ * @returns {Array} Splitted hash URL: [path, diagName]
+ */
 function parseUrl(hashUrl) {
-  // No path passed as param -> set to the current one
+  // No hash URL passed to the router, set to the current one
   if (!hashUrl) hashUrl = location.hash.slice(1);
 
   // Separate path and diagName (if present)
   const [path, diagName] =
     hashUrl.indexOf('?') != -1 ? hashUrl.split('?') : [hashUrl, ''];
 
-  // Check for url validity
-  return !isValidPath(path) ? ['/', ''] : [path, diagName];
-}
-
-function isValidPath(path) {
-  return (
-    routes.find((r) => r.path.match(new RegExp(`^\\${path}$`, 'gm'))) || false
-  );
+  // Check for path validity
+  return !isValidPath(path) || path === '/' ? ['/', ''] : [path, diagName];
 }
 
 /**
- * Extract the path from the hash portion of the url
- * @returns {String} path
+ * Check whether a path is valid or not
+ * @param {String} path Path portion of the hash URL
+ * @returns {Boolean} True if the path passed as parameter is valid, false otherwise
  */
-// function parseLocation() {
-//   return location.hash.slice(1).substring(0, 2).toLowerCase() || '/';
-// }
-
-function findComponentByPath(path, routes) {
-  const route =
-    routes.find((r) => r.path.match(new RegExp(`^\\${path}$`, 'gm'))) ||
-    undefined;
-  return route ? route.component : HomeComponent;
+function isValidPath(path) {
+  return getRouteByPath(path) ? true : false;
 }
 
-export { navigate };
+/**
+ * Get the component that matches the path
+ * @param {String} path Path portion of the hash URL
+ * @returns {Object} Requested component whether a match is found (if the path is not correct, return HomeComponent)
+ */
+function findComponentByPath(path) {
+  return getRouteByPath(path)?.component || HomeComponent;
+}
+
+/**
+ * Search for a match within the routes array and return the corresponding route
+ * @param {String} path Path that has to match with the one of a route entry
+ * @returns {Object || undefined} Requested route object if exists, undefined otherwise
+ */
+function getRouteByPath(path) {
+  return routes.find((r) => r.path.match(new RegExp(`^\\${path}$`, 'gm')));
+}
+
+/**
+ * Get the path portion from an hash URL. Use the current one if a blank URL is provided.
+ * @returns {String} Currently displayed path
+ */
+function getPath(hashUrl = '') {
+  return parseUrl(hashUrl).at(0);
+}
+
+/**
+ * Get the diagram name portion from an hash URL. Use the current one if a blank URL is provided.
+ * @returns {String} Currently displayed diagram name
+ */
+function getDiagName(hashUrl = '') {
+  //TODO: Decide whether the router should decode the name or not
+  return parseUrl(hashUrl).at(1);
+}
+
+export { navigate, getPath, getDiagName };
