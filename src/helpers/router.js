@@ -3,7 +3,7 @@ import { ViewerComponent } from '../components/viewer';
 import { ModelerComponent } from '../components/modeler';
 
 // Define router routes
-const routes = [
+const ROUTES = [
   { path: '/', component: HomeComponent },
   { path: '/v', component: ViewerComponent },
   { path: '/m', component: ModelerComponent },
@@ -16,8 +16,21 @@ let currentComponent;
  * @param {String} hashUrl Hash portion of the URL
  */
 function navigate(hashUrl = '') {
+  // Flag that forces components reloading even with identical hash URLs
+  let reload = false;
+  // No hash URL passed to the router
+  if (!hashUrl) {
+    // Evaluate the current one
+    hashUrl = location.hash.slice(1);
+    // Force component re-rendering
+    reload = true;
+  }
   // Get path and diagName from the hash URL
   const [path, diagName] = parseUrl(hashUrl);
+
+  // If new path and diagName are identical to the previous ones, then return
+  if (!reload && getCurrentPath() === path && getCurrentDiagName() === diagName)
+    return;
 
   // Remove global event listeners
   if (currentComponent) currentComponent.destroy();
@@ -47,13 +60,11 @@ function navigate(hashUrl = '') {
  * @returns {Array} Splitted hash URL: [path, diagName]
  */
 function parseUrl(hashUrl) {
-  // No hash URL passed to the router, set to the current one
-  if (!hashUrl) hashUrl = location.hash.slice(1);
-
+  // If the URL is blank, return the default route
+  if (!hashUrl) return ['/', ''];
   // Separate path and diagName (if present)
   const [path, diagName] =
     hashUrl.indexOf('?') != -1 ? hashUrl.split('?') : [hashUrl, ''];
-
   // Check for path validity
   return !isValidPath(path) || path === '/' ? ['/', ''] : [path, diagName];
 }
@@ -82,24 +93,41 @@ function findComponentByPath(path) {
  * @returns {Object || undefined} Requested route object if exists, undefined otherwise
  */
 function getRouteByPath(path) {
-  return routes.find((r) => r.path.match(new RegExp(`^\\${path}$`, 'gm')));
+  return ROUTES.find((r) => r.path.match(new RegExp(`^\\${path}$`, 'gm')));
 }
 
 /**
- * Get the path portion from an hash URL. Use the current one if a blank URL is provided.
- * @returns {String} Currently displayed path
+ * Get the path portion from an hash URL
+ * @returns {String} Path
  */
-function getPath(hashUrl = '') {
+function getPath(hashUrl) {
   return parseUrl(hashUrl).at(0);
 }
 
 /**
- * Get the diagram name portion from an hash URL. Use the current one if a blank URL is provided.
- * @returns {String} Currently displayed diagram name
+ * Get the diagram name portion from an hash URL
+ * @returns {String} Diagram name
  */
-function getDiagName(hashUrl = '') {
+function getDiagName(hashUrl) {
   //TODO: Decide whether the router should decode the name or not
   return parseUrl(hashUrl).at(1);
 }
 
-export { navigate, getPath, getDiagName };
+/**
+ * Get the path portion of the current hash URL
+ * @returns {String} Path
+ */
+function getCurrentPath() {
+  return parseUrl(location.hash.slice(1)).at(0);
+}
+
+/**
+ * Get the diagram name portion of the current hash URL
+ * @returns {String} Diagram name
+ */
+function getCurrentDiagName() {
+  //TODO: Decide whether the router should decode the name or not
+  return parseUrl(location.hash.slice(1)).at(1);
+}
+
+export { navigate, getCurrentPath, getCurrentDiagName };

@@ -27,7 +27,7 @@ const HomeComponent = {
             </button>
     
             <!-- Import local diagram button -->
-            <button id="importDiag" class="home-icon-btn">
+            <button id="import-diag-btn" class="home-icon-btn">
               <span
                 class="material-icons md-light md-36"
                 alt="Import diagram"
@@ -51,6 +51,9 @@ const HomeComponent = {
     document
       .querySelector('#new-diag-btn')
       .addEventListener('click', newDiagram);
+    document
+      .querySelector('#import-diag-btn')
+      .addEventListener('click', importDiagram);
   },
   destroy() {},
 };
@@ -62,6 +65,7 @@ function newDiagram(e) {
 
 function importDiagram(e) {
   e.stopPropagation();
+  router.navigate('/m');
 }
 
 export { HomeComponent };
