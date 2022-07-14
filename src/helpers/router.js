@@ -33,7 +33,7 @@ function navigate(hashUrl = '') {
     return;
 
   // Remove global event listeners
-  if (currentComponent) currentComponent.destroy();
+  if (currentComponent) currentComponent.destroy?.();
   // Find the component based on the current path
   currentComponent = findComponentByPath(path);
 

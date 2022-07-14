@@ -1,26 +1,66 @@
 import Modeler from 'bpmn-js/lib/Modeler';
-import Viewer from 'bpmn-js/lib/Viewer';
 import NavigatedViewer from 'bpmn-js/lib/NavigatedViewer';
 import TokenSimulationViewer from 'bpmn-js-token-simulation/lib/viewer';
 import TokenSimulationModeler from 'bpmn-js-token-simulation/lib/modeler';
 import BLANK_DIAGRAM from '../assets/diagrams/new-diagram.bpmn';
+//TODO: To remove
+import PIZZA_DIAGRAM from '../assets/diagrams/pizza-diagram.bpmn';
 import 'bpmn-js/dist/assets/diagram-js.css';
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
 import 'bpmn-js-token-simulation/assets/css/bpmn-js-token-simulation.css';
 
+// Current editor instance (either Modeler or Viewer)
 let editor;
-let commandStack;
-let zoomScroll;
-// Current diagram mode
-//let mode = ""; TODO: Work on diagram toggle mode
+// Current editor mode {"v": Viewer, "m": Modeler}
+let editorMode;
+// Modeler instance
+// let modeler;
+// Viewer instance
+// let viewer;
+let commandStack; // Modeler only
+let zoomScroll; // Viewer and Modeler
 
 /**
- * Instantiate a new BPMN Editor
- * @param {String} editorMode Editor typology {"v": Viewer, "n": NavigatedViewer, "m": Modeler}
+ * Instantiate a new BPMN Editor based on the mode parameter
+ * @param {String} mode Editor mode {"v": Viewer, "m": Modeler}
  * @param {String} canvas Canvas container id
  */
-function createEditor(editorMode, canvas, callback) {
-  if (editor !== undefined) return;
+// function createEditor(mode, canvas, callback) {
+//   editorMode = mode;
+//   switch (editorMode) {
+//     case 'm': // Modeler
+//       modeler = new Modeler({
+//         container: `#${canvas}`,
+//         keyboard: {
+//           bindTo: document,
+//         },
+//         additionalModules: [TokenSimulationModeler],
+//       });
+//       // Initialize control variables
+//       commandStack = modeler.get('commandStack');
+//       zoomScroll = modeler.get('zoomScroll');
+//       // Set diagram events callback
+//       eventsListener(modeler, callback);
+//       break;
+
+//     case 'v': // NavigatedViewer
+//       viewer = new NavigatedViewer({
+//         container: `#${canvas}`,
+//         keyboard: {
+//           bindTo: document,
+//         },
+//         additionalModules: [TokenSimulationViewer],
+//       });
+//       // Initialize control variables
+//       zoomScroll = viewer.get('zoomScroll');
+//       // Set diagram events callback
+//       eventsListener(viewer, callback);
+//       break;
+//   }
+// }
+
+function createEditor(mode, canvas, callback) {
+  editorMode = mode;
   switch (editorMode) {
     case 'm': // Modeler
       editor = new Modeler({
@@ -32,17 +72,12 @@ function createEditor(editorMode, canvas, callback) {
       });
       // Initialize control variables
       commandStack = editor.get('commandStack');
+      zoomScroll = editor.get('zoomScroll');
+      // Set diagram events callback
+      eventsListener(editor, callback);
       break;
-    case 'v': // Viewer
-      editor = new Viewer({
-        container: `#${canvas}`,
-        keyboard: {
-          bindTo: document,
-        },
-        additionalModules: [TokenSimulationViewer],
-      });
-      break;
-    case 'n': // NavigatedViewer
+
+    case 'v': // NavigatedViewer
       editor = new NavigatedViewer({
         container: `#${canvas}`,
         keyboard: {
@@ -50,12 +85,12 @@ function createEditor(editorMode, canvas, callback) {
         },
         additionalModules: [TokenSimulationViewer],
       });
+      // Initialize control variables
+      zoomScroll = editor.get('zoomScroll');
+      // Set diagram events callback
+      eventsListener(editor, callback);
       break;
   }
-  zoomScroll = editor.get('zoomScroll');
-
-  // Set diagram events callback
-  eventsListener(callback);
 }
 
 /**
@@ -114,12 +149,18 @@ function displayBlankDiagram() {
   else throw new Error('Editor is not defined!');
 }
 
+// TODO: For debug purpose only
+function displayPizzaDiagram() {
+  if (editor) displayDiagram(PIZZA_DIAGRAM);
+  else throw new Error('Editor is not defined!');
+}
+
 /**
  * Display a bpmn diagram passed as XML text
  * @param {String} diagram
  */
 async function displayDiagram(diagram) {
-  if (!diagram) return;
+  if (!diagram || !editor) return;
   try {
     await editor.importXML(diagram);
     editor.get('canvas').zoom('fit-viewport');
@@ -148,8 +189,8 @@ function resetZoom() {
   zoomScroll.reset();
 }
 
-function eventsListener(callback) {
-  editor.on('tokenSimulation.toggleMode', (event) => {
+function eventsListener(instance, callback) {
+  instance.on('tokenSimulation.toggleMode', (event) => {
     callback('toggleSimulation', event);
   });
 }
@@ -160,6 +201,7 @@ export {
   exportDiagramSVG,
   fetchAndDisplay,
   displayBlankDiagram,
+  displayPizzaDiagram,
   undoAction,
   redoAction,
   zoomIn,

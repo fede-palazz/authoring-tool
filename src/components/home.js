@@ -8,9 +8,9 @@ const HomeComponent = {
             <h2 class="subtitle">Recently opened</h2>
             <hr>
               <ul id="recent-files-list">
-                <li class="recent-files-item">Ciaooo</li>
-                <li class="recent-files-item">Ciaooo</li>
-                <li class="recent-files-item">Ciaooo</li>
+                <li class="recent-files-item">diagram_1</li>
+                <li class="recent-files-item">diagram_2</li>
+                <li class="recent-files-item">diagram_3</li>
               </ul>
           </div>
           <div class="home-toolbar">
@@ -60,12 +60,12 @@ const HomeComponent = {
 
 function newDiagram(e) {
   e.stopPropagation();
-  router.navigate('/v');
+  router.navigate('/m');
 }
 
 function importDiagram(e) {
   e.stopPropagation();
-  router.navigate('/m');
+  router.navigate('/v');
 }
 
 export { HomeComponent };

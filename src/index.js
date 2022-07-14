@@ -9,7 +9,6 @@ window.addEventListener('load', () => {
 });
 
 window.addEventListener('hashchange', (e) => {
-  e.preventDefault();
   router.navigate();
 });
 
