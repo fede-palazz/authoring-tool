@@ -11,18 +11,6 @@
   --divider-color: #bdbdbd;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  height: 100%;
-  padding: 0;
-  margin: 0;
-  font-family: "Roboto", sans-serif;
-}
-
 /* MATERIAL ICONS STYLING */
 
 /* Rules for sizing the icon. */
@@ -61,6 +49,18 @@ body {
 
 /*************************+*/
 
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+}
+
 #wrapper {
   display: flex;
   flex-direction: column;
@@ -74,6 +74,7 @@ body {
   align-items: center;
   background-color: var(--primary-color);
   padding: 0 20px;
+  z-index: 100;
 }
 
 .title-container {
@@ -83,8 +84,13 @@ body {
   height: 75px;
 }
 
+.title-container a {
+  cursor: pointer;
+}
+
 .title {
   text-shadow: 2px 2px 4px #000000;
+  margin: 0;
 }
 
 .logo {
@@ -92,84 +98,14 @@ body {
   max-width: 90px;
 }
 
-#canvas-container {
+#app {
   display: flex;
   flex-grow: 1;
   justify-content: stretch;
   padding: 0;
 }
 
-#canvas {
-  flex-grow: 1;
-}
-
-.toolbar {
-  display: flex;
-  flex-direction: row;
-  position: fixed;
-  left: 10px;
-  bottom: 10px;
-}
-
-.sub-toolbar {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-right: 15px;
-  padding: 2px;
-}
-
-.icon-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px;
-  border-radius: 10px;
-  background-color: inherit;
-  border: none;
-}
-
-.toolbar .icon-btn {
-  margin: 2px 5px;
-}
-
-.icon-btn a {
+.hidden-link {
   text-decoration: none;
-  color: #000;
-}
-
-.zoom-bar {
-  position: fixed;
-  right: 15px;
-  bottom: 60px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  padding: 2px;
-}
-
-.zoom-bar .icon-btn {
-  margin-top: 10px;
-  margin: 5px 3px;
-}
-
-.zoom-bar,
-.sub-toolbar {
-  background-color: var(--primary-color);
-  border-radius: 10px;
-  /* border: 1px solid #999; */
-}
-
-.icon-btn:hover {
-  cursor: pointer;
-  background-color: var(--light-primary-color);
-}
-
-.icon-btn:hover > .material-icons {
-  color: rgba(0, 0, 0, 0.54);
-}
-
-.hide {
-  display: none;
+  color: inherit;
 }
