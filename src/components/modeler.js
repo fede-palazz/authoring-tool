@@ -16,10 +16,10 @@ const ModelerComponent = {
           <button id="newDiag" class="icon-btn">
             <span
               class="material-icons md-light"
-              alt="New diagram"
-              title="Create blank diagram"
+              alt="Save diagram"
+              title="Save diagram"
             >
-              add_circle
+              save
             </span>
           </button>
   
@@ -27,10 +27,10 @@ const ModelerComponent = {
           <button id="importDiag" class="icon-btn">
             <span
               class="material-icons md-light"
-              alt="Import diagram"
-              title="Import local diagram"
+              alt="Save as new diagram"
+              title="Save diagram as"
             >
-              file_upload
+              save_as
             </span>
             <input id="importDiagHidden" type="file" accept=".bpmn" hidden />
           </button>

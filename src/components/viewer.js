@@ -74,6 +74,7 @@ const ViewerComponent = {
     this.setListeners();
     initializeCanvas();
     diagHandler.displayPizzaDiagram();
+    console.log('Diagram name: ' + diagName);
   },
   setListeners() {
     /**

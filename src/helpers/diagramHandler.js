@@ -13,10 +13,6 @@ import 'bpmn-js-token-simulation/assets/css/bpmn-js-token-simulation.css';
 let editor;
 // Current editor mode {"v": Viewer, "m": Modeler}
 let editorMode;
-// Modeler instance
-// let modeler;
-// Viewer instance
-// let viewer;
 let commandStack; // Modeler only
 let zoomScroll; // Viewer and Modeler
 
@@ -24,41 +20,8 @@ let zoomScroll; // Viewer and Modeler
  * Instantiate a new BPMN Editor based on the mode parameter
  * @param {String} mode Editor mode {"v": Viewer, "m": Modeler}
  * @param {String} canvas Canvas container id
+ * @param {function} callback Diagram events handler
  */
-// function createEditor(mode, canvas, callback) {
-//   editorMode = mode;
-//   switch (editorMode) {
-//     case 'm': // Modeler
-//       modeler = new Modeler({
-//         container: `#${canvas}`,
-//         keyboard: {
-//           bindTo: document,
-//         },
-//         additionalModules: [TokenSimulationModeler],
-//       });
-//       // Initialize control variables
-//       commandStack = modeler.get('commandStack');
-//       zoomScroll = modeler.get('zoomScroll');
-//       // Set diagram events callback
-//       eventsListener(modeler, callback);
-//       break;
-
-//     case 'v': // NavigatedViewer
-//       viewer = new NavigatedViewer({
-//         container: `#${canvas}`,
-//         keyboard: {
-//           bindTo: document,
-//         },
-//         additionalModules: [TokenSimulationViewer],
-//       });
-//       // Initialize control variables
-//       zoomScroll = viewer.get('zoomScroll');
-//       // Set diagram events callback
-//       eventsListener(viewer, callback);
-//       break;
-//   }
-// }
-
 function createEditor(mode, canvas, callback) {
   editorMode = mode;
   switch (editorMode) {
@@ -72,9 +35,6 @@ function createEditor(mode, canvas, callback) {
       });
       // Initialize control variables
       commandStack = editor.get('commandStack');
-      zoomScroll = editor.get('zoomScroll');
-      // Set diagram events callback
-      eventsListener(editor, callback);
       break;
 
     case 'v': // NavigatedViewer
@@ -85,12 +45,12 @@ function createEditor(mode, canvas, callback) {
         },
         additionalModules: [TokenSimulationViewer],
       });
-      // Initialize control variables
-      zoomScroll = editor.get('zoomScroll');
-      // Set diagram events callback
-      eventsListener(editor, callback);
       break;
   }
+  // Initialize control variables
+  zoomScroll = editor.get('zoomScroll');
+  // Set diagram events callback
+  eventsListener(editor, callback);
 }
 
 /**

@@ -15,7 +15,7 @@ const HomeComponent = {
           </div>
           <div class="home-toolbar">
             <!-- Create blank diagram button -->
-            <button id="new-diag-btn" class="home-icon-btn">
+            <button id="newDiag" class="home-icon-btn">
               <span
                 class="material-icons md-light md-36"
                 alt="New diagram"
@@ -27,7 +27,7 @@ const HomeComponent = {
             </button>
     
             <!-- Import local diagram button -->
-            <button id="import-diag-btn" class="home-icon-btn">
+            <button id="importDiag" class="home-icon-btn">
               <span
                 class="material-icons md-light md-36"
                 alt="Import diagram"
@@ -45,15 +45,52 @@ const HomeComponent = {
       `;
   },
   init() {
-    /*
-     * EVENT LISTENERS
+    this.setEventListeners();
+  },
+  setEventListeners() {
+    document.querySelector('#newDiag').addEventListener('click', newDiagram);
+
+    /**
+     * Import diagram button event listener
+     */
+    document.querySelector('#importDiag').addEventListener('click', () => {
+      document.querySelector('#importDiagHidden').click();
+    });
+
+    /**
+     * Hidden file upload field event listener
      */
     document
-      .querySelector('#new-diag-btn')
-      .addEventListener('click', newDiagram);
+      .querySelector('#importDiagHidden')
+      .addEventListener('click', (event) => {
+        event.stopPropagation();
+      });
+
+    /**
+     * Hidden file upload field on file change event listener
+     */
     document
-      .querySelector('#import-diag-btn')
-      .addEventListener('click', importDiagram);
+      .querySelector('#importDiagHidden')
+      .addEventListener('change', () => {
+        const importDiagBtnHidden = document.querySelector('#importDiagHidden');
+        // Null check for the selected file diagram
+        if (!importDiagBtnHidden.files) return;
+
+        // File extension check
+        let fileName = importDiagBtnHidden.value;
+        fileName = fileName
+          .substring(fileName.lastIndexOf('\\') + 1)
+          .replace(/ /g, '_');
+        if (fileName.split('.').pop() !== 'bpmn') {
+          alert('Only files with .bpmn extension can be submitted!');
+          // Reset the file choice
+          importDiagBtnHidden.value = '';
+          return;
+        }
+        // Read the selected local diagram and display it
+        //diagHandler.fetchAndDisplay(importDiagBtnHidden.files[0]);
+        router.navigate(`/v?${fileName}`);
+      });
   },
   destroy() {},
 };
@@ -61,11 +98,6 @@ const HomeComponent = {
 function newDiagram(e) {
   e.stopPropagation();
   router.navigate('/m');
-}
-
-function importDiagram(e) {
-  e.stopPropagation();
-  router.navigate('/v');
 }
 
 export { HomeComponent };
