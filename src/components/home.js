@@ -85,7 +85,6 @@ function importDiagram(e) {
   const importDiagBtnHidden = e.target;
   // Null check for the selected file diagram
   if (!importDiagBtnHidden.files) return;
-
   // Diagram XML
   const file = importDiagBtnHidden.files[0];
   // Diagram name
@@ -112,12 +111,10 @@ function fetchAndSave(fileName, file) {
 
   // Load event: reading finished, no errors
   fr.onload = () => {
-    // Display the diagram
-    // displayDiagram(fr.result);
-    console.log('Saving diagram... ');
-    storageHandler.saveDiagram(fileName, fr.result);
-    // Read the selected local diagram and display it
-    router.navigate(`/v?${fileName}`);
+    // Save diagram to local storage
+    const id = storageHandler.saveDiagram(fileName, fr.result);
+    // Pass the diagram id to the editor
+    router.navigate(`/v?${id}`);
   };
   // Error occured during file reading
   fr.onerror = (err) => {

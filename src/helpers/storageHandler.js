@@ -1,29 +1,48 @@
 let diagrams;
+const ALPHABET =
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+const ID_LENGTH = 15;
 
 function init() {
   diagrams = JSON.parse(localStorage.getItem('diagrams')) || [];
+  console.log(diagrams);
 }
 
 function saveDiagram(name, diagram) {
+  const id = generateId();
   diagrams.push({
-    name: name,
-    diagram: diagram,
+    name,
+    diagram,
+    id,
   });
   serializeDiagrams();
+  return id;
 }
 
-function loadDiagram(name) {
-  return diagrams.find((elem) => elem.name === name)?.diagram;
+function loadDiagram(id) {
+  return diagrams.find((elem) => elem.id === id)?.diagram;
 }
 
 function serializeDiagrams() {
   localStorage.setItem('diagrams', JSON.stringify(diagrams));
 }
 
-function exists(name) {
-  return loadDiagram(name) ? true : false;
+function deleteDiagram(id) {
+  diagrams = diagrams.filter((elem) => elem.id !== id);
+  serializeDiagrams();
+}
+
+function exists(id) {
+  return loadDiagram(id) ? true : false;
+}
+
+function generateId() {
+  let id = '';
+  for (var i = 0; i < ID_LENGTH; i++)
+    id += ALPHABET.charAt(Math.floor(Math.random() * ALPHABET.length));
+  return id;
 }
 
 init();
 
-export { saveDiagram, loadDiagram, exists };
+export { saveDiagram, loadDiagram, deleteDiagram, exists };
