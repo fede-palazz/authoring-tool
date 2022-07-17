@@ -109,12 +109,6 @@ function displayBlankDiagram() {
   else throw new Error('Editor is not defined!');
 }
 
-// TODO: For debug purpose only
-function displayPizzaDiagram() {
-  if (editor) displayDiagram(PIZZA_DIAGRAM);
-  else throw new Error('Editor is not defined!');
-}
-
 /**
  * Display a bpmn diagram passed as XML text
  * @param {String} diagram
@@ -161,7 +155,7 @@ export {
   exportDiagramSVG,
   fetchAndDisplay,
   displayBlankDiagram,
-  displayPizzaDiagram,
+  displayDiagram,
   undoAction,
   redoAction,
   zoomIn,

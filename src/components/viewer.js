@@ -1,4 +1,6 @@
 import * as diagHandler from '../helpers/diagramHandler';
+import * as storageHandler from '../helpers/storageHandler';
+import * as router from '../helpers/router';
 
 const CANVAS_ID = 'canvas';
 const EDITOR_MODE = 'v';
@@ -73,8 +75,9 @@ const ViewerComponent = {
   init(diagName = '') {
     this.setListeners();
     initializeCanvas();
-    diagHandler.displayPizzaDiagram();
-    console.log('Diagram name: ' + diagName);
+    if (storageHandler.exists(diagName))
+      diagHandler.displayDiagram(storageHandler.loadDiagram(diagName));
+    else router.navigate('/');
   },
   setListeners() {
     /**
@@ -138,7 +141,6 @@ const ViewerComponent = {
       });
     });
   },
-  // destroy() {},
 };
 
 /**

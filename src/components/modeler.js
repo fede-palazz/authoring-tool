@@ -1,4 +1,5 @@
 import * as diagHandler from '../helpers/diagramHandler';
+import * as storageHandler from '../helpers/storageHandler';
 
 const CANVAS_ID = 'canvas';
 const EDITOR_MODE = 'm';
@@ -181,7 +182,7 @@ const ModelerComponent = {
      * Undo / Redo action event listener
      */
     document.removeEventListener('keydown', handleUndo);
-
+    // TODO:
     // window.removeEventListener('beforeunload', (event) => {
     //   event.preventDefault();
     //   event.returnValue = '';
