@@ -14,7 +14,7 @@ const ViewerComponent = {
         <div class="toolbar sub-toolbar" id="toolbar">
         
           <!-- Export diagram (BPMN) button -->
-          <a class="hidden-link" id="exportDiag" download="diagram.bpmn"
+          <a class="hidden-link" id="exportDiag" download=""
             ><button class="icon-btn">
               <span
                 class="material-icons md-light"
@@ -27,7 +27,7 @@ const ViewerComponent = {
           >
   
           <!-- Export diagram (SVG) button -->
-          <a class="hidden-link" id="exportDiagSvg" download="diagram.svg"
+          <a class="hidden-link" id="exportDiagSvg" download=""
             ><button class="icon-btn">
               <span
                 class="material-icons md-light"
@@ -72,12 +72,14 @@ const ViewerComponent = {
     
           `;
   },
-  init(diagName = '') {
+  init(diagId) {
     this.setListeners();
     initializeCanvas();
-    if (storageHandler.exists(diagName))
-      diagHandler.displayDiagram(storageHandler.loadDiagram(diagName));
-    else router.navigate('/');
+    if (storageHandler.exists(diagId)) {
+      diagHandler.displayDiagram(storageHandler.getDiagram(diagId));
+      // Set diagram name
+      this.setDiagName(storageHandler.getName(diagId));
+    } else router.navigate('/');
   },
   setListeners() {
     /**
@@ -140,6 +142,13 @@ const ViewerComponent = {
         handleZoom(elem);
       });
     });
+  },
+  setDiagName(diagName) {
+    document.querySelector('#exportDiag').download = diagName;
+    document.querySelector('#exportDiagSvg').download = diagName.replace(
+      'bpmn',
+      'svg'
+    );
   },
 };
 

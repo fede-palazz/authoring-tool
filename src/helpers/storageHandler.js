@@ -19,8 +19,8 @@ function saveDiagram(name, diagram) {
   return id;
 }
 
-function loadDiagram(id) {
-  return diagrams.find((elem) => elem.id === id)?.diagram;
+function getDiagram(id) {
+  return getDiagramObj(id)?.diagram;
 }
 
 function serializeDiagrams() {
@@ -32,8 +32,16 @@ function deleteDiagram(id) {
   serializeDiagrams();
 }
 
+function getName(id) {
+  return getDiagramObj(id)?.name;
+}
+
+function getDiagramObj(id) {
+  return diagrams.find((elem) => elem.id === id);
+}
+
 function exists(id) {
-  return loadDiagram(id) ? true : false;
+  return getDiagramObj(id) ? true : false;
 }
 
 function generateId() {
@@ -45,4 +53,4 @@ function generateId() {
 
 init();
 
-export { saveDiagram, loadDiagram, deleteDiagram, exists };
+export { saveDiagram, getName, getDiagram, deleteDiagram, exists };

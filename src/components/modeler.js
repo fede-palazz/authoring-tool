@@ -7,7 +7,6 @@ const EDITOR_MODE = 'm';
 const ModelerComponent = {
   render() {
     return `
-               
       <div id="${CANVAS_ID}"></div>
   
       <!-- Bottom toolbar -->
@@ -38,7 +37,7 @@ const ModelerComponent = {
         </div>
         <div class="sub-toolbar">
           <!-- Export diagram (BPMN) button -->
-          <a class="hidden-link" id="exportDiag" download="diagram.bpmn"
+          <a class="hidden-link" id="exportDiag" download=""
             ><button class="icon-btn">
               <span
                 class="material-icons md-light"
@@ -51,7 +50,7 @@ const ModelerComponent = {
           >
   
           <!-- Export diagram (SVG) button -->
-          <a class="hidden-link" id="exportDiagSvg" download="diagram.svg"
+          <a class="hidden-link" id="exportDiagSvg" download=""
             ><button class="icon-btn">
               <span
                 class="material-icons md-light"
@@ -97,7 +96,7 @@ const ModelerComponent = {
           
             `;
   },
-  init(diagName = '') {
+  init(diagId = '') {
     //TODO: if diagName != '', then check for a saved diagram with that name
     this.setListeners();
     initializeCanvas();
@@ -176,6 +175,13 @@ const ModelerComponent = {
     //   event.preventDefault();
     //   event.returnValue = '';
     // });
+  },
+  setDiagName(diagName) {
+    document.querySelector('#exportDiag').download = diagName;
+    document.querySelector('#exportDiagSvg').download = diagName.replace(
+      'bpmn',
+      'svg'
+    );
   },
   destroy() {
     /**
