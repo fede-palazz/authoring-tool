@@ -7,6 +7,12 @@ function init() {
   diagrams = JSON.parse(localStorage.getItem('diagrams')) || [];
 }
 
+/**
+ * Save
+ * @param {*} name
+ * @param {*} diagram
+ * @returns
+ */
 function saveDiagram(name, diagram) {
   const id = generateId();
   diagrams.push({
@@ -18,8 +24,24 @@ function saveDiagram(name, diagram) {
   return id;
 }
 
+function updateDiagram(id, diagram) {
+  getDiagramObj(id).diagram = diagram;
+  serializeDiagrams();
+}
+
 function getDiagram(id) {
   return getDiagramObj(id)?.diagram;
+}
+
+function getDiagramsList() {
+  const diagramList = [];
+  diagrams.forEach((diagram) => {
+    diagramList.push({
+      name: diagram.name,
+      id: diagram.id,
+    });
+  });
+  return diagramList;
 }
 
 function serializeDiagrams() {
@@ -52,4 +74,12 @@ function generateId() {
 
 init();
 
-export { saveDiagram, getName, getDiagram, deleteDiagram, exists };
+export {
+  saveDiagram,
+  updateDiagram,
+  getName,
+  getDiagram,
+  getDiagramsList,
+  deleteDiagram,
+  exists,
+};

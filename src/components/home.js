@@ -47,6 +47,7 @@ const HomeComponent = {
   },
   init() {
     this.setEventListeners();
+    console.log(storageHandler.getDiagramsList());
   },
   setEventListeners() {
     document.querySelector('#newDiag').addEventListener('click', newDiagram);
