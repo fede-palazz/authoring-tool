@@ -92,14 +92,16 @@ const ModelerComponent = {
           >
         </button>
       </div>
-    
-          
             `;
   },
   init(diagId = '') {
-    //TODO: if diagName != '', then check for a saved diagram with that name
     this.setListeners();
     initializeCanvas();
+    if (diagId && storageHandler.exists(diagId)) {
+      diagHandler.displayDiagram(storageHandler.getDiagram(diagId));
+      // Set correct diagram name when exporting it
+      this.setDiagName(storageHandler.getName(diagId));
+    }
   },
   setListeners() {
     /**

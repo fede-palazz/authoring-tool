@@ -39,6 +39,18 @@ const ViewerComponent = {
             </button></a
           >
         </div>
+      
+      <!-- Edit diagram button -->
+      <div class="edit-bar">
+      <button class="icon-btn" id="editDiag">
+          <span
+            class="material-icons md-light"
+            alt="Edit diagram"
+            title="Edit diagram"
+            >edit</span
+          >
+      </button>
+      </div>
 
       <!-- Lateral zoom bar -->
       <div class="zoom-bar">
@@ -69,7 +81,6 @@ const ViewerComponent = {
           >
         </button>
       </div>
-    
           `;
   },
   init(diagId) {
@@ -77,7 +88,7 @@ const ViewerComponent = {
     initializeCanvas();
     if (storageHandler.exists(diagId)) {
       diagHandler.displayDiagram(storageHandler.getDiagram(diagId));
-      // Set diagram name
+      // Set correct diagram name when exporting it
       this.setDiagName(storageHandler.getName(diagId));
     } else router.navigate('/');
   },
@@ -142,7 +153,18 @@ const ViewerComponent = {
         handleZoom(elem);
       });
     });
+
+    /**
+     * Switch to edit mode event listener
+     */
+    document
+      .querySelector('.edit-bar > button')
+      .addEventListener('click', editDiagram);
   },
+  /**
+   * Set diagram name for the .bpmn and .svg export functions
+   * @param {String} diagName Diagram name
+   */
   setDiagName(diagName) {
     document.querySelector('#exportDiag').download = diagName;
     document.querySelector('#exportDiagSvg').download = diagName.replace(
@@ -200,6 +222,14 @@ function handleZoom(element) {
       diagHandler.zoomOut();
       break;
   }
+}
+
+/**
+ * Switch to edit diagram mode
+ */
+function editDiagram() {
+  const diagId = router.getCurrentDiagId();
+  router.navigate(`/m?${diagId}`);
 }
 
 export { ViewerComponent };

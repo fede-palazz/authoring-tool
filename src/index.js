@@ -8,7 +8,7 @@ window.addEventListener('load', () => {
   router.navigate();
 });
 
-window.addEventListener('hashchange', (e) => {
+window.addEventListener('hashchange', () => {
   router.navigate();
 });
 

@@ -5,7 +5,6 @@ const ID_LENGTH = 15;
 
 function init() {
   diagrams = JSON.parse(localStorage.getItem('diagrams')) || [];
-  console.log(diagrams);
 }
 
 function saveDiagram(name, diagram) {
