@@ -1,5 +1,6 @@
 import * as diagHandler from '../helpers/diagramHandler';
 import * as storageHandler from '../helpers/storageHandler';
+import * as router from '../helpers/router';
 
 const CANVAS_ID = 'canvas';
 const EDITOR_MODE = 'm';
@@ -12,8 +13,8 @@ const ModelerComponent = {
       <!-- Bottom toolbar -->
       <div class="toolbar" id="toolbar">
         <div class="sub-toolbar">
-          <!-- Create blank diagram button -->
-          <button id="newDiag" class="icon-btn">
+          <!-- Save diagram button -->
+          <button id="saveDiag" class="icon-btn">
             <span
               class="material-icons md-light"
               alt="Save diagram"
@@ -23,8 +24,8 @@ const ModelerComponent = {
             </span>
           </button>
   
-          <!-- Import local diagram button -->
-          <button id="importDiag" class="icon-btn">
+          <!-- Save as new diagram button -->
+          <button id="saveDiagAs" class="icon-btn">
             <span
               class="material-icons md-light"
               alt="Save as new diagram"
@@ -32,9 +33,9 @@ const ModelerComponent = {
             >
               save_as
             </span>
-            <input id="importDiagHidden" type="file" accept=".bpmn" hidden />
           </button>
         </div>
+
         <div class="sub-toolbar">
           <!-- Export diagram (BPMN) button -->
           <a class="hidden-link" id="exportDiag" download=""
@@ -97,10 +98,20 @@ const ModelerComponent = {
   init(diagId = '') {
     this.setListeners();
     initializeCanvas();
+    // diagId not null and valid
     if (diagId && storageHandler.exists(diagId)) {
+      // load and display the diagram
       diagHandler.displayDiagram(storageHandler.getDiagram(diagId));
       // Set correct diagram name when exporting it
       this.setDiagName(storageHandler.getName(diagId));
+    }
+    // diagId not null but invalid
+    else if (diagId)
+      // navigate to homepage
+      router.navigate('/');
+    // diagId is null
+    else {
+      document.getElementById('saveDiag').style.display = 'none';
     }
   },
   setListeners() {
@@ -171,12 +182,9 @@ const ModelerComponent = {
     });
 
     /**
-     * Ask to save/discard pending changes to the diagram
+     * Pending changes event listener
      */
-    // window.addEventListener('beforeunload', (event) => {
-    //   event.preventDefault();
-    //   event.returnValue = '';
-    // });
+    window.addEventListener('beforeunload', beforeUnload);
   },
   setDiagName(diagName) {
     document.querySelector('#exportDiag').download = diagName;
@@ -186,15 +194,8 @@ const ModelerComponent = {
     );
   },
   destroy() {
-    /**
-     * Undo / Redo action event listener
-     */
     document.removeEventListener('keydown', handleUndo);
-    // TODO:
-    // window.removeEventListener('beforeunload', (event) => {
-    //   event.preventDefault();
-    //   event.returnValue = '';
-    // });
+    window.removeEventListener('beforeunload', beforeUnload);
   },
 };
 
@@ -251,6 +252,11 @@ function handleZoom(element) {
 function handleUndo(e) {
   if (e.ctrlKey && e.key === 'z') diagHandler.undoAction();
   else if (e.ctrlKey && e.key === 'y') diagHandler.redoAction();
+}
+
+function beforeUnload(e) {
+  e.preventDefault();
+  e.returnValue = '';
 }
 
 export { ModelerComponent };
