@@ -227,7 +227,6 @@ function handleEvents(eventName, event) {
  */
 function toggleToolbar(hide) {
   const toolbar = document.querySelector('#toolbar');
-  console.log(toolbar);
   hide ? toolbar.classList.add('hidden') : toolbar.classList.remove('hidden');
 }
 
