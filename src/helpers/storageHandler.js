@@ -14,7 +14,7 @@ function init() {
  * Save and serialize a new diagram and return its id
  * @param {String} name
  * @param {XMLDocument} diagram
- * @returns Diagram id
+ * @returns {String} Diagram id
  */
 function saveDiagram(name, diagram) {
   const id = generateId();
@@ -30,7 +30,7 @@ function saveDiagram(name, diagram) {
 /**
  * Update a saved XML diagram
  * @param {String} id Diagram id to update
- * @param {XMLDocument} diagram Updated XML diagram
+ * @param {String} diagram Updated XML diagram
  */
 function updateDiagram(id, diagram) {
   getDiagramObj(id).diagram = diagram;
@@ -39,7 +39,7 @@ function updateDiagram(id, diagram) {
 
 /**
  * Get the in-memory array of saved diagrams
- * @returns Diagrams array (name, id)
+ * @returns {Array} Diagrams array (name, id)
  */
 function getDiagramsList() {
   const diagramList = [];
@@ -79,7 +79,7 @@ function clear() {
 /**
  * Get a saved diagram's name
  * @param {String} id Diagram id
- * @returns Diagram name
+ * @returns {String} Diagram name
  */
 function getName(id) {
   return getDiagramObj(id)?.name;
@@ -88,7 +88,7 @@ function getName(id) {
 /**
  * Get the XML diagram representation
  * @param {String} id Diagram id
- * @returns Requested XML diagram
+ * @returns {String} Requested XML diagram
  */
 function getDiagram(id) {
   return getDiagramObj(id)?.diagram;
@@ -97,7 +97,7 @@ function getDiagram(id) {
 /**
  * Get a saved diagram object
  * @param {String} id Diagram id
- * @returns Diagram object
+ * @returns {Object} Diagram object
  */
 function getDiagramObj(id) {
   return diagrams.find((elem) => elem.id === id);
@@ -106,7 +106,7 @@ function getDiagramObj(id) {
 /**
  * Check whether a diagram with the specified id exists
  * @param {String} id
- * @returns True if the diagram exists, false otherwise
+ * @returns {Boolean} True if the diagram exists, false otherwise
  */
 function exists(id) {
   return getDiagramObj(id) ? true : false;
@@ -114,7 +114,7 @@ function exists(id) {
 
 /**
  * Generate a fixed length random string id
- * @returns Random id
+ * @returns {String} Random id
  */
 function generateId() {
   let id = '';
