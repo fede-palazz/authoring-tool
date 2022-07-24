@@ -69,6 +69,13 @@ function deleteDiagram(id) {
 }
 
 /**
+ * Clear the in-memory diagrams array
+ */
+function clear() {
+  diagrams = [];
+}
+
+/**
  * Get a saved diagram's name
  * @param {String} id Diagram id
  * @returns Diagram name
@@ -124,5 +131,6 @@ export {
   getDiagram,
   getDiagramsList,
   deleteDiagram,
+  clear,
   exists,
 };

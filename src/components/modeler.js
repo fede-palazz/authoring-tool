@@ -110,11 +110,23 @@ const ModelerComponent = {
       // navigate to homepage
       router.navigate('/');
     // diagId is null
-    else {
-      document.getElementById('saveDiag').style.display = 'none';
-    }
+    else document.getElementById('saveDiag').style.display = 'none';
   },
   setListeners() {
+    /**
+     * Save as new diagram event listener
+     */
+    document.querySelector('#saveDiagAs').addEventListener('click', () => {
+      // Prompt for new diagram name
+      let diagName = prompt('Type a name for this diagram');
+      // Replace dots and blank spaces with underscores
+      diagName = diagName.replace(/\.| /g, '_');
+      // Save current diagram
+      diagHandler.exportDiagram().then((diagram) => {
+        // Save diagram to localstorage
+        storageHandler.saveDiagram(diagName, diagram);
+      });
+    });
     /**
      * Export BPMN button event listener
      */
@@ -183,8 +195,8 @@ const ModelerComponent = {
 
     /**
      * Pending changes event listener
-     */
-    window.addEventListener('beforeunload', beforeUnload);
+     */ //TODO: Remove comment
+    // window.addEventListener('beforeunload', beforeUnload);
   },
   setDiagName(diagName) {
     document.querySelector('#exportDiag').download = diagName;

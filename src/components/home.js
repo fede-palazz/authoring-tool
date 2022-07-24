@@ -49,6 +49,22 @@ const HomeComponent = {
     this.setEventListeners();
   },
   setEventListeners() {
+    /**
+     * Oncleared localstorage event listener
+     * NOTE: this event is active in every app's component
+     */
+    window.addEventListener('storage', (event) => {
+      if (event.storageArea.length === 0) {
+        // Delete in-memory diagrams
+        storageHandler.clear();
+        // Navigate to homepage
+        router.navigate('/');
+      }
+    });
+
+    /**
+     * Create new blank diagram event listener
+     */
     document.querySelector('#newDiag').addEventListener('click', newDiagram);
 
     /**
@@ -92,36 +108,42 @@ function importDiagram(e) {
   // Remove fake path
   fileName = fileName
     .substring(fileName.lastIndexOf('\\') + 1)
-    .replace(/ /g, '_');
+    .replace(/ /g, '_') // Remove spaces
+    .replace(/\(|\)/g, ''); // Remove brackets
+  const extension = fileName.split('.').pop();
 
   // File extension check
-  if (fileName.split('.').pop() !== 'bpmn') {
+  if (extension !== 'bpmn') {
     alert('Only files with .bpmn extension can be submitted!');
     // Reset the file choice
     importDiagBtnHidden.value = '';
     return;
   }
+  // Remove extension from diagram name
+  fileName = fileName.substring(0, fileName.lastIndexOf('.bpmn'));
   // Fetch and save opened diagram inside local storage
-  fetchAndSave(fileName, file);
+  fetchAndSave(fileName, file).then((diagId) => {
+    // Pass the diagram id to the editor
+    router.navigate(`/v?${diagId}`);
+  });
 }
 
 function fetchAndSave(fileName, file) {
   if (!file) throw new Error('Error: received file is null!');
-  let fr = new FileReader();
-
-  // Load event: reading finished, no errors
-  fr.onload = () => {
-    // Save diagram to local storage
-    const id = storageHandler.saveDiagram(fileName, fr.result);
-    // Pass the diagram id to the editor
-    router.navigate(`/v?${id}`);
-  };
-  // Error occured during file reading
-  fr.onerror = (err) => {
-    throw new Error('An error occured during file reading: ' + err);
-  };
-  // Read the .bpmn file as plain text
-  fr.readAsText(file);
+  return new Promise((resolve, reject) => {
+    let fr = new FileReader();
+    // Load event: reading finished, no errors
+    fr.onload = () => {
+      // Save diagram to local storage and return its id
+      resolve(storageHandler.saveDiagram(fileName, fr.result));
+    };
+    // Error occured during file reading
+    fr.onerror = (err) => {
+      reject(new Error('An error occured during file reading: ' + err));
+    };
+    // Read the .bpmn file as plain text
+    fr.readAsText(file);
+  });
 }
 
 export { HomeComponent };
