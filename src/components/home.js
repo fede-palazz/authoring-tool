@@ -50,19 +50,6 @@ const HomeComponent = {
   },
   setEventListeners() {
     /**
-     * Oncleared localstorage event listener
-     * NOTE: this event is active in every app's component
-     */
-    window.addEventListener('storage', (event) => {
-      if (event.storageArea.length === 0) {
-        // Delete in-memory diagrams
-        storageHandler.clear();
-        // Navigate to homepage
-        router.navigate('/');
-      }
-    });
-
-    /**
      * Create new blank diagram event listener
      */
     document.querySelector('#newDiag').addEventListener('click', newDiagram);

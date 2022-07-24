@@ -12,6 +12,18 @@ window.addEventListener('hashchange', () => {
   router.navigate();
 });
 
+/**
+ * On clear localstorage event listener
+ */
+window.addEventListener('storage', (event) => {
+  if (event.storageArea.length === 0) {
+    // Delete in-memory diagrams
+    storageHandler.clear();
+    // Navigate to homepage
+    router.navigate('/');
+  }
+});
+
 document.querySelector('.title-container a').addEventListener('click', () => {
   router.navigate('/');
 });

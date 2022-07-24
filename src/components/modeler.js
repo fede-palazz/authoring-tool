@@ -114,6 +114,19 @@ const ModelerComponent = {
   },
   setListeners() {
     /**
+     * Save pending changes to current diagram
+     */
+    document.querySelector('#saveDiag').addEventListener('click', () => {
+      diagHandler.exportDiagram().then((diagram) => {
+        // Update the current diagram
+        storageHandler.updateDiagram(
+          router.getCurrentDiagId(),
+          decodeURIComponent(diagram)
+        );
+      });
+    });
+
+    /**
      * Save as new diagram event listener
      */
     document.querySelector('#saveDiagAs').addEventListener('click', () => {
@@ -124,9 +137,15 @@ const ModelerComponent = {
       // Save current diagram
       diagHandler.exportDiagram().then((diagram) => {
         // Save diagram to localstorage
-        storageHandler.saveDiagram(diagName, diagram);
+        const diagId = storageHandler.saveDiagram(
+          diagName,
+          decodeURIComponent(diagram)
+        );
+        // Open the saved diagram
+        router.navigate(`/m?${diagId}`);
       });
     });
+
     /**
      * Export BPMN button event listener
      */

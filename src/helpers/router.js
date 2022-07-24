@@ -97,22 +97,6 @@ function getRouteByPath(path) {
 }
 
 /**
- * Get the path portion from an hash URL
- * @returns {String} Path
- */
-function getPath(hashUrl) {
-  return parseUrl(hashUrl).at(0);
-}
-
-/**
- * Get the diagram id portion from an hash URL
- * @returns {String} Diagram id
- */
-function getDiagName(hashUrl) {
-  return parseUrl(hashUrl).at(1);
-}
-
-/**
  * Get the path portion of the current hash URL
  * @returns {String} Path
  */
