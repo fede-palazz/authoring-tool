@@ -89,61 +89,21 @@ const ViewerComponent = {
     if (storageHandler.exists(diagId)) {
       diagHandler.displayDiagram(storageHandler.getDiagram(diagId));
       // Set correct diagram name when exporting it
-      this.setDiagName(storageHandler.getName(diagId));
+      setDiagName(storageHandler.getName(diagId));
     } else router.navigate('/');
   },
   setListeners() {
     /**
      * Export BPMN button event listener
      */
-    document.querySelector('#exportDiag').addEventListener('click', () => {
-      const exportDiagBtn = document.querySelector('#exportDiag');
-      diagHandler
-        .exportDiagram()
-        .then((xmlDiag) => {
-          // Make the href attribute point to the diagram xml
-          exportDiagBtn.setAttribute(
-            'href',
-            'data:application/bpmn20-xml;charset=UTF-8,' + xmlDiag
-          );
-        })
-        .then(() => {
-          // Wait 10ms
-          return new Promise((resolve) => {
-            setTimeout(() => resolve(), 10);
-          });
-        })
-        .then(() => {
-          // Reset the href attribute of the anchor element
-          exportDiagBtn.setAttribute('href', '');
-        });
-    });
+    document.querySelector('#exportDiag').addEventListener('click', exportDiag);
 
     /**
      * Export SVG button event listener
      */
-    document.querySelector('#exportDiagSvg').addEventListener('click', () => {
-      const exportDiagSvgBtn = document.querySelector('#exportDiagSvg');
-      diagHandler
-        .exportDiagramSVG()
-        .then((svgDiag) => {
-          // Make the href attribute point to the diagram xml
-          exportDiagSvgBtn.setAttribute(
-            'href',
-            'data:application/bpmn20-xml;charset=UTF-8,' + svgDiag
-          );
-        })
-        .then(() => {
-          // Wait 10ms
-          return new Promise((resolve) => {
-            setTimeout(() => resolve(), 10);
-          });
-        })
-        .then(() => {
-          // Reset the href attribute of the anchor element
-          exportDiagSvgBtn.setAttribute('href', '');
-        });
-    });
+    document
+      .querySelector('#exportDiagSvg')
+      .addEventListener('click', exportDiagSvg);
 
     /**
      * Change diagram zoom event listener
@@ -160,17 +120,6 @@ const ViewerComponent = {
     document
       .querySelector('.edit-bar > button')
       .addEventListener('click', editDiagram);
-  },
-  /**
-   * Set diagram name for the .bpmn and .svg export functions
-   * @param {String} diagName Diagram name
-   */
-  setDiagName(diagName) {
-    document.querySelector('#exportDiag').download = diagName;
-    document.querySelector('#exportDiagSvg').download = diagName.replace(
-      'bpmn',
-      'svg'
-    );
   },
 };
 
@@ -195,6 +144,67 @@ function handleEvents(eventName, event) {
       event.active ? toggleToolbar(true) : toggleToolbar(false);
       break;
   }
+}
+
+/**
+ * Export diagram in .bpmn format
+ */
+function exportDiag() {
+  const exportDiagBtn = document.querySelector('#exportDiag');
+  diagHandler
+    .exportDiagram()
+    .then((xmlDiag) => {
+      // Make the href attribute point to the diagram xml
+      exportDiagBtn.setAttribute(
+        'href',
+        'data:application/bpmn20-xml;charset=UTF-8,' + xmlDiag
+      );
+    })
+    .then(() => {
+      // Wait 10ms
+      return new Promise((resolve) => {
+        setTimeout(() => resolve(), 10);
+      });
+    })
+    .then(() => {
+      // Reset the href attribute of the anchor element
+      exportDiagBtn.setAttribute('href', '');
+    });
+}
+
+/**
+ * Export diagram in .svg format
+ */
+function exportDiagSvg() {
+  const exportDiagSvgBtn = document.querySelector('#exportDiagSvg');
+  diagHandler
+    .exportDiagramSVG()
+    .then((svgDiag) => {
+      // Make the href attribute point to the diagram xml
+      exportDiagSvgBtn.setAttribute(
+        'href',
+        'data:application/bpmn20-xml;charset=UTF-8,' + svgDiag
+      );
+    })
+    .then(() => {
+      // Wait 10ms
+      return new Promise((resolve) => {
+        setTimeout(() => resolve(), 10);
+      });
+    })
+    .then(() => {
+      // Reset the href attribute of the anchor element
+      exportDiagSvgBtn.setAttribute('href', '');
+    });
+}
+
+/**
+ * Set diagram name for the .bpmn and .svg export functions
+ * @param {String} diagName Diagram name
+ */
+function setDiagName(diagName) {
+  document.querySelector('#exportDiag').download = `${diagName}.bpmn`;
+  document.querySelector('#exportDiagSvg').download = `${diagName}.svg`;
 }
 
 /**

@@ -110,7 +110,13 @@ const ModelerComponent = {
       // navigate to homepage
       router.navigate('/');
     // diagId is null
-    else document.getElementById('saveDiag').style.display = 'none';
+    else {
+      // Hide save diagram button
+      document.getElementById('saveDiag').style.display = 'none';
+      // Set default names for diagram export
+      document.querySelector('#exportDiag').download = 'diagram.bpmn';
+      document.querySelector('#exportDiagSvg').download = 'diagram.svg';
+    }
   },
   setListeners() {
     /**
@@ -150,6 +156,12 @@ const ModelerComponent = {
         handleZoom(elem);
       });
     });
+
+    document
+      .querySelector('.title-container a')
+      .addEventListener('click', () => {
+        // TODO: Prevent from loosing pending changes
+      });
 
     /**
      * Pending changes event listener
@@ -272,11 +284,8 @@ function exportDiagSvg() {
 }
 
 function setDiagName(diagName) {
-  document.querySelector('#exportDiag').download = diagName;
-  document.querySelector('#exportDiagSvg').download = diagName.replace(
-    'bpmn',
-    'svg'
-  );
+  document.querySelector('#exportDiag').download = `${diagName}.bpmn`;
+  document.querySelector('#exportDiagSvg').download = `${diagName}.svg`;
 }
 
 /**

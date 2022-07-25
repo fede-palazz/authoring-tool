@@ -3,6 +3,7 @@ import * as storageHandler from '../helpers/storageHandler';
 
 const HomeComponent = {
   render: () => {
+    const diagList = storageHandler.getDiagramsList();
     return `
         <div id="home-container">
           <div id="recent-files-container">
