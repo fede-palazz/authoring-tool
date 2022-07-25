@@ -3,16 +3,21 @@ import * as storageHandler from '../helpers/storageHandler';
 
 const HomeComponent = {
   render: () => {
-    const diagList = storageHandler.getDiagramsList();
     return `
         <div id="home-container">
-          <div id="recent-files-container">
+          <div id="recent-diagrams-container">
             <h2 class="subtitle">Recently opened</h2>
-            <hr>
-              <ul id="recent-files-list">
-                <li class="recent-files-item">diagram_1</li>
-                <li class="recent-files-item">diagram_2</li>
-                <li class="recent-files-item">diagram_3</li>
+              <ul id="recent-diagrams-list">
+                <template id="list-item-template">
+                  <li class="recent-diagrams-item">
+                    <p>New diagram</p>
+                    <span
+                      class="material-icons md-dark"
+                    >
+                    delete
+                    </span>
+                  </li>
+                </template>
               </ul>
           </div>
           <div class="home-toolbar">
@@ -42,14 +47,27 @@ const HomeComponent = {
             </button>
           </div>
         </div>
-
-      
       `;
   },
   init() {
+    displayRecentDiagrams();
     this.setEventListeners();
   },
   setEventListeners() {
+    /**
+     * On delete diagram event listener
+     */
+    document
+      .querySelectorAll('.recent-diagrams-item')
+      .forEach((elem) => elem.addEventListener('click', openDiagram));
+
+    /**
+     * On delete diagram event listener
+     */
+    document
+      .querySelectorAll('.recent-diagrams-item > span')
+      .forEach((elem) => elem.addEventListener('click', deleteDiagram));
+
     /**
      * Create new blank diagram event listener
      */
@@ -132,6 +150,40 @@ function fetchAndSave(fileName, file) {
     // Read the .bpmn file as plain text
     fr.readAsText(file);
   });
+}
+
+function displayRecentDiagrams() {
+  // Get template element
+  const template = document.querySelector('#list-item-template');
+  // Get diagrams list element
+  const listElem = document.getElementById('recent-diagrams-list');
+  // Fetch diagrams list
+  const diagList = storageHandler.getDiagramsList();
+
+  diagList.forEach((elem) => {
+    // Clone the template node
+    const listItemElem = template.content.firstElementChild.cloneNode(true);
+    // Set diagram id as data attribute
+    listItemElem.dataset.diagId = elem.id;
+    // Set diagram name
+    listItemElem.querySelector('p').innerText = elem.name;
+    // Append item to the list
+    listElem.appendChild(listItemElem);
+  });
+}
+
+function deleteDiagram(e) {
+  e.stopImmediatePropagation();
+  // Fetch diagram id to delete
+  const id = e.target.parentNode.dataset.diagId;
+  storageHandler.deleteDiagram(id);
+  // Refresh page
+  router.navigate();
+}
+
+function openDiagram(e) {
+  e.stopImmediatePropagation();
+  router.navigate(`/v?${e.target.dataset.diagId}`);
 }
 
 export { HomeComponent };

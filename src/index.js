@@ -3,6 +3,7 @@ import './css/home.css';
 import './css/canvas.css';
 import './assets/idea-logo-small.png';
 import * as router from './helpers/router';
+import * as storageHandler from './helpers/storageHandler';
 
 window.addEventListener('load', () => {
   router.navigate();
@@ -16,12 +17,12 @@ window.addEventListener('hashchange', () => {
  * On clear localstorage event listener
  */
 window.addEventListener('storage', (event) => {
-  if (event.storageArea.length === 0) {
-    // Delete in-memory diagrams
-    storageHandler.clear();
-    // Navigate to homepage
-    router.navigate('/');
-  }
+  if (event.storageArea.length !== 0) return;
+  // Delete in-memory diagrams
+  storageHandler.clear();
+  // Navigate to homepage
+  if (router.getCurrentPath() !== '/') router.navigate('/');
+  else router.navigate();
 });
 
 document.querySelector('.title-container a').addEventListener('click', () => {
