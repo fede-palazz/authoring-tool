@@ -157,21 +157,25 @@ const ModelerComponent = {
       });
     });
 
+    /**
+     * On banner click event listener
+     */
     document
       .querySelector('.title-container a')
-      .addEventListener('click', () => {
-        // TODO: Prevent from loosing pending changes
-      });
+      .addEventListener('click', preventNavigation);
 
     /**
      * Pending changes event listener
      */ //TODO: Remove comment
-    //window.addEventListener('beforeunload', beforeUnload);
+    window.addEventListener('beforeunload', beforeUnload);
   },
 
   destroy() {
     document.removeEventListener('keydown', handleUndo);
     window.removeEventListener('beforeunload', beforeUnload);
+    document
+      .querySelector('.title-container a')
+      .removeEventListener('click', preventNavigation);
   },
 };
 
@@ -286,6 +290,13 @@ function exportDiagSvg() {
 function setDiagName(diagName) {
   document.querySelector('#exportDiag').download = `${diagName}.bpmn`;
   document.querySelector('#exportDiagSvg').download = `${diagName}.svg`;
+}
+
+/**
+ * Prevent pending changes looses
+ */
+function preventNavigation() {
+  if (confirm('Sure? Changes you made may not be saved')) router.navigate('/');
 }
 
 /**

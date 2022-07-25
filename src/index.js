@@ -25,6 +25,6 @@ window.addEventListener('storage', (event) => {
 });
 
 document.querySelector('.title-container a').addEventListener('click', () => {
-  // TODO: Don't navigate straight to homepage in modeler mode
-  router.navigate('/');
+  // Prevent from loosing pending changes in modeler mode
+  if (router.getCurrentPath() !== '/m') router.navigate('/');
 });
