@@ -1,4 +1,6 @@
 import * as diagHandler from '../helpers/diagramHandler';
+import * as storageHandler from '../helpers/storageHandler';
+import * as router from '../helpers/router';
 
 const CANVAS_ID = 'canvas';
 const EDITOR_MODE = 'v';
@@ -12,7 +14,7 @@ const ViewerComponent = {
         <div class="toolbar sub-toolbar" id="toolbar">
         
           <!-- Export diagram (BPMN) button -->
-          <a class="hidden-link" id="exportDiag" download="diagram.bpmn"
+          <a class="hidden-link" id="exportDiag" download=""
             ><button class="icon-btn">
               <span
                 class="material-icons md-light"
@@ -25,7 +27,7 @@ const ViewerComponent = {
           >
   
           <!-- Export diagram (SVG) button -->
-          <a class="hidden-link" id="exportDiagSvg" download="diagram.svg"
+          <a class="hidden-link" id="exportDiagSvg" download=""
             ><button class="icon-btn">
               <span
                 class="material-icons md-light"
@@ -37,6 +39,18 @@ const ViewerComponent = {
             </button></a
           >
         </div>
+      
+      <!-- Edit diagram button -->
+      <div class="edit-bar">
+      <button class="icon-btn" id="editDiag">
+          <span
+            class="material-icons md-light"
+            alt="Edit diagram"
+            title="Edit diagram"
+            >edit</span
+          >
+      </button>
+      </div>
 
       <!-- Lateral zoom bar -->
       <div class="zoom-bar">
@@ -67,67 +81,29 @@ const ViewerComponent = {
           >
         </button>
       </div>
-    
           `;
   },
-  init(diagName = '') {
+  init(diagId) {
     this.setListeners();
     initializeCanvas();
-    diagHandler.displayPizzaDiagram();
-    console.log('Diagram name: ' + diagName);
+    if (storageHandler.exists(diagId)) {
+      diagHandler.displayDiagram(storageHandler.getDiagram(diagId));
+      // Set correct diagram name when exporting it
+      setDiagName(storageHandler.getName(diagId));
+    } else router.navigate('/');
   },
   setListeners() {
     /**
      * Export BPMN button event listener
      */
-    document.querySelector('#exportDiag').addEventListener('click', () => {
-      const exportDiagBtn = document.querySelector('#exportDiag');
-      diagHandler
-        .exportDiagram()
-        .then((xmlDiag) => {
-          // Make the href attribute point to the diagram xml
-          exportDiagBtn.setAttribute(
-            'href',
-            'data:application/bpmn20-xml;charset=UTF-8,' + xmlDiag
-          );
-        })
-        .then(() => {
-          // Wait 10ms
-          return new Promise((resolve) => {
-            setTimeout(() => resolve(), 10);
-          });
-        })
-        .then(() => {
-          // Reset the href attribute of the anchor element
-          exportDiagBtn.setAttribute('href', '');
-        });
-    });
+    document.querySelector('#exportDiag').addEventListener('click', exportDiag);
 
     /**
      * Export SVG button event listener
      */
-    document.querySelector('#exportDiagSvg').addEventListener('click', () => {
-      const exportDiagSvgBtn = document.querySelector('#exportDiagSvg');
-      diagHandler
-        .exportDiagramSVG()
-        .then((svgDiag) => {
-          // Make the href attribute point to the diagram xml
-          exportDiagSvgBtn.setAttribute(
-            'href',
-            'data:application/bpmn20-xml;charset=UTF-8,' + svgDiag
-          );
-        })
-        .then(() => {
-          // Wait 10ms
-          return new Promise((resolve) => {
-            setTimeout(() => resolve(), 10);
-          });
-        })
-        .then(() => {
-          // Reset the href attribute of the anchor element
-          exportDiagSvgBtn.setAttribute('href', '');
-        });
-    });
+    document
+      .querySelector('#exportDiagSvg')
+      .addEventListener('click', exportDiagSvg);
 
     /**
      * Change diagram zoom event listener
@@ -137,8 +113,14 @@ const ViewerComponent = {
         handleZoom(elem);
       });
     });
+
+    /**
+     * Switch to edit mode event listener
+     */
+    document
+      .querySelector('.edit-bar > button')
+      .addEventListener('click', editDiagram);
   },
-  // destroy() {},
 };
 
 /**
@@ -162,6 +144,67 @@ function handleEvents(eventName, event) {
       event.active ? toggleToolbar(true) : toggleToolbar(false);
       break;
   }
+}
+
+/**
+ * Export diagram in .bpmn format
+ */
+function exportDiag() {
+  const exportDiagBtn = document.querySelector('#exportDiag');
+  diagHandler
+    .exportDiagram()
+    .then((xmlDiag) => {
+      // Make the href attribute point to the diagram xml
+      exportDiagBtn.setAttribute(
+        'href',
+        'data:application/bpmn20-xml;charset=UTF-8,' + xmlDiag
+      );
+    })
+    .then(() => {
+      // Wait 10ms
+      return new Promise((resolve) => {
+        setTimeout(() => resolve(), 10);
+      });
+    })
+    .then(() => {
+      // Reset the href attribute of the anchor element
+      exportDiagBtn.setAttribute('href', '');
+    });
+}
+
+/**
+ * Export diagram in .svg format
+ */
+function exportDiagSvg() {
+  const exportDiagSvgBtn = document.querySelector('#exportDiagSvg');
+  diagHandler
+    .exportDiagramSVG()
+    .then((svgDiag) => {
+      // Make the href attribute point to the diagram xml
+      exportDiagSvgBtn.setAttribute(
+        'href',
+        'data:application/bpmn20-xml;charset=UTF-8,' + svgDiag
+      );
+    })
+    .then(() => {
+      // Wait 10ms
+      return new Promise((resolve) => {
+        setTimeout(() => resolve(), 10);
+      });
+    })
+    .then(() => {
+      // Reset the href attribute of the anchor element
+      exportDiagSvgBtn.setAttribute('href', '');
+    });
+}
+
+/**
+ * Set diagram name for the .bpmn and .svg export functions
+ * @param {String} diagName Diagram name
+ */
+function setDiagName(diagName) {
+  document.querySelector('#exportDiag').download = `${diagName}.bpmn`;
+  document.querySelector('#exportDiagSvg').download = `${diagName}.svg`;
 }
 
 /**
@@ -189,6 +232,14 @@ function handleZoom(element) {
       diagHandler.zoomOut();
       break;
   }
+}
+
+/**
+ * Switch to edit diagram mode
+ */
+function editDiagram() {
+  const diagId = router.getCurrentDiagId();
+  router.navigate(`/m?${diagId}`);
 }
 
 export { ViewerComponent };

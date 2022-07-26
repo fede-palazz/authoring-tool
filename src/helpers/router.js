@@ -26,10 +26,10 @@ function navigate(hashUrl = '') {
     reload = true;
   }
   // Get path and diagName from the hash URL
-  const [path, diagName] = parseUrl(hashUrl);
+  const [path, diagId] = parseUrl(hashUrl);
 
   // If new path and diagName are identical to the previous ones, then return
-  if (!reload && getCurrentPath() === path && getCurrentDiagName() === diagName)
+  if (!reload && getCurrentPath() === path && getCurrentDiagId() === diagId)
     return;
 
   // Remove global event listeners
@@ -45,9 +45,9 @@ function navigate(hashUrl = '') {
   app.innerHTML = currentComponent.render();
 
   // Inizialize the component
-  if (currentComponent != HomeComponent && diagName) {
-    currentComponent.init(diagName);
-    history.replaceState(null, null, `#${path}?${diagName}`);
+  if (currentComponent != HomeComponent && diagId) {
+    currentComponent.init(diagId);
+    history.replaceState(null, null, `#${path}?${diagId}`);
   } else {
     currentComponent.init();
     history.replaceState(null, null, `#${path}`);
@@ -55,18 +55,18 @@ function navigate(hashUrl = '') {
 }
 
 /**
- * Parse the submitted hash URL and split it into path and diagram name parts. Use the current one if a blank URL is provided.
+ * Parse the submitted hash URL and split it into path and diagram id parts. Use the current one if a blank URL is provided.
  * @param {String} hashUrl Hash portion of the URL
- * @returns {Array} Splitted hash URL: [path, diagName]
+ * @returns {Array} Splitted hash URL: [path, diagId]
  */
 function parseUrl(hashUrl) {
   // If the URL is blank, return the default route
   if (!hashUrl) return ['/', ''];
   // Separate path and diagName (if present)
-  const [path, diagName] =
+  const [path, diagId] =
     hashUrl.indexOf('?') != -1 ? hashUrl.split('?') : [hashUrl, ''];
   // Check for path validity
-  return !isValidPath(path) || path === '/' ? ['/', ''] : [path, diagName];
+  return !isValidPath(path) || path === '/' ? ['/', ''] : [path, diagId];
 }
 
 /**
@@ -97,23 +97,6 @@ function getRouteByPath(path) {
 }
 
 /**
- * Get the path portion from an hash URL
- * @returns {String} Path
- */
-function getPath(hashUrl) {
-  return parseUrl(hashUrl).at(0);
-}
-
-/**
- * Get the diagram name portion from an hash URL
- * @returns {String} Diagram name
- */
-function getDiagName(hashUrl) {
-  //TODO: Decide whether the router should decode the name or not
-  return parseUrl(hashUrl).at(1);
-}
-
-/**
  * Get the path portion of the current hash URL
  * @returns {String} Path
  */
@@ -122,12 +105,11 @@ function getCurrentPath() {
 }
 
 /**
- * Get the diagram name portion of the current hash URL
- * @returns {String} Diagram name
+ * Get the diagram id portion of the current hash URL
+ * @returns {String} Diagram id
  */
-function getCurrentDiagName() {
-  //TODO: Decide whether the router should decode the name or not
+function getCurrentDiagId() {
   return parseUrl(location.hash.slice(1)).at(1);
 }
 
-export { navigate, getCurrentPath, getCurrentDiagName };
+export { navigate, getCurrentPath, getCurrentDiagId };

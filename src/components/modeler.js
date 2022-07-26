@@ -1,4 +1,6 @@
 import * as diagHandler from '../helpers/diagramHandler';
+import * as storageHandler from '../helpers/storageHandler';
+import * as router from '../helpers/router';
 
 const CANVAS_ID = 'canvas';
 const EDITOR_MODE = 'm';
@@ -6,14 +8,13 @@ const EDITOR_MODE = 'm';
 const ModelerComponent = {
   render() {
     return `
-               
       <div id="${CANVAS_ID}"></div>
   
       <!-- Bottom toolbar -->
       <div class="toolbar" id="toolbar">
         <div class="sub-toolbar">
-          <!-- Create blank diagram button -->
-          <button id="newDiag" class="icon-btn">
+          <!-- Save diagram button -->
+          <button id="saveDiag" class="icon-btn">
             <span
               class="material-icons md-light"
               alt="Save diagram"
@@ -23,8 +24,8 @@ const ModelerComponent = {
             </span>
           </button>
   
-          <!-- Import local diagram button -->
-          <button id="importDiag" class="icon-btn">
+          <!-- Save as new diagram button -->
+          <button id="saveDiagAs" class="icon-btn">
             <span
               class="material-icons md-light"
               alt="Save as new diagram"
@@ -32,12 +33,12 @@ const ModelerComponent = {
             >
               save_as
             </span>
-            <input id="importDiagHidden" type="file" accept=".bpmn" hidden />
           </button>
         </div>
+
         <div class="sub-toolbar">
           <!-- Export diagram (BPMN) button -->
-          <a class="hidden-link" id="exportDiag" download="diagram.bpmn"
+          <a class="hidden-link" id="exportDiag" download=""
             ><button class="icon-btn">
               <span
                 class="material-icons md-light"
@@ -50,7 +51,7 @@ const ModelerComponent = {
           >
   
           <!-- Export diagram (SVG) button -->
-          <a class="hidden-link" id="exportDiagSvg" download="diagram.svg"
+          <a class="hidden-link" id="exportDiagSvg" download=""
             ><button class="icon-btn">
               <span
                 class="material-icons md-light"
@@ -92,67 +93,55 @@ const ModelerComponent = {
           >
         </button>
       </div>
-    
-          
             `;
   },
-  init(diagName = '') {
-    //TODO: if diagName != '', then check for a saved diagram with that name
+  init(diagId = '') {
     this.setListeners();
     initializeCanvas();
+    // diagId not null and valid
+    if (diagId && storageHandler.exists(diagId)) {
+      // load and display the diagram
+      diagHandler.displayDiagram(storageHandler.getDiagram(diagId));
+      // Set correct diagram name when exporting it
+      setDiagName(storageHandler.getName(diagId));
+    }
+    // diagId not null but invalid
+    else if (diagId)
+      // navigate to homepage
+      router.navigate('/');
+    // diagId is null
+    else {
+      // Hide save diagram button
+      document.getElementById('saveDiag').style.display = 'none';
+      // Set default names for diagram export
+      document.querySelector('#exportDiag').download = 'diagram.bpmn';
+      document.querySelector('#exportDiagSvg').download = 'diagram.svg';
+    }
   },
   setListeners() {
     /**
+     * Save pending changes to current diagram
+     */
+    document.querySelector('#saveDiag').addEventListener('click', saveDiagram);
+
+    /**
+     * Save as new diagram event listener
+     */
+    document
+      .querySelector('#saveDiagAs')
+      .addEventListener('click', saveDiagramAs);
+
+    /**
      * Export BPMN button event listener
      */
-    document.querySelector('#exportDiag').addEventListener('click', () => {
-      const exportDiagBtn = document.querySelector('#exportDiag');
-      diagHandler
-        .exportDiagram()
-        .then((xmlDiag) => {
-          // Make the href attribute point to the diagram xml
-          exportDiagBtn.setAttribute(
-            'href',
-            'data:application/bpmn20-xml;charset=UTF-8,' + xmlDiag
-          );
-        })
-        .then(() => {
-          // Wait 10ms
-          return new Promise((resolve) => {
-            setTimeout(() => resolve(), 10);
-          });
-        })
-        .then(() => {
-          // Reset the href attribute of the anchor element
-          exportDiagBtn.setAttribute('href', '');
-        });
-    });
+    document.querySelector('#exportDiag').addEventListener('click', exportDiag);
 
     /**
      * Export SVG button event listener
      */
-    document.querySelector('#exportDiagSvg').addEventListener('click', () => {
-      const exportDiagSvgBtn = document.querySelector('#exportDiagSvg');
-      diagHandler
-        .exportDiagramSVG()
-        .then((svgDiag) => {
-          // Make the href attribute point to the diagram xml
-          exportDiagSvgBtn.setAttribute(
-            'href',
-            'data:application/bpmn20-xml;charset=UTF-8,' + svgDiag
-          );
-        })
-        .then(() => {
-          // Wait 10ms
-          return new Promise((resolve) => {
-            setTimeout(() => resolve(), 10);
-          });
-        })
-        .then(() => {
-          // Reset the href attribute of the anchor element
-          exportDiagSvgBtn.setAttribute('href', '');
-        });
-    });
+    document
+      .querySelector('#exportDiagSvg')
+      .addEventListener('click', exportDiagSvg);
 
     /**
      * Undo / Redo action event listener
@@ -169,23 +158,24 @@ const ModelerComponent = {
     });
 
     /**
-     * Ask to save/discard pending changes to the diagram
+     * On banner click event listener
      */
-    // window.addEventListener('beforeunload', (event) => {
-    //   event.preventDefault();
-    //   event.returnValue = '';
-    // });
-  },
-  destroy() {
-    /**
-     * Undo / Redo action event listener
-     */
-    document.removeEventListener('keydown', handleUndo);
+    document
+      .querySelector('.title-container a')
+      .addEventListener('click', preventNavigation);
 
-    // window.removeEventListener('beforeunload', (event) => {
-    //   event.preventDefault();
-    //   event.returnValue = '';
-    // });
+    /**
+     * Pending changes event listener
+     */
+    window.addEventListener('beforeunload', beforeUnload);
+  },
+
+  destroy() {
+    document.removeEventListener('keydown', handleUndo);
+    window.removeEventListener('beforeunload', beforeUnload);
+    document
+      .querySelector('.title-container a')
+      .removeEventListener('click', preventNavigation);
   },
 };
 
@@ -213,12 +203,108 @@ function handleEvents(eventName, event) {
 }
 
 /**
+ * Save current diagram's pending changes
+ */
+function saveDiagram() {
+  diagHandler.exportDiagram().then((diagram) => {
+    // Update the current diagram
+    storageHandler.updateDiagram(
+      router.getCurrentDiagId(),
+      decodeURIComponent(diagram)
+    );
+  });
+}
+
+/**
+ * Save current diagram as a new one
+ */
+function saveDiagramAs() {
+  // Prompt for new diagram name
+  let diagName = prompt('Type a name for this diagram');
+  // Replace dots and blank spaces with underscores
+  diagName = diagName.replace(/\.| /g, '_');
+  // Save current diagram
+  diagHandler.exportDiagram().then((diagram) => {
+    // Save diagram to localstorage
+    const diagId = storageHandler.saveDiagram(
+      diagName,
+      decodeURIComponent(diagram)
+    );
+    // Open the saved diagram
+    router.navigate(`/m?${diagId}`);
+  });
+}
+
+/**
+ * Export diagram in .bpmn format
+ */
+function exportDiag() {
+  const exportDiagBtn = document.querySelector('#exportDiag');
+  diagHandler
+    .exportDiagram()
+    .then((xmlDiag) => {
+      // Make the href attribute point to the diagram xml
+      exportDiagBtn.setAttribute(
+        'href',
+        'data:application/bpmn20-xml;charset=UTF-8,' + xmlDiag
+      );
+    })
+    .then(() => {
+      // Wait 10ms
+      return new Promise((resolve) => {
+        setTimeout(() => resolve(), 10);
+      });
+    })
+    .then(() => {
+      // Reset the href attribute of the anchor element
+      exportDiagBtn.setAttribute('href', '');
+    });
+}
+
+/**
+ * Export diagram in .svg format
+ */
+function exportDiagSvg() {
+  const exportDiagSvgBtn = document.querySelector('#exportDiagSvg');
+  diagHandler
+    .exportDiagramSVG()
+    .then((svgDiag) => {
+      // Make the href attribute point to the diagram xml
+      exportDiagSvgBtn.setAttribute(
+        'href',
+        'data:application/bpmn20-xml;charset=UTF-8,' + svgDiag
+      );
+    })
+    .then(() => {
+      // Wait 10ms
+      return new Promise((resolve) => {
+        setTimeout(() => resolve(), 10);
+      });
+    })
+    .then(() => {
+      // Reset the href attribute of the anchor element
+      exportDiagSvgBtn.setAttribute('href', '');
+    });
+}
+
+function setDiagName(diagName) {
+  document.querySelector('#exportDiag').download = `${diagName}.bpmn`;
+  document.querySelector('#exportDiagSvg').download = `${diagName}.svg`;
+}
+
+/**
+ * Prevent pending changes looses
+ */
+function preventNavigation() {
+  if (confirm('Sure? Changes you made may not be saved')) router.navigate('/');
+}
+
+/**
  * Toggle bottom toolbar visibility
  * @param {Boolean} hide If true, hide the bottom toolbar, otherwise display it
  */
 function toggleToolbar(hide) {
   const toolbar = document.querySelector('#toolbar');
-  console.log(toolbar);
   hide ? toolbar.classList.add('hidden') : toolbar.classList.remove('hidden');
 }
 
@@ -243,6 +329,15 @@ function handleZoom(element) {
 function handleUndo(e) {
   if (e.ctrlKey && e.key === 'z') diagHandler.undoAction();
   else if (e.ctrlKey && e.key === 'y') diagHandler.redoAction();
+}
+
+/**
+ * Prevent the loss of current pending changes
+ * @param {Event} e
+ */
+function beforeUnload(e) {
+  e.preventDefault();
+  e.returnValue = '';
 }
 
 export { ModelerComponent };

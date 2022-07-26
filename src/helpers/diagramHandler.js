@@ -3,8 +3,6 @@ import NavigatedViewer from 'bpmn-js/lib/NavigatedViewer';
 import TokenSimulationViewer from 'bpmn-js-token-simulation/lib/viewer';
 import TokenSimulationModeler from 'bpmn-js-token-simulation/lib/modeler';
 import BLANK_DIAGRAM from '../assets/diagrams/new-diagram.bpmn';
-//TODO: To remove
-import PIZZA_DIAGRAM from '../assets/diagrams/pizza-diagram.bpmn';
 import 'bpmn-js/dist/assets/diagram-js.css';
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
 import 'bpmn-js-token-simulation/assets/css/bpmn-js-token-simulation.css';
@@ -109,12 +107,6 @@ function displayBlankDiagram() {
   else throw new Error('Editor is not defined!');
 }
 
-// TODO: For debug purpose only
-function displayPizzaDiagram() {
-  if (editor) displayDiagram(PIZZA_DIAGRAM);
-  else throw new Error('Editor is not defined!');
-}
-
 /**
  * Display a bpmn diagram passed as XML text
  * @param {String} diagram
@@ -161,7 +153,7 @@ export {
   exportDiagramSVG,
   fetchAndDisplay,
   displayBlankDiagram,
-  displayPizzaDiagram,
+  displayDiagram,
   undoAction,
   redoAction,
   zoomIn,
