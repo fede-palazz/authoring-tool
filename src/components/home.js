@@ -7,10 +7,6 @@ const HomeComponent = {
         <div id="home-container">
           <div id="recent-diagrams-container">
             <h2 class="subtitle">Recently opened</h2>
-            <div id="no-diagrams-message">
-            <p>Nothing to show here...</p>
-            <p>Try to create a new diagram or opening an existing one</p>
-            </div>
               <ul id="recent-diagrams-list">
                 <template id="list-item-template">
                   <li class="recent-diagrams-item">
@@ -24,6 +20,10 @@ const HomeComponent = {
                 </template>
               </ul>
           </div>
+          <div id="no-diagrams-message">
+            <p>Nothing to show here...</p>
+            <p>Try to create a new diagram or opening an existing one</p>
+            </div>
           <div class="home-toolbar">
             <!-- Create blank diagram button -->
             <button id="newDiag" class="home-icon-btn">
