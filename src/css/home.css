@@ -20,6 +20,24 @@
   margin: 0;
 }
 
+#no-diagrams-message {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+}
+
+#no-diagrams-message p {
+  color: var(--secondary-text-color);
+  font-style: italic;
+  margin: 5px 20px;
+}
+
+#no-diagrams-message p:first-child {
+  margin-top: 30px;
+}
+
 #recent-diagrams-list {
   padding: 0;
 }

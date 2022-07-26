@@ -166,7 +166,7 @@ const ModelerComponent = {
 
     /**
      * Pending changes event listener
-     */ //TODO: Remove comment
+     */
     window.addEventListener('beforeunload', beforeUnload);
   },
 

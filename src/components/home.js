@@ -7,6 +7,10 @@ const HomeComponent = {
         <div id="home-container">
           <div id="recent-diagrams-container">
             <h2 class="subtitle">Recently opened</h2>
+            <div id="no-diagrams-message">
+            <p>Nothing to show here...</p>
+            <p>Try to create a new diagram or opening an existing one</p>
+            </div>
               <ul id="recent-diagrams-list">
                 <template id="list-item-template">
                   <li class="recent-diagrams-item">
@@ -103,6 +107,10 @@ function newDiagram(e) {
   router.navigate('/m');
 }
 
+/**
+ * Fetch the selected local diagram and display it through the viewer
+ * @param {Event} e
+ */
 function importDiagram(e) {
   const importDiagBtnHidden = e.target;
   // Null check for the selected file diagram
@@ -134,6 +142,11 @@ function importDiagram(e) {
   });
 }
 
+/**
+ * Read a local diagram file and save it to localstorage
+ * @param {String} fileName
+ * @param {File} file
+ */
 function fetchAndSave(fileName, file) {
   if (!file) throw new Error('Error: received file is null!');
   return new Promise((resolve, reject) => {
@@ -152,6 +165,9 @@ function fetchAndSave(fileName, file) {
   });
 }
 
+/**
+ * Display a list of recently opened diagrams
+ */
 function displayRecentDiagrams() {
   // Get template element
   const template = document.querySelector('#list-item-template');
@@ -159,6 +175,11 @@ function displayRecentDiagrams() {
   const listElem = document.getElementById('recent-diagrams-list');
   // Fetch diagrams list
   const diagList = storageHandler.getDiagramsList();
+
+  // Check whether the list is not empty
+  if (diagList.length !== 0) {
+    document.getElementById('no-diagrams-message').remove();
+  } else return;
 
   diagList.forEach((elem) => {
     // Clone the template node
@@ -172,6 +193,10 @@ function displayRecentDiagrams() {
   });
 }
 
+/**
+ * Delete the selected diagram from the list and the storage
+ * @param {Event} e
+ */
 function deleteDiagram(e) {
   e.stopImmediatePropagation();
   // Fetch diagram id to delete
@@ -181,6 +206,10 @@ function deleteDiagram(e) {
   router.navigate();
 }
 
+/**
+ * Open the selected diagram with the viewer
+ * @param {Event} e
+ */
 function openDiagram(e) {
   e.stopImmediatePropagation();
   router.navigate(`/v?${e.target.dataset.diagId}`);
