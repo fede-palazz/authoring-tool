@@ -12,16 +12,3 @@ COPY ./dist/* ./
 
 # Containers run nginx with global directives and daemon off
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
-
-
-
-
-# FROM nginx:alpine
-
-# WORKDIR /app
-
-# COPY ./dist/ /app/static/
-# COPY ./nginx.conf /etc/nginx/nginx.conf
-
-# Run the entrypoint at runtime (executed when the container starts)
-#CMD ["node", "index.js"]

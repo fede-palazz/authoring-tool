@@ -22,7 +22,7 @@ const HomeComponent = {
           </div>
           <div id="no-diagrams-message">
             <p>Nothing to show here...</p>
-            <p>Try to create a new diagram or opening an existing one</p>
+            <p>Try to create a new diagram or open an existing one</p>
             </div>
           <div class="home-toolbar">
             <!-- Create blank diagram button -->

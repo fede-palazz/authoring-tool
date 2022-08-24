@@ -41,13 +41,16 @@ $ docker-compose down
 ```
 
 ## Examples
+
 You can find some diagrams examples under the `src/assets/diagrams` directory and import them into the editor.
 
 ## Features
 
-- possibility to create and modify BPMN diagrams
-- import local diagrams functionality
-- export diagrams functionality (`.bpmn`, `.svg`)
+- create and modify BPMN diagrams
+- import local diagrams
+- homepage displaying recently opened diagrams
+- save and delete diagrams from browser's local storage
+- export diagrams in .bpmn and .svg formats
 - token simulation mode
 
 ## External libraries
