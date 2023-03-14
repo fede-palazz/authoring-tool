@@ -1,6 +1,7 @@
 import * as diagHandler from '../helpers/diagramHandler';
 import * as storageHandler from '../helpers/storageHandler';
 import * as router from '../helpers/router';
+import * as apiHandler from '../helpers/apiHandler';
 
 const CANVAS_ID = 'canvas';
 const EDITOR_MODE = 'v';
@@ -100,7 +101,7 @@ const ViewerComponent = {
     if (storageHandler.exists(diagId)) {
       diagHandler.displayDiagram(storageHandler.getDiagram(diagId));
       // Set correct diagram name when exporting it
-      setDiagName(storageHandler.getName(diagId));
+      setDiagName(storageHandler.getDiagramName(diagId));
     } else router.navigate('/');
   },
   setListeners() {
@@ -131,6 +132,13 @@ const ViewerComponent = {
     document
       .getElementById('editDiagBtn')
       .addEventListener('click', editDiagram);
+
+    /**
+     * Deploy current diagram to the Teaming Engine
+     */
+    document
+      .getElementById('deployDiagBtn')
+      .addEventListener('click', deployDiagram);
   },
 };
 
@@ -170,8 +178,6 @@ function exportDiag() {
         'href',
         'data:application/bpmn20-xml;charset=UTF-8,' + xmlDiag
       );
-    })
-    .then(() => {
       // Wait 10ms
       return new Promise((resolve) => {
         setTimeout(() => resolve(), 10);
@@ -196,8 +202,6 @@ function exportDiagSvg() {
         'href',
         'data:application/bpmn20-xml;charset=UTF-8,' + svgDiag
       );
-    })
-    .then(() => {
       // Wait 10ms
       return new Promise((resolve) => {
         setTimeout(() => resolve(), 10);
@@ -249,10 +253,20 @@ function handleZoom(element) {
  * Switch to edit diagram mode
  */
 function editDiagram() {
-  console.log('editing...');
   const diagId = router.getCurrentDiagId();
-  console.log(`Diagram id: ${diagId}`);
   router.navigate(`/m?${diagId}`);
+}
+
+function deployDiagram() {
+  const diagId = router.getCurrentDiagId();
+  const diagram = storageHandler.getDiagram(diagId);
+  const diagramName = storageHandler.getDiagramName(diagId);
+
+  console.log('deployment...');
+  // Teaming Engine API call
+  apiHandler
+    .deployDiagram(diagram, diagId, diagramName)
+    .then((result) => console.log(result));
 }
 
 export { ViewerComponent };

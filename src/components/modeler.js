@@ -117,7 +117,7 @@ const ModelerComponent = {
       // load and display the diagram
       diagHandler.displayDiagram(storageHandler.getDiagram(diagId));
       // Set correct diagram name when exporting it
-      setDiagName(storageHandler.getName(diagId));
+      setDiagName(storageHandler.getDiagramName(diagId));
     }
     // diagId not null but invalid
     else if (diagId)
@@ -274,12 +274,8 @@ function exportDiag() {
         'href',
         'data:application/bpmn20-xml;charset=UTF-8,' + xmlDiag
       );
-    })
-    .then(() => {
       // Wait 10ms
-      return new Promise((resolve) => {
-        setTimeout(() => resolve(), 10);
-      });
+      return new Promise((resolve) => setTimeout(resolve, 10));
     })
     .then(() => {
       // Reset the href attribute of the anchor element
@@ -300,8 +296,6 @@ function exportDiagSvg() {
         'href',
         'data:application/bpmn20-xml;charset=UTF-8,' + svgDiag
       );
-    })
-    .then(() => {
       // Wait 10ms
       return new Promise((resolve) => {
         setTimeout(() => resolve(), 10);
@@ -359,6 +353,31 @@ function handleUndo(e) {
 
 function deployDiagram() {
   console.log('Deploying');
+
+  // Get current diagram
+
+  let bodyContent = new FormData();
+  bodyContent.append('deployment-name', 'diagramName_replace');
+  bodyContent.append('deployment-source', 'diagramId');
+  bodyContent.append('data', 'diagram.bpmn');
+
+  fetch('http://localhost:8001/engine-rest/deployment/create', {
+    method: 'POST',
+    body: bodyContent,
+  })
+    .then((response) => response.json())
+    .then((res) => console.log(res));
+
+  /**
+   * new Promise((resolve, reject) => {
+  //do something that takes time, and then call resolve or maybe reject 
+})
+  // runs when the promise is settled, doesn't matter successfully or not
+  .finally(() => stop loading indicator)
+  // so the loading indicator is always stopped before we go on
+  .then(result => show result, err => show error)
+   * 
+   */
 }
 
 /**
