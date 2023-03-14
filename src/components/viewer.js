@@ -40,16 +40,27 @@ const ViewerComponent = {
           >
         </div>
       
-      <!-- Edit diagram button -->
+      <!-- Lateral edit bar -->
       <div class="edit-bar">
-      <button class="icon-btn" id="editDiag">
-          <span
-            class="material-icons md-light"
-            alt="Edit diagram"
-            title="Edit diagram"
-            >edit</span
-          >
-      </button>
+        <!-- Deploy diagram button -->
+        <button class="icon-btn" id="deployDiagBtn">
+            <span
+              class="material-icons md-light"
+              alt="Deploy diagram"
+              title="Deploy diagram"
+              >publish</span
+            >
+        </button>
+
+        <!-- Edit diagram button -->
+        <button class="icon-btn" id="editDiagBtn">
+            <span
+              class="material-icons md-light"
+              alt="Edit diagram"
+              title="Edit diagram"
+              >edit</span
+            >
+        </button>
       </div>
 
       <!-- Lateral zoom bar -->
@@ -118,7 +129,7 @@ const ViewerComponent = {
      * Switch to edit mode event listener
      */
     document
-      .querySelector('.edit-bar > button')
+      .getElementById('editDiagBtn')
       .addEventListener('click', editDiagram);
   },
 };
@@ -238,7 +249,9 @@ function handleZoom(element) {
  * Switch to edit diagram mode
  */
 function editDiagram() {
+  console.log('editing...');
   const diagId = router.getCurrentDiagId();
+  console.log(`Diagram id: ${diagId}`);
   router.navigate(`/m?${diagId}`);
 }
 

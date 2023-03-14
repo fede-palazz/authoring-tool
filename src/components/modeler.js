@@ -64,6 +64,20 @@ const ModelerComponent = {
           >
         </div>
       </div>
+
+      <!-- Lateral edit bar -->
+      <div class="edit-bar">
+        <!-- Deploy diagram button -->
+        <button class="icon-btn" id="deployDiagBtn">
+            <span
+              class="material-icons md-light"
+              alt="Deploy diagram"
+              title="Deploy diagram"
+              >publish</span
+            >
+        </button>
+      </div>
+
       <!-- Lateral zoom bar -->
       <div class="zoom-bar">
         <!-- Reset zoom button -->
@@ -168,6 +182,13 @@ const ModelerComponent = {
      * Pending changes event listener
      */
     window.addEventListener('beforeunload', beforeUnload);
+
+    /**
+     * Deploy diagram event listener
+     */
+    document
+      .getElementById('deployDiagBtn')
+      .addEventListener('click', deployDiagram);
   },
 
   destroy() {
@@ -221,6 +242,11 @@ function saveDiagram() {
 function saveDiagramAs() {
   // Prompt for new diagram name
   let diagName = prompt('Type a name for this diagram');
+  if (diagName === null) return;
+  while (diagName === '') {
+    diagName = prompt('You need to insert a valid diagram name');
+    if (diagName === null) return;
+  }
   // Replace dots and blank spaces with underscores
   diagName = diagName.replace(/\.| /g, '_');
   // Save current diagram
@@ -331,13 +357,17 @@ function handleUndo(e) {
   else if (e.ctrlKey && e.key === 'y') diagHandler.redoAction();
 }
 
+function deployDiagram() {
+  console.log('Deploying');
+}
+
 /**
  * Prevent the loss of current pending changes
  * @param {Event} e
  */
 function beforeUnload(e) {
   e.preventDefault();
-  e.returnValue = '';
+  // e.returnValue = '';
 }
 
 export { ModelerComponent };
