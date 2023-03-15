@@ -203,9 +203,7 @@ function exportDiagSvg() {
         'data:application/bpmn20-xml;charset=UTF-8,' + svgDiag
       );
       // Wait 10ms
-      return new Promise((resolve) => {
-        setTimeout(() => resolve(), 10);
-      });
+      return new Promise((resolve) => setTimeout(resolve, 10));
     })
     .then(() => {
       // Reset the href attribute of the anchor element
@@ -262,7 +260,6 @@ function deployDiagram() {
   const diagram = storageHandler.getDiagram(diagId);
   const diagramName = storageHandler.getDiagramName(diagId);
 
-  console.log('deployment...');
   // Teaming Engine API call
   apiHandler
     .deployDiagram(diagram, diagId, diagramName)
