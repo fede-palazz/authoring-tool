@@ -213,8 +213,7 @@ function deleteDiagram(e) {
  * @param {Event} e
  */
 function openDiagram(e) {
-  e.stopImmediatePropagation();
-  router.navigate(`/v?${e.target.dataset.diagId}`);
+  router.navigate(`/v?${e.currentTarget.dataset.diagId}`);
 }
 
 export { HomeComponent };
