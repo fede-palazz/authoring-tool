@@ -68,7 +68,7 @@ const ModelerComponent = {
       <!-- Lateral edit bar -->
       <div class="edit-bar">
         <!-- Deploy diagram button -->
-        <button class="icon-btn" id="deployDiagBtn">
+        <button class="icon-btn" id="deployDiag">
             <span
               class="material-icons md-light"
               alt="Deploy diagram"
@@ -127,6 +127,8 @@ const ModelerComponent = {
     else {
       // Hide save diagram button
       document.getElementById('saveDiag').style.display = 'none';
+      // Hide lateral edit bar
+      document.querySelector('.edit-bar').style.display = 'none';
       // Set default names for diagram export
       document.querySelector('#exportDiag').download = 'diagram.bpmn';
       document.querySelector('#exportDiagSvg').download = 'diagram.svg';
@@ -187,7 +189,7 @@ const ModelerComponent = {
      * Deploy diagram event listener
      */
     document
-      .getElementById('deployDiagBtn')
+      .getElementById('deployDiag')
       .addEventListener('click', deployDiagram);
   },
 
