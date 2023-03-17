@@ -3,16 +3,24 @@ const API_URL = 'http://localhost:8001/engine-rest';
 async function deployDiagram(diagram, diagId, diagName) {
   console.log('Deployment...');
   const url = API_URL + '/deployment/create';
+  const diagramName = diagName;
+  const blob = new Blob([diagram], { type: 'text/xml' });
+  const form = new FormData();
 
-  let data = new FormData();
-  data.append('deployment-name', diagName);
-  data.append('deployment-source', diagId);
-  data.append('data', diagram);
+  form.append('deployment-name', diagName);
+  form.append('deployment-source', 'Authoring Tool');
+  // make sure that we do not re-deploy already existing deployment
+  form.append('enable-duplicate-filtering', 'true');
+  form.append(diagramName, blob, diagramName);
+
   try {
-    const response = await fetch(url, { method: 'POST', body: data });
-    const responseJson = await response.json();
-    console.log('Deployment finished!');
-    return responseJson;
+    const response = await fetch(url, {
+      method: 'POST',
+      body: form,
+    });
+    const json = await response.json();
+    console.log('Deployment finished');
+    return json;
   } catch (error) {
     throw new Error(error);
   }
