@@ -73,29 +73,28 @@ body {
   justify-content: space-between;
   align-items: center;
   background-color: var(--primary-color);
-  padding: 0 20px;
+  padding: 0.25rem 1.25rem;
   z-index: 100;
-}
-
-.title-container {
-  display: flex;
-  align-items: center;
-  color: #fff;
-  height: 75px;
-}
-
-.title-container a {
-  cursor: pointer;
 }
 
 .title {
   text-shadow: 2px 2px 4px #000000;
+  color: #fff;
   margin: 0;
+}
+
+.logo-container {
+  display: flex;
+}
+
+.logo-container a:not(:first-child) {
+  margin-left: 1.5rem;
 }
 
 .logo {
   display: block;
-  max-width: 90px;
+  max-height: 3.25rem;
+  /* max-width: 5rem; */
 }
 
 #app {
@@ -108,4 +107,5 @@ body {
 .hidden-link {
   text-decoration: none;
   color: inherit;
+  cursor: pointer;
 }

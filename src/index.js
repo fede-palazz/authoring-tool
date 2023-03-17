@@ -2,6 +2,7 @@ import './css/style.css';
 import './css/home.css';
 import './css/canvas.css';
 import './assets/idea-logo-small.png';
+import './assets/teaming-logo-black.png';
 import * as router from './helpers/router';
 import * as storageHandler from './helpers/storageHandler';
 
