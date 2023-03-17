@@ -1,5 +1,6 @@
 import * as diagHandler from '../helpers/diagramHandler';
 import * as storageHandler from '../helpers/storageHandler';
+import * as apiHandler from '../helpers/apiHandler';
 import * as router from '../helpers/router';
 
 const CANVAS_ID = 'canvas';
@@ -354,32 +355,14 @@ function handleUndo(e) {
 }
 
 function deployDiagram() {
-  console.log('Deploying');
+  const diagId = router.getCurrentDiagId();
+  const diagram = storageHandler.getDiagram(diagId);
+  const diagramName = storageHandler.getDiagramName(diagId);
 
-  // Get current diagram
-
-  let bodyContent = new FormData();
-  bodyContent.append('deployment-name', 'diagramName_replace');
-  bodyContent.append('deployment-source', 'diagramId');
-  bodyContent.append('data', 'diagram.bpmn');
-
-  fetch('http://localhost:8001/engine-rest/deployment/create', {
-    method: 'POST',
-    body: bodyContent,
-  })
-    .then((response) => response.json())
-    .then((res) => console.log(res));
-
-  /**
-   * new Promise((resolve, reject) => {
-  //do something that takes time, and then call resolve or maybe reject 
-})
-  // runs when the promise is settled, doesn't matter successfully or not
-  .finally(() => stop loading indicator)
-  // so the loading indicator is always stopped before we go on
-  .then(result => show result, err => show error)
-   * 
-   */
+  // Teaming Engine API call
+  apiHandler
+    .deployDiagram(diagram, diagId, diagramName)
+    .then((result) => console.log(result));
 }
 
 /**
