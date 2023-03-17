@@ -6,7 +6,7 @@ This repository contains source code and files used during the development of th
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/en/download/) (tested with `v16.15`)
+- [Node.js](https://nodejs.org/en/download/) (tested with `v16.18.1`)
 - [Docker](https://docs.docker.com/engine/install/)
 - [Docker compose](https://docs.docker.com/compose/install/compose-plugin/#installing-compose-on-linux-systems)
 
@@ -56,6 +56,5 @@ You can find some diagrams examples under the `src/assets/diagrams` directory an
 ## External libraries
 
 - [bpmn-js](https://github.com/bpmn-io/bpmn-js)
-
 - [bpmn-js-token-simulation](https://github.com/bpmn-io/bpmn-js-token-simulation)
 - [webpack](https://webpack.js.org/)
