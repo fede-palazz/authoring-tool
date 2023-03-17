@@ -19,7 +19,7 @@ module.exports = {
     },
     compress: true,
     hot: true,
-    port: 9000,
+    port: 3000,
   },
   // Only for multiple entry points
   //   optimization: {
