@@ -189,7 +189,7 @@ function displayRecentDiagrams() {
     // Set diagram id as data attribute
     listItemElem.dataset.diagId = elem.id;
     // Set diagram name
-    listItemElem.querySelector('p').innerText = elem.name;
+    listItemElem.querySelector('p').innerText = elem.name.replaceAll('_', ' ');
     // Append item to the list
     listElem.appendChild(listItemElem);
   });

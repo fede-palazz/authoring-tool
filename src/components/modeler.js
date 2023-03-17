@@ -126,10 +126,10 @@ const ModelerComponent = {
       router.navigate('/');
     // diagId is null
     else {
-      // Hide save diagram button
-      document.getElementById('saveDiag').style.display = 'none';
-      // Hide lateral edit bar
-      document.querySelector('.edit-bar').style.display = 'none';
+      // Remove save diagram button from DOM
+      document.getElementById('saveDiag').remove();
+      // Remove lateral edit bar from DOM
+      document.querySelector('.edit-bar').remove();
       // Set default names for diagram export
       document.querySelector('#exportDiag').download = 'diagram.bpmn';
       document.querySelector('#exportDiagSvg').download = 'diagram.svg';
