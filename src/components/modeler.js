@@ -1,5 +1,6 @@
 import * as diagHandler from '../helpers/diagramHandler';
 import * as storageHandler from '../helpers/storageHandler';
+import * as apiHandler from '../helpers/apiHandler';
 import * as router from '../helpers/router';
 
 const CANVAS_ID = 'canvas';
@@ -64,6 +65,20 @@ const ModelerComponent = {
           >
         </div>
       </div>
+
+      <!-- Lateral edit bar -->
+      <div class="edit-bar">
+        <!-- Deploy diagram button -->
+        <button class="icon-btn" id="deployDiag">
+            <span
+              class="material-icons md-light"
+              alt="Deploy diagram"
+              title="Deploy diagram"
+              >publish</span
+            >
+        </button>
+      </div>
+
       <!-- Lateral zoom bar -->
       <div class="zoom-bar">
         <!-- Reset zoom button -->
@@ -103,7 +118,7 @@ const ModelerComponent = {
       // load and display the diagram
       diagHandler.displayDiagram(storageHandler.getDiagram(diagId));
       // Set correct diagram name when exporting it
-      setDiagName(storageHandler.getName(diagId));
+      setDiagName(storageHandler.getDiagramName(diagId));
     }
     // diagId not null but invalid
     else if (diagId)
@@ -111,8 +126,10 @@ const ModelerComponent = {
       router.navigate('/');
     // diagId is null
     else {
-      // Hide save diagram button
-      document.getElementById('saveDiag').style.display = 'none';
+      // Remove save diagram button from DOM
+      document.getElementById('saveDiag').remove();
+      // Remove lateral edit bar from DOM
+      document.querySelector('.edit-bar').remove();
       // Set default names for diagram export
       document.querySelector('#exportDiag').download = 'diagram.bpmn';
       document.querySelector('#exportDiagSvg').download = 'diagram.svg';
@@ -168,6 +185,13 @@ const ModelerComponent = {
      * Pending changes event listener
      */
     window.addEventListener('beforeunload', beforeUnload);
+
+    /**
+     * Deploy diagram event listener
+     */
+    document
+      .getElementById('deployDiag')
+      .addEventListener('click', deployDiagram);
   },
 
   destroy() {
@@ -221,6 +245,11 @@ function saveDiagram() {
 function saveDiagramAs() {
   // Prompt for new diagram name
   let diagName = prompt('Type a name for this diagram');
+  if (diagName === null) return;
+  while (diagName === '') {
+    diagName = prompt('You need to insert a valid diagram name');
+    if (diagName === null) return;
+  }
   // Replace dots and blank spaces with underscores
   diagName = diagName.replace(/\.| /g, '_');
   // Save current diagram
@@ -248,12 +277,8 @@ function exportDiag() {
         'href',
         'data:application/bpmn20-xml;charset=UTF-8,' + xmlDiag
       );
-    })
-    .then(() => {
       // Wait 10ms
-      return new Promise((resolve) => {
-        setTimeout(() => resolve(), 10);
-      });
+      return new Promise((resolve) => setTimeout(resolve, 10));
     })
     .then(() => {
       // Reset the href attribute of the anchor element
@@ -274,8 +299,6 @@ function exportDiagSvg() {
         'href',
         'data:application/bpmn20-xml;charset=UTF-8,' + svgDiag
       );
-    })
-    .then(() => {
       // Wait 10ms
       return new Promise((resolve) => {
         setTimeout(() => resolve(), 10);
@@ -331,13 +354,24 @@ function handleUndo(e) {
   else if (e.ctrlKey && e.key === 'y') diagHandler.redoAction();
 }
 
+function deployDiagram() {
+  const diagId = router.getCurrentDiagId();
+  const diagram = storageHandler.getDiagram(diagId);
+  const diagramName = storageHandler.getDiagramName(diagId);
+
+  // Teaming Engine API call
+  apiHandler
+    .deployDiagram(diagram, diagId, diagramName)
+    .then((result) => console.log(result));
+}
+
 /**
  * Prevent the loss of current pending changes
  * @param {Event} e
  */
 function beforeUnload(e) {
   e.preventDefault();
-  e.returnValue = '';
+  // e.returnValue = '';
 }
 
 export { ModelerComponent };

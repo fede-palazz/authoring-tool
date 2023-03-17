@@ -81,7 +81,7 @@ function clear() {
  * @param {String} id Diagram id
  * @returns {String} Diagram name
  */
-function getName(id) {
+function getDiagramName(id) {
   return getDiagramObj(id)?.name;
 }
 
@@ -128,7 +128,7 @@ init();
 export {
   saveDiagram,
   updateDiagram,
-  getName,
+  getDiagramName,
   getDiagram,
   getDiagramsList,
   deleteDiagram,

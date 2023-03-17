@@ -1,6 +1,7 @@
 import * as diagHandler from '../helpers/diagramHandler';
 import * as storageHandler from '../helpers/storageHandler';
 import * as router from '../helpers/router';
+import * as apiHandler from '../helpers/apiHandler';
 
 const CANVAS_ID = 'canvas';
 const EDITOR_MODE = 'v';
@@ -40,16 +41,27 @@ const ViewerComponent = {
           >
         </div>
       
-      <!-- Edit diagram button -->
+      <!-- Lateral edit bar -->
       <div class="edit-bar">
-      <button class="icon-btn" id="editDiag">
-          <span
-            class="material-icons md-light"
-            alt="Edit diagram"
-            title="Edit diagram"
-            >edit</span
-          >
-      </button>
+        <!-- Deploy diagram button -->
+        <button class="icon-btn" id="deployDiagBtn">
+            <span
+              class="material-icons md-light"
+              alt="Deploy diagram"
+              title="Deploy diagram"
+              >publish</span
+            >
+        </button>
+
+        <!-- Edit diagram button -->
+        <button class="icon-btn" id="editDiagBtn">
+            <span
+              class="material-icons md-light"
+              alt="Edit diagram"
+              title="Edit diagram"
+              >edit</span
+            >
+        </button>
       </div>
 
       <!-- Lateral zoom bar -->
@@ -89,7 +101,7 @@ const ViewerComponent = {
     if (storageHandler.exists(diagId)) {
       diagHandler.displayDiagram(storageHandler.getDiagram(diagId));
       // Set correct diagram name when exporting it
-      setDiagName(storageHandler.getName(diagId));
+      setDiagName(storageHandler.getDiagramName(diagId));
     } else router.navigate('/');
   },
   setListeners() {
@@ -118,8 +130,15 @@ const ViewerComponent = {
      * Switch to edit mode event listener
      */
     document
-      .querySelector('.edit-bar > button')
+      .getElementById('editDiagBtn')
       .addEventListener('click', editDiagram);
+
+    /**
+     * Deploy current diagram to the Teaming Engine
+     */
+    document
+      .getElementById('deployDiagBtn')
+      .addEventListener('click', deployDiagram);
   },
 };
 
@@ -159,8 +178,6 @@ function exportDiag() {
         'href',
         'data:application/bpmn20-xml;charset=UTF-8,' + xmlDiag
       );
-    })
-    .then(() => {
       // Wait 10ms
       return new Promise((resolve) => {
         setTimeout(() => resolve(), 10);
@@ -185,12 +202,8 @@ function exportDiagSvg() {
         'href',
         'data:application/bpmn20-xml;charset=UTF-8,' + svgDiag
       );
-    })
-    .then(() => {
       // Wait 10ms
-      return new Promise((resolve) => {
-        setTimeout(() => resolve(), 10);
-      });
+      return new Promise((resolve) => setTimeout(resolve, 10));
     })
     .then(() => {
       // Reset the href attribute of the anchor element
@@ -240,6 +253,17 @@ function handleZoom(element) {
 function editDiagram() {
   const diagId = router.getCurrentDiagId();
   router.navigate(`/m?${diagId}`);
+}
+
+function deployDiagram() {
+  const diagId = router.getCurrentDiagId();
+  const diagram = storageHandler.getDiagram(diagId);
+  const diagramName = storageHandler.getDiagramName(diagId);
+
+  // Teaming Engine API call
+  apiHandler
+    .deployDiagram(diagram, diagId, diagramName)
+    .then((result) => console.log(result));
 }
 
 export { ViewerComponent };

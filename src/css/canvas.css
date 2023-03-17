@@ -43,7 +43,11 @@
   position: fixed;
   right: 15px;
   bottom: 200px;
-  padding: 5px;
+  padding: 2px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .zoom-bar {
@@ -57,7 +61,8 @@
   padding: 2px;
 }
 
-.zoom-bar .icon-btn {
+.zoom-bar .icon-btn,
+.edit-bar .icon-btn {
   margin-top: 10px;
   margin: 5px 3px;
 }

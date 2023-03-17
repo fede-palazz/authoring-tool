@@ -6,7 +6,7 @@ const HomeComponent = {
     return `
         <div id="home-container">
           <div id="recent-diagrams-container">
-            <h2 class="subtitle">Recently opened</h2>
+            <h2 id="recent-diagrams-title" class="subtitle" hidden>Recently opened</h2>
               <ul id="recent-diagrams-list">
                 <template id="list-item-template">
                   <li class="recent-diagrams-item">
@@ -170,7 +170,7 @@ function fetchAndSave(fileName, file) {
  */
 function displayRecentDiagrams() {
   // Get template element
-  const template = document.querySelector('#list-item-template');
+  const template = document.getElementById('list-item-template');
   // Get diagrams list element
   const listElem = document.getElementById('recent-diagrams-list');
   // Fetch diagrams list
@@ -179,6 +179,8 @@ function displayRecentDiagrams() {
   // Check whether the list is not empty
   if (diagList.length !== 0) {
     document.getElementById('no-diagrams-message').remove();
+    // Show recent diagrams title
+    document.getElementById('recent-diagrams-title').hidden = false;
   } else return;
 
   diagList.forEach((elem) => {
@@ -187,7 +189,7 @@ function displayRecentDiagrams() {
     // Set diagram id as data attribute
     listItemElem.dataset.diagId = elem.id;
     // Set diagram name
-    listItemElem.querySelector('p').innerText = elem.name;
+    listItemElem.querySelector('p').innerText = elem.name.replaceAll('_', ' ');
     // Append item to the list
     listElem.appendChild(listItemElem);
   });
@@ -211,8 +213,7 @@ function deleteDiagram(e) {
  * @param {Event} e
  */
 function openDiagram(e) {
-  e.stopImmediatePropagation();
-  router.navigate(`/v?${e.target.dataset.diagId}`);
+  router.navigate(`/v?${e.currentTarget.dataset.diagId}`);
 }
 
 export { HomeComponent };
