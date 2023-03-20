@@ -358,6 +358,11 @@ function handleUndo(e) {
 }
 
 function deployDiagram() {
+  // Ask for confirmation to save diagram
+  if (!confirm("In order to deploy current diagram it's necessary to save it"))
+    return;
+  // Save current diagram
+  saveDiagram();
   const diagId = router.getCurrentDiagId();
   const diagram = storageService.getDiagram(diagId);
   const diagramName = storageService.getDiagramName(diagId);
@@ -374,7 +379,6 @@ function deployDiagram() {
  */
 function beforeUnload(e) {
   e.preventDefault();
-  // e.returnValue = '';
 }
 
 export { ModelerComponent };
