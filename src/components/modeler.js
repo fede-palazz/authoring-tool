@@ -1,6 +1,6 @@
-import * as diagHandler from '../helpers/diagramHandler';
-import * as storageHandler from '../helpers/storageHandler';
-import * as apiHandler from '../helpers/apiHandler';
+import * as diagService from '../helpers/diagramService';
+import * as storageService from '../helpers/storageService';
+import * as apiService from '../helpers/apiService';
 import * as router from '../helpers/router';
 
 const CANVAS_ID = 'canvas';
@@ -114,11 +114,11 @@ const ModelerComponent = {
     this.setListeners();
     initializeCanvas();
     // diagId not null and valid
-    if (diagId && storageHandler.exists(diagId)) {
+    if (diagId && storageService.exists(diagId)) {
       // load and display the diagram
-      diagHandler.displayDiagram(storageHandler.getDiagram(diagId));
+      diagService.displayDiagram(storageService.getDiagram(diagId));
       // Set correct diagram name when exporting it
-      setDiagName(storageHandler.getDiagramName(diagId));
+      setExportedDiagName(storageService.getDiagramName(diagId));
     }
     // diagId not null but invalid
     else if (diagId)
@@ -193,7 +193,6 @@ const ModelerComponent = {
       .getElementById('deployDiag')
       .addEventListener('click', deployDiagram);
   },
-
   destroy() {
     document.removeEventListener('keydown', handleUndo);
     window.removeEventListener('beforeunload', beforeUnload);
@@ -208,9 +207,9 @@ const ModelerComponent = {
  */
 function initializeCanvas() {
   // Instantiate the modeler
-  diagHandler.createEditor(EDITOR_MODE, CANVAS_ID, handleEvents);
+  diagService.createEditor(EDITOR_MODE, CANVAS_ID, handleEvents);
   // Load the blank diagram template
-  diagHandler.displayBlankDiagram();
+  diagService.displayBlankDiagram();
 }
 
 /**
@@ -221,7 +220,7 @@ function initializeCanvas() {
 function handleEvents(eventName, event) {
   switch (eventName) {
     case 'toggleSimulation':
-      event.active ? toggleToolbar(true) : toggleToolbar(false);
+      event.active ? toggleToolbars(true) : toggleToolbars(false);
       break;
   }
 }
@@ -229,39 +228,32 @@ function handleEvents(eventName, event) {
 /**
  * Save current diagram's pending changes
  */
-function saveDiagram() {
-  diagHandler.exportDiagram().then((diagram) => {
-    // Update the current diagram
-    storageHandler.updateDiagram(
-      router.getCurrentDiagId(),
-      decodeURIComponent(diagram)
-    );
-  });
+async function saveDiagram() {
+  const diagram = await diagService.exportDiagram();
+  const diagramId = router.getCurrentDiagId();
+  // Update the current diagram
+  storageService.updateDiagram(diagramId, diagram);
 }
 
 /**
  * Save current diagram as a new one
  */
-function saveDiagramAs() {
+async function saveDiagramAs() {
   // Prompt for new diagram name
-  let diagName = prompt('Type a name for this diagram');
-  if (diagName === null) return;
-  while (diagName === '') {
-    diagName = prompt('You need to insert a valid diagram name');
-    if (diagName === null) return;
+  let diagramName = prompt('Type a name for this diagram');
+  if (diagramName === null) return;
+  while (diagramName === '') {
+    diagramName = prompt('You need to insert a valid diagram name');
+    if (diagramName === null) return;
   }
-  // Replace dots and blank spaces with underscores
-  diagName = diagName.replace(/\.| /g, '_');
+  // Replace periods and blank spaces with underscores
+  diagramName = diagramName.replace(/\.| /g, '_');
   // Save current diagram
-  diagHandler.exportDiagram().then((diagram) => {
-    // Save diagram to localstorage
-    const diagId = storageHandler.saveDiagram(
-      diagName,
-      decodeURIComponent(diagram)
-    );
-    // Open the saved diagram
-    router.navigate(`/m?${diagId}`);
-  });
+  const diagram = await diagService.exportDiagram();
+  // Save diagram to localstorage
+  const diagId = storageService.saveDiagram(diagramName, diagram);
+  // Open the saved diagram
+  router.navigate(`/m?${diagId}`);
 }
 
 /**
@@ -269,13 +261,14 @@ function saveDiagramAs() {
  */
 function exportDiag() {
   const exportDiagBtn = document.querySelector('#exportDiag');
-  diagHandler
+  diagService
     .exportDiagram()
     .then((xmlDiag) => {
       // Make the href attribute point to the diagram xml
       exportDiagBtn.setAttribute(
         'href',
-        'data:application/bpmn20-xml;charset=UTF-8,' + xmlDiag
+        'data:application/bpmn20-xml;charset=UTF-8,' +
+          encodeURIComponent(xmlDiag)
       );
       // Wait 10ms
       return new Promise((resolve) => setTimeout(resolve, 10));
@@ -291,13 +284,14 @@ function exportDiag() {
  */
 function exportDiagSvg() {
   const exportDiagSvgBtn = document.querySelector('#exportDiagSvg');
-  diagHandler
+  diagService
     .exportDiagramSVG()
     .then((svgDiag) => {
       // Make the href attribute point to the diagram xml
       exportDiagSvgBtn.setAttribute(
         'href',
-        'data:application/bpmn20-xml;charset=UTF-8,' + svgDiag
+        'data:application/bpmn20-xml;charset=UTF-8,' +
+          encodeURIComponent(svgDiag)
       );
       // Wait 10ms
       return new Promise((resolve) => {
@@ -310,7 +304,11 @@ function exportDiagSvg() {
     });
 }
 
-function setDiagName(diagName) {
+/**
+ * Set diagram name for the .bpmn and .svg export functions
+ * @param {String} diagName Diagram name
+ */
+function setExportedDiagName(diagName) {
   document.querySelector('#exportDiag').download = `${diagName}.bpmn`;
   document.querySelector('#exportDiagSvg').download = `${diagName}.svg`;
 }
@@ -323,12 +321,19 @@ function preventNavigation() {
 }
 
 /**
- * Toggle bottom toolbar visibility
- * @param {Boolean} hide If true, hide the bottom toolbar, otherwise display it
+ * Toggle bottom and lateral toolbar visibility
+ * @param {Boolean} hide If true, hide the toolbars, otherwise display them
  */
-function toggleToolbar(hide) {
+function toggleToolbars(hide) {
   const toolbar = document.querySelector('#toolbar');
-  hide ? toolbar.classList.add('hidden') : toolbar.classList.remove('hidden');
+  const editbar = document.querySelector('.edit-bar');
+  if (hide) {
+    toolbar.classList.add('hidden');
+    editbar.classList.add('hidden');
+  } else {
+    toolbar.classList.remove('hidden');
+    editbar.classList.remove('hidden');
+  }
 }
 
 /**
@@ -338,29 +343,29 @@ function toggleToolbar(hide) {
 function handleZoom(element) {
   switch (element.name) {
     case 'resetZoomBtn':
-      diagHandler.resetZoom();
+      diagService.resetZoom();
       break;
     case 'zoomInBtn':
-      diagHandler.zoomIn();
+      diagService.zoomIn();
       break;
     case 'zoomOutBtn':
-      diagHandler.zoomOut();
+      diagService.zoomOut();
       break;
   }
 }
 
 function handleUndo(e) {
-  if (e.ctrlKey && e.key === 'z') diagHandler.undoAction();
-  else if (e.ctrlKey && e.key === 'y') diagHandler.redoAction();
+  if (e.ctrlKey && e.key === 'z') diagService.undoAction();
+  else if (e.ctrlKey && e.key === 'y') diagService.redoAction();
 }
 
 function deployDiagram() {
   const diagId = router.getCurrentDiagId();
-  const diagram = storageHandler.getDiagram(diagId);
-  const diagramName = storageHandler.getDiagramName(diagId);
+  const diagram = storageService.getDiagram(diagId);
+  const diagramName = storageService.getDiagramName(diagId);
 
   // Teaming Engine API call
-  apiHandler
+  apiService
     .deployDiagram(diagram, diagId, diagramName)
     .then((result) => console.log(result));
 }

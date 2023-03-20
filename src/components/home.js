@@ -1,5 +1,5 @@
 import * as router from '../helpers/router';
-import * as storageHandler from '../helpers/storageHandler';
+import * as storageService from '../helpers/storageService';
 
 const HomeComponent = {
   render: () => {
@@ -122,8 +122,7 @@ function importDiagram(e) {
   // Remove fake path
   fileName = fileName
     .substring(fileName.lastIndexOf('\\') + 1)
-    .replace(/ /g, '_') // Remove spaces
-    .replace(/\(|\)/g, ''); // Remove brackets
+    .replace(/ /g, '_'); // Remove spaces
   const extension = fileName.split('.').pop();
 
   // File extension check
@@ -154,7 +153,7 @@ function fetchAndSave(fileName, file) {
     // Load event: reading finished, no errors
     fr.onload = () => {
       // Save diagram to local storage and return its id
-      resolve(storageHandler.saveDiagram(fileName, fr.result));
+      resolve(storageService.saveDiagram(fileName, fr.result));
     };
     // Error occured during file reading
     fr.onerror = (err) => {
@@ -174,7 +173,7 @@ function displayRecentDiagrams() {
   // Get diagrams list element
   const listElem = document.getElementById('recent-diagrams-list');
   // Fetch diagrams list
-  const diagList = storageHandler.getDiagramsList();
+  const diagList = storageService.getDiagramsList();
 
   // Check whether the list is not empty
   if (diagList.length !== 0) {
@@ -203,7 +202,7 @@ function deleteDiagram(e) {
   e.stopImmediatePropagation();
   // Fetch diagram id to delete
   const id = e.target.parentNode.dataset.diagId;
-  storageHandler.deleteDiagram(id);
+  storageService.deleteDiagram(id);
   // Refresh page
   router.navigate();
 }

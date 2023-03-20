@@ -73,7 +73,7 @@ function deleteDiagram(id) {
  */
 function clear() {
   diagrams = [];
-  if (localStorage.length !== 0) localStorage.removeItem('diagrams');
+  localStorage.removeItem('diagrams');
 }
 
 /**

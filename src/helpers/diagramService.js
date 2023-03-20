@@ -58,7 +58,7 @@ function createEditor(mode, canvas, callback) {
 async function exportDiagram() {
   try {
     const { xml } = await editor.saveXML();
-    return encodeURIComponent(xml);
+    return xml;
   } catch (err) {
     console.log('Failed to serialize BPMN 2.0 xml', err);
   }
@@ -71,7 +71,7 @@ async function exportDiagram() {
 async function exportDiagramSVG() {
   try {
     const { svg } = await editor.saveSVG();
-    return encodeURIComponent(svg);
+    return svg;
   } catch (err) {
     console.log('Failed to serialize SVG xml', err);
   }
