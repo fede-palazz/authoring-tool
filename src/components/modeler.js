@@ -327,12 +327,10 @@ function preventNavigation() {
 function toggleToolbars(hide) {
   const toolbar = document.querySelector('#toolbar');
   const editbar = document.querySelector('.edit-bar');
-  if (hide) {
-    toolbar.classList.add('hidden');
-    editbar.classList.add('hidden');
-  } else {
-    toolbar.classList.remove('hidden');
-    editbar.classList.remove('hidden');
+  hide ? toolbar.classList.add('hidden') : toolbar.classList.remove('hidden');
+  // Editbar could be undefined in "new diagram" view
+  if (editbar) {
+    hide ? editbar.classList.add('hidden') : editbar.classList.remove('hidden');
   }
 }
 
