@@ -172,7 +172,7 @@ function handleEvents(eventName, event) {
 function exportDiag() {
   const exportDiagBtn = document.querySelector('#exportDiag');
   diagService
-    .exportDiagram()
+    .exportDiagram(true)
     .then((xmlDiag) => {
       // Make the href attribute point to the diagram xml
       exportDiagBtn.setAttribute(

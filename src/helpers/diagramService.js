@@ -79,11 +79,14 @@ function createModeler(canvasId, panelId, callback) {
 
 /**
  * Export the current diagram into its xml representation
+ * @param {Boolean} format specify whether to format the XML output string
  * @returns {String} XML encoded BPMN diagram
  */
-async function exportDiagram() {
+async function exportDiagram(format = false) {
   try {
-    const { xml } = await editor.saveXML();
+    const { xml } = Boolean(format)
+      ? await editor.saveXML({ format: true })
+      : await editor.saveXML();
     return xml;
   } catch (err) {
     console.log('Failed to serialize BPMN 2.0 xml', err);
