@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 
 :root {
+  /* COLORS */
   --dark-primary-color: #388e3c;
   --primary-color: #10d170;
   --light-primary-color: #c8e6c9;
@@ -9,6 +10,9 @@
   --accent-color: #607d8b;
   --icons-color: #ffffff;
   --divider-color: #bdbdbd;
+
+  /* UTILS */
+  --navbar-height: 3.75rem;
 }
 
 /* MATERIAL ICONS STYLING */
@@ -64,12 +68,12 @@ body {
 #wrapper {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
 }
 
 .top-bar {
   display: flex;
-  flex-grow: 0;
+  height: var(--navbar-height);
   justify-content: space-between;
   align-items: center;
   background-color: var(--primary-color);

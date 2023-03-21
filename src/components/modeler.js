@@ -9,106 +9,108 @@ const PROPERTIES_PANEL_ID = 'properties-panel';
 const ModelerComponent = {
   render() {
     return `
-      <div id="${CANVAS_ID}"></div>
-      <div id="${PROPERTIES_PANEL_ID}"></div>
-  
-      <!-- Bottom toolbar -->
-      <div class="toolbar" id="toolbar">
-        <div class="sub-toolbar">
-          <!-- Save diagram button -->
-          <button id="saveDiag" class="icon-btn">
-            <span
-              class="material-icons md-light"
-              alt="Save diagram"
-              title="Save diagram"
+      <div id="${CANVAS_ID}" class="canvas">
+
+        <!-- Bottom toolbar -->
+        <div class="toolbar" id="toolbar">
+          <div class="sub-toolbar">
+            <!-- Save diagram button -->
+            <button id="saveDiag" class="icon-btn">
+              <span
+                class="material-icons md-light"
+                alt="Save diagram"
+                title="Save diagram"
+              >
+                save
+              </span>
+            </button>
+    
+            <!-- Save as new diagram button -->
+            <button id="saveDiagAs" class="icon-btn">
+              <span
+                class="material-icons md-light"
+                alt="Save as new diagram"
+                title="Save diagram as"
+              >
+                save_as
+              </span>
+            </button>
+          </div>
+
+          <div class="sub-toolbar">
+            <!-- Export diagram (BPMN) button -->
+            <a class="hidden-link" id="exportDiag" download=""
+              ><button class="icon-btn">
+                <span
+                  class="material-icons md-light"
+                  alt="Export diagram as BPMN"
+                  title="Export diagram (BPMN)"
+                >
+                  file_download
+                </span>
+              </button></a
             >
-              save
-            </span>
-          </button>
-  
-          <!-- Save as new diagram button -->
-          <button id="saveDiagAs" class="icon-btn">
-            <span
-              class="material-icons md-light"
-              alt="Save as new diagram"
-              title="Save diagram as"
+    
+            <!-- Export diagram (SVG) button -->
+            <a class="hidden-link" id="exportDiagSvg" download=""
+              ><button class="icon-btn">
+                <span
+                  class="material-icons md-light"
+                  alt="Export diagram as SVG"
+                  title="Export diagram (SVG)"
+                >
+                  image
+                </span>
+              </button></a
             >
-              save_as
-            </span>
+          </div>
+        </div>
+
+        <!-- Lateral edit bar -->
+        <div class="edit-bar">
+          <!-- Deploy diagram button -->
+          <button class="icon-btn" id="deployDiag">
+              <span
+                class="material-icons md-light"
+                alt="Deploy diagram"
+                title="Deploy diagram"
+                >publish</span
+              >
           </button>
         </div>
 
-        <div class="sub-toolbar">
-          <!-- Export diagram (BPMN) button -->
-          <a class="hidden-link" id="exportDiag" download=""
-            ><button class="icon-btn">
-              <span
-                class="material-icons md-light"
-                alt="Export diagram as BPMN"
-                title="Export diagram (BPMN)"
-              >
-                file_download
-              </span>
-            </button></a
-          >
-  
-          <!-- Export diagram (SVG) button -->
-          <a class="hidden-link" id="exportDiagSvg" download=""
-            ><button class="icon-btn">
-              <span
-                class="material-icons md-light"
-                alt="Export diagram as SVG"
-                title="Export diagram (SVG)"
-              >
-                image
-              </span>
-            </button></a
-          >
-        </div>
-      </div>
-
-      <!-- Lateral edit bar -->
-      <div class="edit-bar">
-        <!-- Deploy diagram button -->
-        <button class="icon-btn" id="deployDiag">
+        <!-- Lateral zoom bar -->
+        <div class="zoom-bar">
+          <!-- Reset zoom button -->
+          <button class="icon-btn" name="resetZoomBtn">
             <span
               class="material-icons md-light"
-              alt="Deploy diagram"
-              title="Deploy diagram"
-              >publish</span
+              alt="Reset Zoom"
+              title="Reset zoom"
+              >center_focus_weak</span
             >
-        </button>
-      </div>
+          </button>
+    
+          <!-- Zoom in button -->
+          <button class="icon-btn" name="zoomInBtn">
+            <span class="material-icons md-light" alt="Zoom In" title="Zoom in"
+              >zoom_in</span
+            >
+          </button>
+    
+          <!-- Zoom out button -->
+          <button class="icon-btn" name="zoomOutBtn">
+            <span
+              class="material-icons md-light"
+              alt="Zoom Out"
+              title="Zoom out"
+              >zoom_out</span
+            >
+          </button>
+        </div>
 
-      <!-- Lateral zoom bar -->
-      <div class="zoom-bar">
-        <!-- Reset zoom button -->
-        <button class="icon-btn" name="resetZoomBtn">
-          <span
-            class="material-icons md-light"
-            alt="Reset Zoom"
-            title="Reset zoom"
-            >center_focus_weak</span
-          >
-        </button>
-  
-        <!-- Zoom in button -->
-        <button class="icon-btn" name="zoomInBtn">
-          <span class="material-icons md-light" alt="Zoom In" title="Zoom in"
-            >zoom_in</span
-          >
-        </button>
-  
-        <!-- Zoom out button -->
-        <button class="icon-btn" name="zoomOutBtn">
-          <span
-            class="material-icons md-light"
-            alt="Zoom Out"
-            title="Zoom out"
-            >zoom_out</span
-          >
-        </button>
       </div>
+      <div id="${PROPERTIES_PANEL_ID}" class="prop-panel"></div>
             `;
   },
   init(diagId = '') {
@@ -208,7 +210,7 @@ const ModelerComponent = {
  */
 function initializeCanvas() {
   // Instantiate the modeler
-  diagService.createModeler(CANVAS_ID, handleEvents);
+  diagService.createModeler(CANVAS_ID, PROPERTIES_PANEL_ID, handleEvents);
   // Load the blank diagram template
   diagService.displayBlankDiagram();
 }
@@ -360,7 +362,9 @@ function handleUndo(e) {
 
 function deployDiagram() {
   // Ask for confirmation to save diagram
-  if (!confirm("In order to deploy current diagram it's necessary to save it"))
+  if (
+    !confirm("In order to deploy the current diagram it's necessary to save it")
+  )
     return;
   // Save current diagram
   saveDiagram();

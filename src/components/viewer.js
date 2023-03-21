@@ -8,90 +8,92 @@ const CANVAS_ID = 'canvas';
 const ViewerComponent = {
   render() {
     return `   
-      <div id="canvas"></div>
-  
-      <!-- Bottom toolbar -->
-        <div class="toolbar sub-toolbar" id="toolbar">
-        
-          <!-- Export diagram (BPMN) button -->
-          <a class="hidden-link" id="exportDiag" download=""
-            ><button class="icon-btn">
-              <span
-                class="material-icons md-light"
-                alt="Export diagram as BPMN"
-                title="Export diagram (BPMN)"
-              >
-                file_download
-              </span>
-            </button></a
-          >
-  
-          <!-- Export diagram (SVG) button -->
-          <a class="hidden-link" id="exportDiagSvg" download=""
-            ><button class="icon-btn">
-              <span
-                class="material-icons md-light"
-                alt="Export diagram as SVG"
-                title="Export diagram (SVG)"
-              >
-                image
-              </span>
-            </button></a
-          >
-        </div>
+      <div id="canvas" class="canvas">
       
-      <!-- Lateral edit bar -->
-      <div class="edit-bar">
-        <!-- Deploy diagram button -->
-        <button class="icon-btn" id="deployDiagBtn">
+        <!-- Bottom toolbar -->
+          <div class="toolbar sub-toolbar" id="toolbar">
+          
+            <!-- Export diagram (BPMN) button -->
+            <a class="hidden-link" id="exportDiag" download=""
+              ><button class="icon-btn">
+                <span
+                  class="material-icons md-light"
+                  alt="Export diagram as BPMN"
+                  title="Export diagram (BPMN)"
+                >
+                  file_download
+                </span>
+              </button></a
+            >
+    
+            <!-- Export diagram (SVG) button -->
+            <a class="hidden-link" id="exportDiagSvg" download=""
+              ><button class="icon-btn">
+                <span
+                  class="material-icons md-light"
+                  alt="Export diagram as SVG"
+                  title="Export diagram (SVG)"
+                >
+                  image
+                </span>
+              </button></a
+            >
+          </div>
+        
+        <!-- Lateral edit bar -->
+        <div class="edit-bar">
+          <!-- Deploy diagram button -->
+          <button class="icon-btn" id="deployDiagBtn">
+              <span
+                class="material-icons md-light"
+                alt="Deploy diagram"
+                title="Deploy diagram"
+                >publish</span
+              >
+          </button>
+
+          <!-- Edit diagram button -->
+          <button class="icon-btn" id="editDiagBtn">
+              <span
+                class="material-icons md-light"
+                alt="Edit diagram"
+                title="Edit diagram"
+                >edit</span
+              >
+          </button>
+        </div>
+
+        <!-- Lateral zoom bar -->
+        <div class="zoom-bar">
+          <!-- Reset zoom button -->
+          <button class="icon-btn" name="resetZoomBtn">
             <span
               class="material-icons md-light"
-              alt="Deploy diagram"
-              title="Deploy diagram"
-              >publish</span
+              alt="Reset Zoom"
+              title="Reset zoom"
+              >center_focus_weak</span
             >
-        </button>
-
-        <!-- Edit diagram button -->
-        <button class="icon-btn" id="editDiagBtn">
+          </button>
+    
+          <!-- Zoom in button -->
+          <button class="icon-btn" name="zoomInBtn">
+            <span class="material-icons md-light" alt="Zoom In" title="Zoom in"
+              >zoom_in</span
+            >
+          </button>
+    
+          <!-- Zoom out button -->
+          <button class="icon-btn" name="zoomOutBtn">
             <span
               class="material-icons md-light"
-              alt="Edit diagram"
-              title="Edit diagram"
-              >edit</span
+              alt="Zoom Out"
+              title="Zoom out"
+              >zoom_out</span
             >
-        </button>
+          </button>
+        </div>
       </div>
 
-      <!-- Lateral zoom bar -->
-      <div class="zoom-bar">
-        <!-- Reset zoom button -->
-        <button class="icon-btn" name="resetZoomBtn">
-          <span
-            class="material-icons md-light"
-            alt="Reset Zoom"
-            title="Reset zoom"
-            >center_focus_weak</span
-          >
-        </button>
-  
-        <!-- Zoom in button -->
-        <button class="icon-btn" name="zoomInBtn">
-          <span class="material-icons md-light" alt="Zoom In" title="Zoom in"
-            >zoom_in</span
-          >
-        </button>
-  
-        <!-- Zoom out button -->
-        <button class="icon-btn" name="zoomOutBtn">
-          <span
-            class="material-icons md-light"
-            alt="Zoom Out"
-            title="Zoom out"
-            >zoom_out</span
-          >
-        </button>
-      </div>
           `;
   },
   init(diagId) {

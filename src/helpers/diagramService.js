@@ -2,10 +2,17 @@ import Modeler from 'bpmn-js/lib/Modeler';
 import NavigatedViewer from 'bpmn-js/lib/NavigatedViewer';
 import TokenSimulationViewer from 'bpmn-js-token-simulation/lib/viewer';
 import TokenSimulationModeler from 'bpmn-js-token-simulation/lib/modeler';
+import {
+  BpmnPropertiesPanelModule,
+  BpmnPropertiesProviderModule,
+  CamundaPlatformPropertiesProviderModule,
+} from 'bpmn-js-properties-panel';
+import camundaModdleDescriptors from 'camunda-bpmn-moddle/resources/camunda'; // use Camunda BPMN namespace
 import BLANK_DIAGRAM from '../assets/diagrams/new-diagram.bpmn';
 import 'bpmn-js/dist/assets/diagram-js.css';
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
 import 'bpmn-js-token-simulation/assets/css/bpmn-js-token-simulation.css';
+import 'bpmn-js-properties-panel/dist/assets/properties-panel.css';
 
 // Current editor instance (either Modeler or Viewer)
 let editor;
@@ -37,19 +44,30 @@ function createViewer(canvas, callback) {
 
 /**
  * Instantiate a new BPMN Modeler
- * @param {String} canvas Canvas container id
- * @param {String} panel Properties panel container id
+ * @param {String} canvasId Canvas container id
+ * @param {String} panelId Properties panel container id
  * @param {function} callback Diagram events handler
  */
-function createModeler(canvas, panel, callback) {
+function createModeler(canvasId, panelId, callback) {
   // Set editor as Modeler
   editorMode = 'm';
   editor = new Modeler({
-    container: `#${canvas}`,
+    container: `#${canvasId}`,
+    propertiesPanel: {
+      parent: `#${panelId}`,
+    },
     keyboard: {
       bindTo: document,
     },
-    additionalModules: [TokenSimulationModeler],
+    additionalModules: [
+      TokenSimulationModeler,
+      BpmnPropertiesPanelModule,
+      BpmnPropertiesProviderModule,
+      CamundaPlatformPropertiesProviderModule,
+    ],
+    moddleExtensions: {
+      camunda: camundaModdleDescriptors,
+    },
   });
   // Initialize control variables
   commandStack = editor.get('commandStack');

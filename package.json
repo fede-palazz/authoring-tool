@@ -27,17 +27,17 @@
   "homepage": "https://github.com/IlPalazz/authoring-tool#readme",
   "dependencies": {
     "@bpmn-io/properties-panel": "^1.5.1",
-    "bpmn-js": "^9.0.3",
+    "bpmn-js": "^9.4.1",
     "bpmn-js-properties-panel": "^1.19.1",
     "bpmn-js-token-simulation": "^0.27.0",
     "camunda-bpmn-moddle": "^7.0.1"
   },
   "devDependencies": {
-    "css-loader": "^6.7.1",
+    "css-loader": "^6.7.3",
     "html-webpack-plugin": "^5.5.0",
-    "style-loader": "^3.3.1",
-    "webpack": "^5.72.1",
-    "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.9.0"
+    "style-loader": "^3.3.2",
+    "webpack": "^5.76.2",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.13.1"
   }
 }
