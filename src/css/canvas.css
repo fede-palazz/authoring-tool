@@ -13,8 +13,8 @@
   display: flex;
   flex-direction: row;
   position: absolute;
-  left: 10px;
-  bottom: 10px;
+  left: 15px;
+  bottom: 15px;
   z-index: 10;
 }
 
@@ -45,6 +45,18 @@
   color: #000;
 }
 
+.menu-bar {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px;
+  z-index: 10;
+}
+
 .edit-bar {
   position: absolute;
   right: 15px;
@@ -70,14 +82,16 @@
 }
 
 .zoom-bar .icon-btn,
-.edit-bar .icon-btn {
+.edit-bar .icon-btn,
+.menu-bar .icon-btn {
   margin-top: 10px;
   margin: 5px 3px;
 }
 
 .zoom-bar,
 .sub-toolbar,
-.edit-bar {
+.edit-bar,
+.menu-bar {
   background-color: var(--primary-color);
   border-radius: 10px;
 }

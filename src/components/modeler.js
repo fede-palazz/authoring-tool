@@ -11,6 +11,20 @@ const ModelerComponent = {
     return `
       <div id="${CANVAS_ID}" class="canvas">
 
+      <!-- Top menu bar -->
+        <div class="menu-bar">
+          <!-- Toggle properties panel button -->
+          <button class="icon-btn" id="togglePanel">
+              <span
+                class="material-icons md-light"
+                alt="Toggle properties panel"
+                title="Toggle properties panel"
+                >menu</span
+              >
+          </button>
+        </div>
+
+
         <!-- Bottom toolbar -->
         <div class="toolbar" id="toolbar">
           <div class="sub-toolbar">
@@ -195,6 +209,13 @@ const ModelerComponent = {
     document
       .getElementById('deployDiag')
       .addEventListener('click', deployDiagram);
+
+    /**
+     * Toggle properties panel event listener
+     */
+    document
+      .getElementById('togglePanel')
+      .addEventListener('click', togglePanel);
   },
   destroy() {
     document.removeEventListener('keydown', handleUndo);
@@ -330,10 +351,21 @@ function preventNavigation() {
 function toggleToolbars(hide) {
   const toolbar = document.querySelector('#toolbar');
   const editbar = document.querySelector('.edit-bar');
+  const menubar = document.querySelector('.menu-bar');
+  const propertiesPanel = document.getElementById(PROPERTIES_PANEL_ID);
+
   hide ? toolbar.classList.add('hidden') : toolbar.classList.remove('hidden');
   // Editbar could be undefined in "new diagram" view
-  if (editbar) {
-    hide ? editbar.classList.add('hidden') : editbar.classList.remove('hidden');
+  if (editbar && menubar) {
+    if (hide) {
+      editbar.classList.add('hidden');
+      menubar.classList.add('hidden');
+      propertiesPanel.classList.add('hidden');
+    } else {
+      editbar.classList.remove('hidden');
+      menubar.classList.remove('hidden');
+      propertiesPanel.classList.remove('hidden');
+    }
   }
 }
 
@@ -358,6 +390,10 @@ function handleZoom(element) {
 function handleUndo(e) {
   if (e.ctrlKey && e.key === 'z') diagService.undoAction();
   else if (e.ctrlKey && e.key === 'y') diagService.redoAction();
+}
+
+function togglePanel() {
+  document.getElementById(PROPERTIES_PANEL_ID).classList.toggle('hidden');
 }
 
 function deployDiagram() {
