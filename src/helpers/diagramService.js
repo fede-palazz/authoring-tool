@@ -15,36 +15,44 @@ let commandStack; // Modeler only
 let zoomScroll; // Viewer and Modeler
 
 /**
- * Instantiate a new BPMN Editor based on the mode parameter
- * @param {String} mode Editor mode {"v": Viewer, "m": Modeler}
+ * Instantiate a new BPMN Viewer
  * @param {String} canvas Canvas container id
  * @param {function} callback Diagram events handler
  */
-function createEditor(mode, canvas, callback) {
-  editorMode = mode;
-  switch (editorMode) {
-    case 'm': // Modeler
-      editor = new Modeler({
-        container: `#${canvas}`,
-        keyboard: {
-          bindTo: document,
-        },
-        additionalModules: [TokenSimulationModeler],
-      });
-      // Initialize control variables
-      commandStack = editor.get('commandStack');
-      break;
+function createViewer(canvas, callback) {
+  // Set editor as Viewer
+  editorMode = 'v';
+  editor = new NavigatedViewer({
+    container: `#${canvas}`,
+    keyboard: {
+      bindTo: document,
+    },
+    additionalModules: [TokenSimulationViewer],
+  });
+  // Initialize control variables
+  zoomScroll = editor.get('zoomScroll');
+  // Set diagram events callback
+  eventsListener(editor, callback);
+}
 
-    case 'v': // NavigatedViewer
-      editor = new NavigatedViewer({
-        container: `#${canvas}`,
-        keyboard: {
-          bindTo: document,
-        },
-        additionalModules: [TokenSimulationViewer],
-      });
-      break;
-  }
+/**
+ * Instantiate a new BPMN Modeler
+ * @param {String} canvas Canvas container id
+ * @param {String} panel Properties panel container id
+ * @param {function} callback Diagram events handler
+ */
+function createModeler(canvas, panel, callback) {
+  // Set editor as Modeler
+  editorMode = 'm';
+  editor = new Modeler({
+    container: `#${canvas}`,
+    keyboard: {
+      bindTo: document,
+    },
+    additionalModules: [TokenSimulationModeler],
+  });
+  // Initialize control variables
+  commandStack = editor.get('commandStack');
   // Initialize control variables
   zoomScroll = editor.get('zoomScroll');
   // Set diagram events callback
@@ -148,7 +156,9 @@ function eventsListener(instance, callback) {
 }
 
 export {
-  createEditor,
+  // createEditor,
+  createViewer,
+  createModeler,
   exportDiagram,
   exportDiagramSVG,
   fetchAndDisplay,

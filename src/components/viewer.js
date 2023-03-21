@@ -4,7 +4,6 @@ import * as apiService from '../helpers/apiService';
 import * as router from '../helpers/router';
 
 const CANVAS_ID = 'canvas';
-const EDITOR_MODE = 'v';
 
 const ViewerComponent = {
   render() {
@@ -147,7 +146,7 @@ const ViewerComponent = {
  */
 function initializeCanvas() {
   // Instantiate the modeler
-  diagService.createEditor(EDITOR_MODE, CANVAS_ID, handleEvents);
+  diagService.createViewer(CANVAS_ID, handleEvents);
   // Load the blank diagram template
   diagService.displayBlankDiagram();
 }

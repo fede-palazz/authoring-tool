@@ -4,12 +4,13 @@ import * as apiService from '../helpers/apiService';
 import * as router from '../helpers/router';
 
 const CANVAS_ID = 'canvas';
-const EDITOR_MODE = 'm';
+const PROPERTIES_PANEL_ID = 'properties-panel';
 
 const ModelerComponent = {
   render() {
     return `
       <div id="${CANVAS_ID}"></div>
+      <div id="${PROPERTIES_PANEL_ID}"></div>
   
       <!-- Bottom toolbar -->
       <div class="toolbar" id="toolbar">
@@ -207,7 +208,7 @@ const ModelerComponent = {
  */
 function initializeCanvas() {
   // Instantiate the modeler
-  diagService.createEditor(EDITOR_MODE, CANVAS_ID, handleEvents);
+  diagService.createModeler(CANVAS_ID, handleEvents);
   // Load the blank diagram template
   diagService.displayBlankDiagram();
 }
