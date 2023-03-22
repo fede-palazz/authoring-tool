@@ -23,15 +23,8 @@ $ npm start
 ### Docker
 
 ```bash
-# Generate static assets inside the dist folder
-$ npm run build
-
-# Docker will copy them inside the container and
-# they will be served by NGINX
-
-# Build the image and start the container
-# (use --build flag to update image with local changes)
-$ docker-compose up -d --build
+# Start auth-tool container (use --build flag to update image with local changes)
+$ docker-compose up -d
 
 # Stop running container
 $ docker-compose down
@@ -49,9 +42,11 @@ You can find some diagrams examples under the `src/assets/diagrams` directory an
 - save and delete diagrams from browser's local storage
 - export diagrams in .bpmn and .svg formats
 - token simulation mode
+- support camunda properties panel
 
 ## External libraries
 
 - [bpmn-js](https://github.com/bpmn-io/bpmn-js)
 - [bpmn-js-token-simulation](https://github.com/bpmn-io/bpmn-js-token-simulation)
+- [bpmn-js-properties-panel](https://github.com/bpmn-io/bpmn-js-properties-panel)
 - [webpack](https://webpack.js.org/)
