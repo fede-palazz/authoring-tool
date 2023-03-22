@@ -4,7 +4,7 @@ import './css/canvas.css';
 import './assets/idea-logo-small.png';
 import './assets/teaming-logo-black.png';
 import * as router from './helpers/router';
-import * as storageHandler from './helpers/storageHandler';
+import * as storageService from './helpers/storageService';
 
 window.addEventListener('load', () => {
   router.navigate();
@@ -20,7 +20,7 @@ window.addEventListener('hashchange', () => {
 window.addEventListener('storage', (event) => {
   if (event.storageArea.length !== 0) return;
   // Delete in-memory diagrams
-  storageHandler.clear();
+  storageService.clear();
   // Navigate to homepage
   if (router.getCurrentPath() !== '/') router.navigate('/');
   else router.navigate();

@@ -1,124 +1,141 @@
-import * as diagHandler from '../helpers/diagramHandler';
-import * as storageHandler from '../helpers/storageHandler';
-import * as apiHandler from '../helpers/apiHandler';
+import * as diagService from '../helpers/diagramService';
+import * as storageService from '../helpers/storageService';
+import * as apiService from '../helpers/apiService';
 import * as router from '../helpers/router';
 
 const CANVAS_ID = 'canvas';
-const EDITOR_MODE = 'm';
+const PROPERTIES_PANEL_ID = 'properties-panel';
 
 const ModelerComponent = {
   render() {
     return `
-      <div id="${CANVAS_ID}"></div>
-  
-      <!-- Bottom toolbar -->
-      <div class="toolbar" id="toolbar">
-        <div class="sub-toolbar">
-          <!-- Save diagram button -->
-          <button id="saveDiag" class="icon-btn">
-            <span
-              class="material-icons md-light"
-              alt="Save diagram"
-              title="Save diagram"
-            >
-              save
-            </span>
-          </button>
-  
-          <!-- Save as new diagram button -->
-          <button id="saveDiagAs" class="icon-btn">
-            <span
-              class="material-icons md-light"
-              alt="Save as new diagram"
-              title="Save diagram as"
-            >
-              save_as
-            </span>
+      <div id="${CANVAS_ID}" class="canvas">
+
+      <!-- Top menu bar -->
+        <div class="menu-bar">
+          <!-- Toggle properties panel button -->
+          <button class="icon-btn" id="togglePanel">
+              <span
+                class="material-icons md-light"
+                alt="Toggle properties panel"
+                title="Toggle properties panel"
+                >menu</span
+              >
           </button>
         </div>
 
-        <div class="sub-toolbar">
-          <!-- Export diagram (BPMN) button -->
-          <a class="hidden-link" id="exportDiag" download=""
-            ><button class="icon-btn">
-              <span
-                class="material-icons md-light"
-                alt="Export diagram as BPMN"
-                title="Export diagram (BPMN)"
-              >
-                file_download
-              </span>
-            </button></a
-          >
-  
-          <!-- Export diagram (SVG) button -->
-          <a class="hidden-link" id="exportDiagSvg" download=""
-            ><button class="icon-btn">
-              <span
-                class="material-icons md-light"
-                alt="Export diagram as SVG"
-                title="Export diagram (SVG)"
-              >
-                image
-              </span>
-            </button></a
-          >
-        </div>
-      </div>
 
-      <!-- Lateral edit bar -->
-      <div class="edit-bar">
-        <!-- Deploy diagram button -->
-        <button class="icon-btn" id="deployDiag">
+        <!-- Bottom toolbar -->
+        <div class="toolbar" id="toolbar">
+          <div class="sub-toolbar">
+            <!-- Save diagram button -->
+            <button id="saveDiag" class="icon-btn">
+              <span
+                class="material-icons md-light"
+                alt="Save diagram"
+                title="Save diagram"
+              >
+                save
+              </span>
+            </button>
+    
+            <!-- Save as new diagram button -->
+            <button id="saveDiagAs" class="icon-btn">
+              <span
+                class="material-icons md-light"
+                alt="Save as new diagram"
+                title="Save diagram as"
+              >
+                save_as
+              </span>
+            </button>
+          </div>
+
+          <div class="sub-toolbar">
+            <!-- Export diagram (BPMN) button -->
+            <a class="hidden-link" id="exportDiag" download=""
+              ><button class="icon-btn">
+                <span
+                  class="material-icons md-light"
+                  alt="Export diagram as BPMN"
+                  title="Export diagram (BPMN)"
+                >
+                  file_download
+                </span>
+              </button></a
+            >
+    
+            <!-- Export diagram (SVG) button -->
+            <a class="hidden-link" id="exportDiagSvg" download=""
+              ><button class="icon-btn">
+                <span
+                  class="material-icons md-light"
+                  alt="Export diagram as SVG"
+                  title="Export diagram (SVG)"
+                >
+                  image
+                </span>
+              </button></a
+            >
+          </div>
+        </div>
+
+        <!-- Lateral edit bar -->
+        <div class="edit-bar">
+          <!-- Deploy diagram button -->
+          <button class="icon-btn" id="deployDiag">
+              <span
+                class="material-icons md-light"
+                alt="Deploy diagram"
+                title="Deploy diagram"
+                >publish</span
+              >
+          </button>
+        </div>
+
+        <!-- Lateral zoom bar -->
+        <div class="zoom-bar">
+          <!-- Reset zoom button -->
+          <button class="icon-btn" name="resetZoomBtn">
             <span
               class="material-icons md-light"
-              alt="Deploy diagram"
-              title="Deploy diagram"
-              >publish</span
+              alt="Reset Zoom"
+              title="Reset zoom"
+              >center_focus_weak</span
             >
-        </button>
-      </div>
+          </button>
+    
+          <!-- Zoom in button -->
+          <button class="icon-btn" name="zoomInBtn">
+            <span class="material-icons md-light" alt="Zoom In" title="Zoom in"
+              >zoom_in</span
+            >
+          </button>
+    
+          <!-- Zoom out button -->
+          <button class="icon-btn" name="zoomOutBtn">
+            <span
+              class="material-icons md-light"
+              alt="Zoom Out"
+              title="Zoom out"
+              >zoom_out</span
+            >
+          </button>
+        </div>
 
-      <!-- Lateral zoom bar -->
-      <div class="zoom-bar">
-        <!-- Reset zoom button -->
-        <button class="icon-btn" name="resetZoomBtn">
-          <span
-            class="material-icons md-light"
-            alt="Reset Zoom"
-            title="Reset zoom"
-            >center_focus_weak</span
-          >
-        </button>
-  
-        <!-- Zoom in button -->
-        <button class="icon-btn" name="zoomInBtn">
-          <span class="material-icons md-light" alt="Zoom In" title="Zoom in"
-            >zoom_in</span
-          >
-        </button>
-  
-        <!-- Zoom out button -->
-        <button class="icon-btn" name="zoomOutBtn">
-          <span
-            class="material-icons md-light"
-            alt="Zoom Out"
-            title="Zoom out"
-            >zoom_out</span
-          >
-        </button>
       </div>
+      <div id="${PROPERTIES_PANEL_ID}" class="prop-panel"></div>
             `;
   },
   init(diagId = '') {
     this.setListeners();
     initializeCanvas();
     // diagId not null and valid
-    if (diagId && storageHandler.exists(diagId)) {
+    if (diagId && storageService.exists(diagId)) {
       // load and display the diagram
-      diagHandler.displayDiagram(storageHandler.getDiagram(diagId));
+      diagService.displayDiagram(storageService.getDiagram(diagId));
       // Set correct diagram name when exporting it
-      setDiagName(storageHandler.getDiagramName(diagId));
+      setExportedDiagName(storageService.getDiagramName(diagId));
     }
     // diagId not null but invalid
     else if (diagId)
@@ -192,8 +209,14 @@ const ModelerComponent = {
     document
       .getElementById('deployDiag')
       .addEventListener('click', deployDiagram);
-  },
 
+    /**
+     * Toggle properties panel event listener
+     */
+    document
+      .getElementById('togglePanel')
+      .addEventListener('click', togglePanel);
+  },
   destroy() {
     document.removeEventListener('keydown', handleUndo);
     window.removeEventListener('beforeunload', beforeUnload);
@@ -208,9 +231,9 @@ const ModelerComponent = {
  */
 function initializeCanvas() {
   // Instantiate the modeler
-  diagHandler.createEditor(EDITOR_MODE, CANVAS_ID, handleEvents);
+  diagService.createModeler(CANVAS_ID, PROPERTIES_PANEL_ID, handleEvents);
   // Load the blank diagram template
-  diagHandler.displayBlankDiagram();
+  diagService.displayBlankDiagram();
 }
 
 /**
@@ -221,7 +244,7 @@ function initializeCanvas() {
 function handleEvents(eventName, event) {
   switch (eventName) {
     case 'toggleSimulation':
-      event.active ? toggleToolbar(true) : toggleToolbar(false);
+      event.active ? toggleToolbars(true) : toggleToolbars(false);
       break;
   }
 }
@@ -229,39 +252,32 @@ function handleEvents(eventName, event) {
 /**
  * Save current diagram's pending changes
  */
-function saveDiagram() {
-  diagHandler.exportDiagram().then((diagram) => {
-    // Update the current diagram
-    storageHandler.updateDiagram(
-      router.getCurrentDiagId(),
-      decodeURIComponent(diagram)
-    );
-  });
+async function saveDiagram() {
+  const diagram = await diagService.exportDiagram();
+  const diagramId = router.getCurrentDiagId();
+  // Update the current diagram
+  storageService.updateDiagram(diagramId, diagram);
 }
 
 /**
  * Save current diagram as a new one
  */
-function saveDiagramAs() {
+async function saveDiagramAs() {
   // Prompt for new diagram name
-  let diagName = prompt('Type a name for this diagram');
-  if (diagName === null) return;
-  while (diagName === '') {
-    diagName = prompt('You need to insert a valid diagram name');
-    if (diagName === null) return;
+  let diagramName = prompt('Type a name for this diagram');
+  if (diagramName === null) return;
+  while (diagramName === '') {
+    diagramName = prompt('You need to insert a valid diagram name');
+    if (diagramName === null) return;
   }
-  // Replace dots and blank spaces with underscores
-  diagName = diagName.replace(/\.| /g, '_');
+  // Replace periods and blank spaces with underscores
+  diagramName = diagramName.replace(/\.| /g, '_');
   // Save current diagram
-  diagHandler.exportDiagram().then((diagram) => {
-    // Save diagram to localstorage
-    const diagId = storageHandler.saveDiagram(
-      diagName,
-      decodeURIComponent(diagram)
-    );
-    // Open the saved diagram
-    router.navigate(`/m?${diagId}`);
-  });
+  const diagram = await diagService.exportDiagram();
+  // Save diagram to localstorage
+  const diagId = storageService.saveDiagram(diagramName, diagram);
+  // Open the saved diagram
+  router.navigate(`/m?${diagId}`);
 }
 
 /**
@@ -269,13 +285,14 @@ function saveDiagramAs() {
  */
 function exportDiag() {
   const exportDiagBtn = document.querySelector('#exportDiag');
-  diagHandler
-    .exportDiagram()
+  diagService
+    .exportDiagram(true)
     .then((xmlDiag) => {
       // Make the href attribute point to the diagram xml
       exportDiagBtn.setAttribute(
         'href',
-        'data:application/bpmn20-xml;charset=UTF-8,' + xmlDiag
+        'data:application/bpmn20-xml;charset=UTF-8,' +
+          encodeURIComponent(xmlDiag)
       );
       // Wait 10ms
       return new Promise((resolve) => setTimeout(resolve, 10));
@@ -291,13 +308,14 @@ function exportDiag() {
  */
 function exportDiagSvg() {
   const exportDiagSvgBtn = document.querySelector('#exportDiagSvg');
-  diagHandler
+  diagService
     .exportDiagramSVG()
     .then((svgDiag) => {
       // Make the href attribute point to the diagram xml
       exportDiagSvgBtn.setAttribute(
         'href',
-        'data:application/bpmn20-xml;charset=UTF-8,' + svgDiag
+        'data:application/bpmn20-xml;charset=UTF-8,' +
+          encodeURIComponent(svgDiag)
       );
       // Wait 10ms
       return new Promise((resolve) => {
@@ -310,7 +328,11 @@ function exportDiagSvg() {
     });
 }
 
-function setDiagName(diagName) {
+/**
+ * Set diagram name for the .bpmn and .svg export functions
+ * @param {String} diagName Diagram name
+ */
+function setExportedDiagName(diagName) {
   document.querySelector('#exportDiag').download = `${diagName}.bpmn`;
   document.querySelector('#exportDiagSvg').download = `${diagName}.svg`;
 }
@@ -323,12 +345,28 @@ function preventNavigation() {
 }
 
 /**
- * Toggle bottom toolbar visibility
- * @param {Boolean} hide If true, hide the bottom toolbar, otherwise display it
+ * Toggle bottom and lateral toolbar visibility
+ * @param {Boolean} hide If true, hide the toolbars, otherwise display them
  */
-function toggleToolbar(hide) {
+function toggleToolbars(hide) {
   const toolbar = document.querySelector('#toolbar');
+  const editbar = document.querySelector('.edit-bar');
+  const menubar = document.querySelector('.menu-bar');
+  const propertiesPanel = document.getElementById(PROPERTIES_PANEL_ID);
+
   hide ? toolbar.classList.add('hidden') : toolbar.classList.remove('hidden');
+  // Editbar could be undefined in "new diagram" view
+  if (editbar && menubar) {
+    if (hide) {
+      editbar.classList.add('hidden');
+      menubar.classList.add('hidden');
+      propertiesPanel.classList.add('hidden');
+    } else {
+      editbar.classList.remove('hidden');
+      menubar.classList.remove('hidden');
+      propertiesPanel.classList.remove('hidden');
+    }
+  }
 }
 
 /**
@@ -338,29 +376,40 @@ function toggleToolbar(hide) {
 function handleZoom(element) {
   switch (element.name) {
     case 'resetZoomBtn':
-      diagHandler.resetZoom();
+      diagService.resetZoom();
       break;
     case 'zoomInBtn':
-      diagHandler.zoomIn();
+      diagService.zoomIn();
       break;
     case 'zoomOutBtn':
-      diagHandler.zoomOut();
+      diagService.zoomOut();
       break;
   }
 }
 
 function handleUndo(e) {
-  if (e.ctrlKey && e.key === 'z') diagHandler.undoAction();
-  else if (e.ctrlKey && e.key === 'y') diagHandler.redoAction();
+  if (e.ctrlKey && e.key === 'z') diagService.undoAction();
+  else if (e.ctrlKey && e.key === 'y') diagService.redoAction();
+}
+
+function togglePanel() {
+  document.getElementById(PROPERTIES_PANEL_ID).classList.toggle('hidden');
 }
 
 function deployDiagram() {
+  // Ask for confirmation to save diagram
+  if (
+    !confirm("In order to deploy the current diagram it's necessary to save it")
+  )
+    return;
+  // Save current diagram
+  saveDiagram();
   const diagId = router.getCurrentDiagId();
-  const diagram = storageHandler.getDiagram(diagId);
-  const diagramName = storageHandler.getDiagramName(diagId);
+  const diagram = storageService.getDiagram(diagId);
+  const diagramName = storageService.getDiagramName(diagId);
 
   // Teaming Engine API call
-  apiHandler
+  apiService
     .deployDiagram(diagram, diagId, diagramName)
     .then((result) => console.log(result));
 }
@@ -371,7 +420,6 @@ function deployDiagram() {
  */
 function beforeUnload(e) {
   e.preventDefault();
-  // e.returnValue = '';
 }
 
 export { ModelerComponent };

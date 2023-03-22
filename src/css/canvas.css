@@ -1,15 +1,21 @@
-#canvas-viewer,
-#canvas-modeler,
-#canvas {
+.canvas {
   flex-grow: 1;
+  position: relative;
+}
+
+.prop-panel {
+  max-height: calc(100vh - var(--navbar-height));
+  border-left: 1px solid #b9bcc6;
+  overflow-y: auto;
 }
 
 .toolbar {
   display: flex;
   flex-direction: row;
-  position: fixed;
-  left: 10px;
-  bottom: 10px;
+  position: absolute;
+  left: 15px;
+  bottom: 15px;
+  z-index: 10;
 }
 
 .sub-toolbar {
@@ -39,8 +45,20 @@
   color: #000;
 }
 
+.menu-bar {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px;
+  z-index: 10;
+}
+
 .edit-bar {
-  position: fixed;
+  position: absolute;
   right: 15px;
   bottom: 200px;
   padding: 2px;
@@ -48,10 +66,11 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  z-index: 10;
 }
 
 .zoom-bar {
-  position: fixed;
+  position: absolute;
   right: 15px;
   bottom: 60px;
   display: flex;
@@ -59,17 +78,20 @@
   justify-content: space-between;
   align-items: center;
   padding: 2px;
+  z-index: 10;
 }
 
 .zoom-bar .icon-btn,
-.edit-bar .icon-btn {
+.edit-bar .icon-btn,
+.menu-bar .icon-btn {
   margin-top: 10px;
   margin: 5px 3px;
 }
 
 .zoom-bar,
 .sub-toolbar,
-.edit-bar {
+.edit-bar,
+.menu-bar {
   background-color: var(--primary-color);
   border-radius: 10px;
 }

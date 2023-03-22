@@ -2,10 +2,17 @@ import Modeler from 'bpmn-js/lib/Modeler';
 import NavigatedViewer from 'bpmn-js/lib/NavigatedViewer';
 import TokenSimulationViewer from 'bpmn-js-token-simulation/lib/viewer';
 import TokenSimulationModeler from 'bpmn-js-token-simulation/lib/modeler';
+import {
+  BpmnPropertiesPanelModule,
+  BpmnPropertiesProviderModule,
+  CamundaPlatformPropertiesProviderModule,
+} from 'bpmn-js-properties-panel';
+import camundaModdleDescriptors from 'camunda-bpmn-moddle/resources/camunda'; // use Camunda BPMN namespace
 import BLANK_DIAGRAM from '../assets/diagrams/new-diagram.bpmn';
 import 'bpmn-js/dist/assets/diagram-js.css';
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
 import 'bpmn-js-token-simulation/assets/css/bpmn-js-token-simulation.css';
+import 'bpmn-js-properties-panel/dist/assets/properties-panel.css';
 
 // Current editor instance (either Modeler or Viewer)
 let editor;
@@ -15,36 +22,55 @@ let commandStack; // Modeler only
 let zoomScroll; // Viewer and Modeler
 
 /**
- * Instantiate a new BPMN Editor based on the mode parameter
- * @param {String} mode Editor mode {"v": Viewer, "m": Modeler}
+ * Instantiate a new BPMN Viewer
  * @param {String} canvas Canvas container id
  * @param {function} callback Diagram events handler
  */
-function createEditor(mode, canvas, callback) {
-  editorMode = mode;
-  switch (editorMode) {
-    case 'm': // Modeler
-      editor = new Modeler({
-        container: `#${canvas}`,
-        keyboard: {
-          bindTo: document,
-        },
-        additionalModules: [TokenSimulationModeler],
-      });
-      // Initialize control variables
-      commandStack = editor.get('commandStack');
-      break;
+function createViewer(canvas, callback) {
+  // Set editor as Viewer
+  editorMode = 'v';
+  editor = new NavigatedViewer({
+    container: `#${canvas}`,
+    keyboard: {
+      bindTo: document,
+    },
+    additionalModules: [TokenSimulationViewer],
+  });
+  // Initialize control variables
+  zoomScroll = editor.get('zoomScroll');
+  // Set diagram events callback
+  eventsListener(editor, callback);
+}
 
-    case 'v': // NavigatedViewer
-      editor = new NavigatedViewer({
-        container: `#${canvas}`,
-        keyboard: {
-          bindTo: document,
-        },
-        additionalModules: [TokenSimulationViewer],
-      });
-      break;
-  }
+/**
+ * Instantiate a new BPMN Modeler
+ * @param {String} canvasId Canvas container id
+ * @param {String} panelId Properties panel container id
+ * @param {function} callback Diagram events handler
+ */
+function createModeler(canvasId, panelId, callback) {
+  // Set editor as Modeler
+  editorMode = 'm';
+  editor = new Modeler({
+    container: `#${canvasId}`,
+    propertiesPanel: {
+      parent: `#${panelId}`,
+    },
+    keyboard: {
+      bindTo: document,
+    },
+    additionalModules: [
+      TokenSimulationModeler,
+      BpmnPropertiesPanelModule,
+      BpmnPropertiesProviderModule,
+      CamundaPlatformPropertiesProviderModule,
+    ],
+    moddleExtensions: {
+      camunda: camundaModdleDescriptors,
+    },
+  });
+  // Initialize control variables
+  commandStack = editor.get('commandStack');
   // Initialize control variables
   zoomScroll = editor.get('zoomScroll');
   // Set diagram events callback
@@ -53,12 +79,15 @@ function createEditor(mode, canvas, callback) {
 
 /**
  * Export the current diagram into its xml representation
+ * @param {Boolean} format specify whether to format the XML output string
  * @returns {String} XML encoded BPMN diagram
  */
-async function exportDiagram() {
+async function exportDiagram(format = false) {
   try {
-    const { xml } = await editor.saveXML();
-    return encodeURIComponent(xml);
+    const { xml } = Boolean(format)
+      ? await editor.saveXML({ format: true })
+      : await editor.saveXML();
+    return xml;
   } catch (err) {
     console.log('Failed to serialize BPMN 2.0 xml', err);
   }
@@ -71,7 +100,7 @@ async function exportDiagram() {
 async function exportDiagramSVG() {
   try {
     const { svg } = await editor.saveSVG();
-    return encodeURIComponent(svg);
+    return svg;
   } catch (err) {
     console.log('Failed to serialize SVG xml', err);
   }
@@ -148,7 +177,9 @@ function eventsListener(instance, callback) {
 }
 
 export {
-  createEditor,
+  // createEditor,
+  createViewer,
+  createModeler,
   exportDiagram,
   exportDiagramSVG,
   fetchAndDisplay,
