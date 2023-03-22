@@ -6,20 +6,17 @@ This repository contains source code and files used during the development of th
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/en/download/) (tested with `v16.18.1`)
+- [Node.js](https://nodejs.org/en/download/) (tested with `v18.13.0`)
 - [Docker](https://docs.docker.com/engine/install/)
 - [Docker compose](https://docs.docker.com/compose/install/compose-plugin/#installing-compose-on-linux-systems)
 
 ### Installation
 
 ```bash
-# Clone this repository
-$ git clone https://github.com/IlPalazz/authoring-tool.git
-
 # Install dependencies
 $ npm install
 
-# Launch the Authoring tool
+# Launch the Authoring Tool
 $ npm start
 ```
 
