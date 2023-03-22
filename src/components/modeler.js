@@ -143,9 +143,9 @@ const ModelerComponent = {
       router.navigate('/');
     // diagId is null
     else {
-      // Remove save diagram button from DOM
+      // Hide save diagram button from DOM
       document.getElementById('saveDiag').remove();
-      // Remove lateral edit bar from DOM
+      // Hide lateral edit bar from DOM
       document.querySelector('.edit-bar').remove();
       // Set default names for diagram export
       document.querySelector('#exportDiag').download = 'diagram.bpmn';
@@ -354,19 +354,12 @@ function toggleToolbars(hide) {
   const menubar = document.querySelector('.menu-bar');
   const propertiesPanel = document.getElementById(PROPERTIES_PANEL_ID);
 
-  hide ? toolbar.classList.add('hidden') : toolbar.classList.remove('hidden');
   // Editbar could be undefined in "new diagram" view
-  if (editbar && menubar) {
-    if (hide) {
-      editbar.classList.add('hidden');
-      menubar.classList.add('hidden');
-      propertiesPanel.classList.add('hidden');
-    } else {
-      editbar.classList.remove('hidden');
-      menubar.classList.remove('hidden');
-      propertiesPanel.classList.remove('hidden');
-    }
-  }
+  [toolbar, editbar, menubar].forEach((e) => e?.classList.toggle('hidden'));
+  // Properties panel can't be simply toggled
+  hide
+    ? propertiesPanel.classList.add('hidden')
+    : propertiesPanel.classList.remove('hidden');
 }
 
 /**
