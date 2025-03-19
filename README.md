@@ -1,6 +1,6 @@
 # Authoring Tool
 
-This repository contains source code and files used during the development of the Authoring Tool prototype to accomplish task 5.2 of the Teaming.AI project.
+This repository contains source code and files used during the development of the Authoring Tool prototype to accomplish task 5.2 of the [Teaming.AI](https://www.teamingai-project.eu/) European project.
 
 ## Getting started
 
